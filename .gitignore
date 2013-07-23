@@ -1,0 +1,6 @@
+*~
+*.vim
+*.bak
+*.swp
+*.directory
+js/vendor/*
