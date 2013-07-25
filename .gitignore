@@ -2,5 +2,9 @@
 *.vim
 *.bak
 *.swp
+*.aux
+*.log
+*.out
+*.pdf
 *.directory
 js/vendor/*

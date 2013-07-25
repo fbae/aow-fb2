@@ -1,10 +1,10 @@
 <!doctype html>
-<html class="no-js ui-mobile" lang="de">
+<html class='no-js ui-mobile' lang='de'>
 	<head>
 		<title>Uni Mainz - AOW-Fragebogen 2</title>
-		<meta charset="utf-8">
-		<meta content="Fragebogen" name="description"/>
-		<meta content="width=device-width, initial-scale=1" name="viewport"/>
+		<meta charset='utf-8'>
+		<meta content='Fragebogen' name='description'/>
+		<meta content='width=device-width, initial-scale=1' name='viewport'/>
 		<!-- 
 		http://jquerymobile.com/demos/1.3.0-rc.1/docs/pages/backbone-require.html
 		Adresse als Vorlage für die Kofiguration von
@@ -12,14 +12,72 @@
 		- backbone und underscore
 		- jquery mobile
 		-->
-		<link href="js/vendor/jquery.mobile-1.3.1.min.css" rel="stylesheet"/>
-		<script data-main="js/fb2.config" src="js/vendor/require-2.1.8.min.js"/>
+		<link href='js/vendor/jquery.mobile-1.3.1.min.css' rel='stylesheet' />
+		<script data-main='js/config' src='js/vendor/require-2.1.8.min.js'></script>
 
 	</head>
-	<body class="ui-mobile-viewport ui-overlay-c">
-		<div id="fb2-start" class="ui-page ui-body-c ui-page-active" data-title="Fragebogen 2" data-role="page" data-url="" tabindex="0" style="min-height: 338px;"></div>
-		<div id="schicht" data-title="Animals" data-role="page" data-url="animals" tabindex="0" class="ui-page ui-body-c" style="min-height: 338px;"></div>
-		<div id="nachDerArbeit" data-title="Colors" data-role="page" data-url="colors"></div>
-		<div id="abends" data-title="Vehicles" data-role="page" data-url="vehicles" class="ui-loader ui-corner-all ui-body-a ui-loader-default"></div>
-	</body>
+	<body data-theme='c' id='fb2'>
+		<div id='fb2-start' data-title='Fragebogen 2' data-role='page' data-url='' tabindex='0' data-theme='c'>
+			<div data-theme='c' data-role='header'>Start</div>
+			<div data-theme='c' data-role='content'>
+				<h3>Bitte wählen Sie eine Fragebogen</h3>
+				<ul data-role="listview" data-inset="true">
+					<li><a href="#">morgens</a></li>
+					<li><a href="#">Schicht A</a></li>
+					<li><a href="#">Schicht B</a></li>
+					<li><a href="#">nach der Arbeit</a></li>
+					<li><a href="#">abends</a></li>
+				</ul>
+			</div>
+			<div data-theme='c' data-role='footer' data-position="fixed">
+				<div data-role="navbar" data-iconpos="bottom">
+					<ul>
+						<li><a href="#"   data-icon="home" data-iconpos="left" class="ui-btn-active">home</a></li>
+						<li><a href="#f1-start" data-icon="grid" data-iconpos="left">start</a></li>
+						<li><a href="#prev" data-icon="arrow-l" data-iconpos="left">zurück</a></li>
+						<li><a href="#next" data-icon="arrow-r" data-iconpos="left">weiter</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div>
+		</div>
+
+		<script id="listItems" type="text/template">
+			<% _.each( collection.toJSON(), function( category, id ) { %>
+				<li class="ui-li ui-li-static ui-btn-up-c ui-corner-top">
+				<%= category.type %>
+				</li>
+				<% }); %>
+		</script>
+
+		<div data-role="page" id="p1">
+			<div data-theme="a" data-role="header"><h3 id="h">	Header</h3></div>
+			<div data-role="content">
+				<div data-role="fieldcontain">
+					<label for="f1t">Frage 1</label>
+					<textarea name="f1" id="f1t" placeholder="">Hallo, wie gehts auf einer Skale von 1 bis 10?</textarea>
+				</div>
+				<div data-role="fieldcontain">
+					<label for="slider1">Value</label>
+					<input id="slider1" name="slider" value="50" min="0" max="100" data-highlight="false" type="range"></div>
+				<div id="rb" data-role="fieldcontain">
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<legend>Choose:</legend>
+						<input id="radio1" name="radioButtons" value="radio1" type="radio">
+						<label for="radio1">1</label>
+						<input id="radio2" name="radioButtons" value="radio2" type="radio">
+						<label for="radio2">2</label>
+						<input id="radio3" name="radioButtons" value="radio3" type="radio">
+						<label for="radio3">3</label>
+						<input id="radio4" name="radioButtons" value="radio4" type="radio">
+						<label for="radio4">4</label>
+						<input id="radio5" name="radioButtons" value="radio5" type="radio">
+						<label for="radio5">5</label>
+					</fieldset>
+				</div>
+			</div>
+			<div id="f" data-theme="a" data-role="footer" data-position="fixed">
+				<h3 id="fo">Footer</h3>
+		</div>
+	</div>
+</body>
 </html>
