@@ -1,0 +1,77 @@
+%% Protokoll zur Erstellung und Handhabung des Fragebogen 2
+%%	erstellt am: 13/07/24
+ 
+\documentclass[a4paper]{scrartcl}
+ 
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+%%\usepackage{foilhtml}
+\usepackage[ngerman,english]{babel}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{listings}
+\lstset{
+	language=HTML,
+	extendedchars=false,
+	basicstyle=\ttfamily\footnotesize,
+	tabsize=2,
+	framesep=10pt,
+	showstringspaces=false,
+	fontadjust=true,
+	flexiblecolumns=true
+	}
+  
+\title{Dokumentation zum Fragebogen 2}
+\author{Frank Baethge}
+\date{2013-07-24}
+\begin{document}
+%%\maketitle
+%%\tableofcontents
+	\section{Programmierung}
+
+		\subsection{TODO}
+			\begin{itemize}
+				\item UI
+
+					\begin{itemize}
+						\item teste übergebenen Parameter "'device"'
+						\item Header soll Fortschritt anzeigen
+					\end{itemize}
+				\item offline Applikation
+				\item DatenAblage auf Gerät
+				\item Hinweis für Nutzer, dass ein Fragebogen ausgefüllt werden soll (Wecker evtl. mit Erinnerung)
+				\item Datenübertragung auf Server
+				\item Hosting auf UniMainz-Irgendwo: ssh, webserver + php, ajax (mysql, git, node.js oder modWebSocket)
+			\end{itemize}
+
+		\subsection{DONE}
+			\begin{itemize}
+				\item google chrome beta installiert um Debugging zu ermöglichen siehe \href{https://developers.google.com/chrome-developer-tools/docs/remote-debugging}{remote-debugging}
+				\item \href{http://developer.android.com/tools/device.html#setting-up}{udev einrichten} lege dazu /etc/udev/rules.d/51-android.rules neu an
+				\item installiere adt (sdk und eclipse), weil irgendwas mit den Devices nicht zu funktionieren scheint \newline apt-get install lib32ncurses5 lib32stdc++6
+				\item Domäne an Uni Mainz erhalten (SSH, PHP, MySQL, evtl. node.js)
+				\item Anmeldungen für Google-Play (Chrome 28 - update)
+
+					Vorname Name: 1 AOW \newline
+					mail: AOWMainz@gmail.com - Kennwort extra \newline
+					bester Freund in der Kindheit: Kennwort extra
+				\item \href{http://www.ofbrooklyn.com/2012/11/13/backbonification-migrating-javascript-to-backbone}{Umwandlung einer bestehenden Seite}
+				\item \href{http://backbonetutorials.com/organizing-backbone-using-modules/}{Organizing your app using Modules (require.js)}
+				\item \href{http://developer.chrome.com/apps/about_apps.html}{Offline-App} als Chrome-Erweiterung
+					
+					\href{http://docs.webplatform.org/wiki/tutorials/offline_storage}{localStorage verwenden}\newline
+					\href{http://docs.webplatform.org/wiki/tutorials/appcache_beginner}{application cache} mit manifest
+			\end{itemize}
+		\subsection{Geräte}
+			\begin{itemize}
+				\item 479006020ba8303a \newline
+					IMEI:356098050204712/01 (mit *\#06\# zu erhalten) \newline
+					WLAN:android-d98263c8b9c79f4f \newline
+					WLAN-Mac:10:d5:42:46:b7:5b \newline
+					Seriennummer: RF1D625WH0B
+
+			\end{itemize}
+		\section{Quellen}
+			\subsection{index.html}
+				\lstinputlisting{index.html}
+\end{document}
