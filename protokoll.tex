@@ -5,7 +5,7 @@
  
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-%%\usepackage{foilhtml}
+\usepackage{foilhtml}
 \usepackage[ngerman,english]{babel}
 \usepackage{amsmath}
 \usepackage{hyperref}
@@ -35,6 +35,7 @@
 
 					\begin{itemize}
 						\item teste übergebenen Parameter "'device"'
+						\item Einstellungen programmieren (Starttag, Startzeiten, Gerätenamen)
 						\item Header soll Fortschritt anzeigen
 					\end{itemize}
 				\item offline Applikation
@@ -42,6 +43,14 @@
 				\item Hinweis für Nutzer, dass ein Fragebogen ausgefüllt werden soll (Wecker evtl. mit Erinnerung)
 				\item Datenübertragung auf Server
 				\item Hosting auf UniMainz-Irgendwo: ssh, webserver + php, ajax (mysql, git, node.js oder modWebSocket)
+			\end{itemize}
+
+		\subsection{Informationen zum Programm}
+			\begin{itemize}
+				\item Testen mit: 192.168.178.20:8000
+				\item Parameter: device=bla \rightarrow Gerätename
+				\item Parameter: st=jjjj-mm-tt \rightarrow Startdatum (Tag)
+				\item Parameter: sz=13:45 \rightarrow Startzeit (Zeit des Arbeitsbeginns für jeden Tag)
 			\end{itemize}
 
 		\subsection{DONE}

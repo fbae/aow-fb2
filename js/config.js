@@ -4,8 +4,8 @@ require.config( {
 	paths: {
 		// Core Libraries
 		'jquery': 'vendor/jquery-2.0.3.min',
-		'jqueryCookie': 'vendor/jquery.cookie',
 		'jquerymobile': 'vendor/jquery.mobile-1.3.1.min',
+		'parseURL': 'vendor/purl',
 		'text':'vendor/text', //require text-Plugin
 		'underscore': 'vendor/underscore',
 		'backbone': 'vendor/backbone.min'
@@ -30,33 +30,78 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 			$.mobile.hashListeningEnabled = false;
 		}
 	)
-	require( [ "jquerymobile", 'jqueryCookie' ], function() {
+	require( [ "jquerymobile", 'parseURL' ], function() {
 		// Instantiates a new Backbone.js Mobile Router
 		this.router = new Fb2Router();
 
 		// erledigt restliche Initialisierungen
 		fb2_config.log.push({dt:(new Date).getTime(), msg: 'Router instanziiert'});
 
-		if ($.cookie('device') && fb2_config.device && fb2_config.device === undefined) {
-			fb2_config.device = $.cookie('device');
-			fb2_config.log.push({dt: (new Date).getTime(), msg: 'Cookie gefunden: ' + fb2_config.device});
-		} else { // Gerätenamen als default setzen (später im Cookie-Manager ändern?) TODO: testen
-			var device = new RegExp('device=([^&amp;#]*)').exec(window.location.href);
-			console.debug('device', device);
-			fb2_config.device = (typeof device === 'array') ? device[1] : 'umauo01';
-			$.cookie('device',fb2_config.device);
-			fb2_config.log.push({dt: (new Date).getTime(), msg: 'Cookie gesetzt: ' + fb2_config.device});
+		// ohne localStorage nicht weitermachen und Fehlerseite anzeigen
+		if (!localStorage) {
+			$.mobile.changePage( '#FlS', {reverse: false, changeHash: false} );			
+			return false;
 		}
 
+		// GeräteNamen setzen
+		if (!localStorage.device || (localStorage.device === undefined)) { //TODO: testen
+			var device = $.url().param('device');
+			localStorage.device = (device !== undefined) ? device : 'oN'+(new Date()).getTime();
+			fb2_config.log.push({dt: (new Date).getTime(), msg: 'device gesetzt: ' + device});
+		}
+
+		var tagS = $.url().param('st');
+		if (tagS !== undefined) { // TODO: testen
+			var tagA = tagS.split('-');
+			var sT = new Date(parseInt(tagA[0]),parseInt(tagA[1]),parseInt(tagA[2]));
+			localStorage.startTag = JSON.stringify(sT);
+			fb2_config.log.push({dt: (new Date).getTime(), msg: 'Starttag aus Parameter gesetzt: ' + sT});
+		} else 
+			if (!localStorage.startTag) {
+				var sT = new Date();
+				sT.hours = 12;
+				sT.minutes = 30;
+				sT.seconds = 0;
+				sT.millisconds = 0;
+				localStorage.startTag = JSON.stringify(sT);
+				fb2_config.log.push({dt: (new Date).getTime(), msg: 'Starttag auf heute gesetzt: ' + sT});
+			}
+
+		var zeitS = $.url().param('sz');
+		if (zeitS) { // TODO: testen
+			var zeitA = zeitS.split(':');
+			var zeitStd = parseInt(zeitA[0]);
+			var zeitMin = parseInt(zeitA[1]);
+			if (!sT) var sT = new Date(JSON.parse(localStorage.startTag));
+			sT.setHours(zeitStd);
+			sT.setMinutes(zeitMin);
+			localStorage.startTag = JSON.stringify(sT);
+			console.debug(sT, localStorage.startTag);
+			fb2_config.log.push({dt: (new Date).getTime(), msg: 'StartZeit gesetzt: ' + sT});
+		}
 		localStorage.log = JSON.stringify(fb2_config.log);
 	});
 } );
 
 // Globale Variable
 var fb2_config = {
-	device: undefined,
+	version: '0.1',
+
 	fragenCollection: [],
 	zeitenCollection: [],
 	log: (localStorage.log) ? JSON.parse(localStorage.log) : [],
-	antworten: (localStorage.antworten) ? JSON.parse(localStorage.antworten) : [],
-}
+	antworten: (localStorage.antworten) ? JSON.parse(localStorage.antworten) : []
+};
+
+Object.defineProperty(fb2_config, 'device', {
+	get: function() {return localStorage.device; },
+	set: function(d) {localStorage.device = d}
+});
+Object.defineProperty(fb2_config, 'tag', {
+	get: function() {return localStorage.startTag; },
+	set: function(d) {localStorage.startTag = d}
+});
+Object.defineProperty(fb2_config, 'zeit', {
+	get: function() {return localStorage.startZeit; },
+	set: function(d) {localStorage.startZeit = d}
+});

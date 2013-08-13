@@ -18,15 +18,30 @@
 	</head>
 	<body data-theme='c' id='fb2'>
 
-		<div id='home' data-title='Fragebogen 2' data-role='page' data-url='' tabindex='0' data-theme='c'>
-			<div data-theme='c' data-role='header'>Start</div>
+		<div id='home' data-title='Fragebogen 2' data-role='page' data-theme='c'>
 			<div data-theme='c' data-role='content'>
 				<h3>Bitte wählen Sie eine Fragebogen</h3>
 				<ul data-role='listview' data-inset='true'>
-					<li><a href='#'>Schicht</a></li>
+					<li><a href='#'>während der Arbeit 1</a></li>
+					<li><a href='#'>während der Arbeit 2</a></li>
 					<li><a href='#'>nach der Arbeit</a></li>
 					<li><a href='#'>abends</a></li>
 				</ul>
+			</div>
+			<div data-theme='c' data-role='footer' data-position='fixed'>
+				<div data-role='navbar' data-iconpos='bottom'>
+					<ul>
+						<li><a href='#'   data-icon='home' data-iconpos='left' class='ui-btn-active'>home</a></li>
+						<li><a href='#settings' data-icon='grid' data-iconpos='left'>Einstellungen</a></li>
+					</ul>
+				</div><!-- /navbar -->
+			</div>
+		</div>
+
+<!--
+		<div id='DUMMY' data-title='Fehler localStorage' data-role='page' data-theme='c'>
+			<div data-theme='c' data-role='header'></div>
+			<div data-theme='c' data-role='content'>
 			</div>
 			<div data-theme='c' data-role='footer' data-position='fixed'>
 				<div data-role='navbar' data-iconpos='bottom'>
@@ -36,7 +51,21 @@
 						<li><a href='#prev' data-icon='arrow-l' data-iconpos='left'>zurück</a></li>
 						<li><a href='#next' data-icon='arrow-r' data-iconpos='left'>weiter</a></li>
 					</ul>
-				</div><!-- /navbar -->
+				</div>
+			</div>
+		</div>
+-->
+		<div id='FlS' data-title='Fehler localStorage' data-role='page' data-theme='a'>
+			<div data-theme='a' data-role='header'>Fehler</div>
+			<div data-theme='a' data-role='content'>
+				Es ist ein unbehebbarer Fehler aufgetreten.<br/>
+				Ihr Browser untersützt ein notwendiges Feature: "localStorage" nicht.<br/>
+				Installieren Sie eine neuere Version Ihres Browsers:
+				<ul>
+					<li>Chrome for Android: 28</li>
+					<li>Firefox for Android: 23</li>
+					<li>Opera Mobile: 11</li>
+				</ul>
 			</div>
 		</div>
 

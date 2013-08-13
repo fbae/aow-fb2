@@ -18,15 +18,21 @@ define(
 		routes: {
 			// When there is no hash bang on the url, the home method is called
 			'': 'home',
-			'p1': 'p1',
+			'FlS': 'FehlerLocalStorage',
+			'settings': 'settings',
 
 			// When #fb2? is on the url, the fb2 method is called
 			'fb2?:type': 'frage'
 		},
-		// Home method
+
 		home: function() {
-			// zeigt die Start-Seite 
 			$.mobile.changePage( '#home' , { reverse: false, changeHash: false } );
+		},
+		FehlerLocalStorage: function() {
+			$.mobile.changePage( '#FlS', { reverse: false, changeHash: false } );
+		},
+		settings: function() {
+			//TODO
 		},
 
 		p1: function() {
