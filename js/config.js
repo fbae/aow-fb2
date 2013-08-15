@@ -12,6 +12,9 @@ require.config( {
 	},
 	// Sets the configuration for your third party scripts that are not AMD compatible
 	shim: {
+		underscore: {
+			exports: '_'
+		},
 		'backbone': {
 			'deps': [ 'underscore', 'jquery' ],
 			'exports': 'Backbone' //attaches 'Backbone' to the window object
@@ -43,18 +46,22 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 			return false;
 		}
 
+		// log löschen, falls status == debug
+		if (fb2_config.status === 'debug') localStorage.log = [];
+
 		// GeräteNamen setzen
 		if (!localStorage.device || (localStorage.device === undefined)) { //TODO: testen
 			var device = $.url().param('device');
-			localStorage.device = (device !== undefined) ? device : 'oN'+(new Date()).getTime();
+			fb2_config.device = (device !== undefined) ? device : 'oN'+(new Date()).getTime();
 			fb2_config.log.push({dt: (new Date).getTime(), msg: 'device gesetzt: ' + device});
 		}
 
+		// StartTag und StartZeit setzten, falls welche übergeben wurden
 		var tagS = $.url().param('st');
 		if (tagS !== undefined) { // TODO: testen
 			var tagA = tagS.split('-');
 			var sT = new Date(parseInt(tagA[0]),parseInt(tagA[1]),parseInt(tagA[2]));
-			localStorage.startTag = JSON.stringify(sT);
+			fb2_config.tag = sT;
 			fb2_config.log.push({dt: (new Date).getTime(), msg: 'Starttag aus Parameter gesetzt: ' + sT});
 		} else 
 			if (!localStorage.startTag) {
@@ -63,7 +70,7 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 				sT.minutes = 30;
 				sT.seconds = 0;
 				sT.millisconds = 0;
-				localStorage.startTag = JSON.stringify(sT);
+				fb2_config.tag = sT;
 				fb2_config.log.push({dt: (new Date).getTime(), msg: 'Starttag auf heute gesetzt: ' + sT});
 			}
 
@@ -72,10 +79,10 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 			var zeitA = zeitS.split(':');
 			var zeitStd = parseInt(zeitA[0]);
 			var zeitMin = parseInt(zeitA[1]);
-			if (!sT) var sT = new Date(JSON.parse(localStorage.startTag));
+			if (!sT) var sT = fb2_config.tag;
 			sT.setHours(zeitStd);
 			sT.setMinutes(zeitMin);
-			localStorage.startTag = JSON.stringify(sT);
+			fb2_config.tag = sT;
 			console.debug(sT, localStorage.startTag);
 			fb2_config.log.push({dt: (new Date).getTime(), msg: 'StartZeit gesetzt: ' + sT});
 		}
@@ -86,6 +93,7 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 // Globale Variable
 var fb2_config = {
 	version: '0.1',
+	'status': 'debug', 
 
 	fragenCollection: [],
 	zeitenCollection: [],
@@ -94,14 +102,20 @@ var fb2_config = {
 };
 
 Object.defineProperty(fb2_config, 'device', {
-	get: function() {return localStorage.device; },
-	set: function(d) {localStorage.device = d}
+	get: function() { return localStorage.device; },
+	set: function(d) { localStorage.device = d}
 });
 Object.defineProperty(fb2_config, 'tag', {
-	get: function() {return localStorage.startTag; },
-	set: function(d) {localStorage.startTag = d}
+	get: function() { return new Date(JSON.parse(localStorage.startTag)); },
+	set: function(d) { localStorage.startTag = JSON.stringify(d); }
 });
-Object.defineProperty(fb2_config, 'zeit', {
-	get: function() {return localStorage.startZeit; },
-	set: function(d) {localStorage.startZeit = d}
+Object.defineProperty(fb2_config, 'anzHeute', {
+	get: function() {
+		return Math.floor(((new Date()).getTime() - this.tag.getTime())/1000/60/60/24);
+	}
 });
+Object.defineProperty(fb2_config, 'artHeute', {
+	get: function() {
+		return Math.abs(this.anzHeute % 2);
+	}
+})

@@ -1,0 +1,27 @@
+<div data-theme='c' data-role='content'>
+	<div id='frage' data-value='<%= id %>'>
+		<span class='fEinleitung'>Während der letzten 2 Arbeitsstunden</span>
+		<%= txt %>
+	</div>
+
+	<ul id='antwort' data-role='listview' data-inset='true'>
+		<li id='a1' data-icon='false'><a href='#' data-value='1'>nie</a></li>
+		<li id='a2' data-icon='false'><a href='#' data-value='2'>selten</a></li>
+		<li id='a3' data-icon='false'><a href='#' data-value='3'>manchmal</a></li>
+		<li id='a4' data-icon='false'><a href='#' data-value='4'>häufig</a></li>
+		<li id='a5' data-icon='false'><a href='#' data-value='5'>immer</a></li>
+	</ul>
+
+</div>
+<div data-theme='c' data-role='footer' data-position='fixed'>
+	<div data-role='navbar' data-iconpos='left'>
+		<ul>
+			<% if (!prev || (prev === null)) %>
+			<li><a href='#' data-icon='home' >home</a></li>
+			<% else { %>
+			<li><a href='#f?<%= prev %>' data-icon='arrow-l' >zurück</a></li>
+			<% } %>
+			<li><a href='#<% if (next === null) { print('S') } else { print('f?'+next) } %>' data-icon='arrow-r' >weiter</a></li>
+		</ul>
+	</div>
+</div>

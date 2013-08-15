@@ -3,28 +3,30 @@
 'use strict';
 
 // Includes file dependencies
-define('frage', [ 'jquery', 'underscore', 'text!templates/frage5.html'], function( $, _, frage5Template ) {
-	function Frage(id,art,bes,txt) {
+define(function(require) {
+	var $ = require('jquery');
+	var frage5Template = require('text!../templates/frage5.html');
+	var mt5aTemplate = require('text!../templates/mt5A.html');
+	var mt5bTemplate = require('text!../templates/mt5B.html');
+
+	function Frage(id,art,txt) {
 		// Default-Werte vergeben
 		this.id = (id !== undefined) ? id : -1;
-		this.art = ((art !== undefined) && Number.isInteger(art)) ? art : 5; // Art der Frage - wirkt sich auf das Template aus
-		// Beschriftung und Werte für die Antworten
-		this.bes = ((bes !== undefinde) && (typeof bes === 'array') && (this.art == bes.length)) ? 
-			bes : [{b:'<10',w:1},{b:'<20',w:2},{b:'<=40',w:3},{b:'>40',w:4},{b:'>50',w:5}];
+		this.art = ((art !== undefined)) ? art : 5; // Art der Frage - wirkt sich auf das Template aus
 		this.txt = (txt !== undefined) ? txt : 'Wie alt möchten Sie werden?';
-		this.zeit = null;
-		this.__defineGetter__('Zeit',function(){ return this.zeit.getTime(); });
-		this.__defineSetter__('Zeit',function() { this.zeit = new Date(); });
-		this.setZeit();
+		this.ant = null;
 
-		this.tpl = null;
 		this.__defineGetter__('template',function() {
-			if (this.tpl === null) {
-				// TODO: hier muss noch die exakte Zuordnung des richtigen Templates stattfinden (in Abhängigkeit von this.art)
-				var this.tpl = _.template(frage5Template, this.toJSON());  
+			if (!this.tpl) {
+				switch (this.art) {
+					case 3:  this.tpl = mt5bTemplate; break;
+					case 4:  this.tpl = mt5aTemplate; break;
+					default: this.tpl = frage5Template;  
+				}
 			}
 			return this.tpl;
 		});
+		this.template;
 	};
 
 	Frage.prototype.toJSON = function() {
@@ -32,10 +34,9 @@ define('frage', [ 'jquery', 'underscore', 'text!templates/frage5.html'], functio
 		res.id = this.id;
 		res.art = this.art;
 		res.txt = this.txt;
-		res.zeit = this.Zeit;
-		res.bes = this.bes;
+		res.ant = this.ant;
 		return JSON.stringify( res );
 	}
 
 	return Frage;
-}
+});
