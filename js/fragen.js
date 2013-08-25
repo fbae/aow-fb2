@@ -1,7 +1,13 @@
 // Fragen als Collection 
 // ===================
 
-define([ "jquery","backbone","model","frage" ], function( $, Backbone, FrageModel, Frage ) {
+define(function( require ) {
+	var $ = require('jquery');
+	var Backbone = require('backbone');
+	var FrageModel = require('model');
+	var Frage = require('frage');
+	var MtView = require('mtView');
+	var seitenTemplate = require('text!../templates/seiten.html');
 
 	var Fragen = Backbone.Collection.extend( {
 
@@ -32,50 +38,54 @@ define([ "jquery","backbone","model","frage" ], function( $, Backbone, FrageMode
 			 *	NB -> Ablauf M (Nach der Arbeit B)
 			 *	A -> Ablauf A (Abends)
 			 */
+
+			// Voreinstellungen
+			fb2_config.fragen = this;
 			if (!this.typ) this.typ = 'O';
 			this.akt = 0;
 			this.zeit = new Date();
 
-			this.add(new Frage('MA1',4,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
-      this.add(new Frage('MA2',4,'arbeitete ich an mehr als einer Aufgabe.'));
-      this.add(new Frage('MA3',4,'bearbeitete ich Aufgaben nacheinander ab.'));
-      this.add(new Frage('MA4',4,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
-      this.add(new Frage('MA5',4,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
-      this.add(new Frage('MA6',4,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
-      this.add(new Frage('MA7',4,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
-      this.add(new Frage('MA8',4,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
-			this.add(new Frage('MB1',3,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
-      this.add(new Frage('MB2',3,'arbeitete ich an mehr als einer Aufgabe.'));
-      this.add(new Frage('MB3',3,'bearbeitete ich Aufgaben nacheinander ab.'));
-      this.add(new Frage('MB4',3,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
-      this.add(new Frage('MB5',3,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
-      this.add(new Frage('MB6',3,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
-      this.add(new Frage('MB7',3,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
-      this.add(new Frage('MB8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
+			// Fragen
+			this.add(new Frage('MH1',4,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
+      this.add(new Frage('MH2',4,'arbeitete ich an mehr als einer Aufgabe.'));
+      this.add(new Frage('MH3',4,'bearbeitete ich Aufgaben nacheinander ab.'));
+      this.add(new Frage('MH4',4,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
+      this.add(new Frage('MH5',4,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
+      this.add(new Frage('MH6',4,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
+      this.add(new Frage('MH7',4,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
+      this.add(new Frage('MH8',4,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
+			this.add(new Frage('MZ1',3,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
+      this.add(new Frage('MZ2',3,'arbeitete ich an mehr als einer Aufgabe.'));
+      this.add(new Frage('MZ3',3,'bearbeitete ich Aufgaben nacheinander ab.'));
+      this.add(new Frage('MZ4',3,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
+      this.add(new Frage('MZ5',3,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
+      this.add(new Frage('MZ6',3,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
+      this.add(new Frage('MZ7',3,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
+      this.add(new Frage('MZ8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 
       this.add(new Frage('FW',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.'));
 //      this.add(new Frage('',,''));
 
 			this.ablauf = {
 				W1: [
-					{v: 'MtView', f:['MA1']},
-					{v: 'MtView', f:['MA2']},
-					{v: 'MtView', f:['MA3']},
-					{v: 'MtView', f:['MA4']},
-					{v: 'MtView', f:['MA5']},
-					{v: 'MtView', f:['MA6']},
-					{v: 'MtView', f:['MA7']},
-					{v: 'MtView', f:['MA8']},
+					{v: 'MtView', f:['MH1']},
+					{v: 'MtView', f:['MH2']},
+					{v: 'MtView', f:['MH3']},
+					{v: 'MtView', f:['MH4']},
+					{v: 'MtView', f:['MH5']},
+					{v: 'MtView', f:['MH6']},
+					{v: 'MtView', f:['MH7']},
+					{v: 'MtView', f:['MH8']},
 				],
 				Q1: [
-					{v: 'MtView', f:['MA1']},
-					{v: 'MtView', f:['MA2']},
-					{v: 'MtView', f:['MA3']},
-					{v: 'MtView', f:['MA4']},
-					{v: 'MtView', f:['MA5']},
-					{v: 'MtView', f:['MA6']},
-					{v: 'MtView', f:['MA7']},
-					{v: 'MtView', f:['MA8']},
+					{v: 'MtView', f:['MZ1']},
+					{v: 'MtView', f:['MZ2']},
+					{v: 'MtView', f:['MZ3']},
+					{v: 'MtView', f:['MZ4']},
+					{v: 'MtView', f:['MZ5']},
+					{v: 'MtView', f:['MZ6']},
+					{v: 'MtView', f:['MZ7']},
+					{v: 'MtView', f:['MZ8']},
 				],
 				W2: [ 
 					{v: 'FView', f:['FW','FW']}
@@ -127,16 +137,28 @@ define([ "jquery","backbone","model","frage" ], function( $, Backbone, FrageMode
 
 		},
 
-		get next() {
-			if (!this.ablauf || (this.typ === 'O')) return undefined;
-			var n = this.akt + 1;
-			console.debug( 'akt', this.akt);
-			console.debug( 'ablauf', this.ablauf);
-			console.debug( 'ablauf.typ', this.ablauf[this.typ]);
-			console.debug( 'typ', this.typ);
-			return (n < this.ablauf[this.typ].length) ? n : null;
+		/*
+		 * erstellt für den konkreten Ablauf alle Seiten
+		 * (es muss scheinbar immer auf eine andere Seite verlinkt werden, weil sonst die css-Eigenschaften
+		 * nicht erneuert werden)
+		 *	@param	typ: siehe oben
+		createPages: function(typ) {
+			if ( !( typ === 'WA' || typ === 'WB' || typ === 'QA' || typ === 'QB' || typ === 'N' || typ === 'A' ) ) {
+				console.warn('Fehler: createPages versucht die Seiten für den Typ ' + typ + 
+						' anzulegen, aber der Typ ist nicht bekannt.');
+				return undefined;
+			}
+			this.art = art;
+			this.zeit = new Date();
+			this.akt = 0;
+
+			// ttt $('body').
+
+			return this;
 		},
-		get prev() { return (this.akt == 0) ? null : this.akt - 1; },
+Nicht weiter verwendet
+		 */
+
 
 		// Sets the Collection model property to be a Fragebogen2 Model
 		model: FrageModel,
@@ -182,10 +204,41 @@ define([ "jquery","backbone","model","frage" ], function( $, Backbone, FrageMode
 			// Returns the deferred object
 			return deferred;
 
+		},
+		vorher: function() { return (this.akt == 0) ? null : this.akt - 1; },
+		nachher: function() {
+			if (!this.ablauf || (this.typ === 'O')) return undefined;
+			var n = this.akt + 1;
+			return (n < this.ablauf[this.typ].length) ? n : null;
+		},
+		// Anzahl der Fagen im aktuellen Ablauf
+		anzahl: function() {
+			if (this.typ === 'O') return -1;
+			return this.ablauf[this.typ].length;
+		},
+		zeitpunkt: function() {
+			switch (this.typ) {
+				case 'WA':
+				case 'WB': return '1'; break;
+				case 'QA':
+				case 'QB': return '2'; break;
+				case 'NA':
+				case 'NB': return '3'; break;
+				case 'A': return '4'; break;
+				default: return '0';
+			}
+			return undefined;
+		},
+
+		setzeAntwort: function(antwortO) {
+			if (antwortO.kodierung && antwortO.antw) {
+				var kod = antwortO.kodierung.substr(1,antwortO.kodierung.length-1);
+				console.debug( 'kod:',kod,this.get(kod).attributes);
+				this.get(kod).attributes.ant = antwortO.antw;
+			}
 		}
 
 	} );
-
 	// Returns the Model class
 	return Fragen;
 

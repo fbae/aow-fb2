@@ -36,6 +36,7 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 	require( [ "jquerymobile", 'parseURL' ], function() {
 		// Instantiates a new Backbone.js Mobile Router
 		this.router = new Fb2Router();
+		fb2_config.router = this.router;
 
 		// erledigt restliche Initialisierungen
 		fb2_config.log.push({dt:(new Date).getTime(), msg: 'Router instanziiert'});
@@ -90,15 +91,78 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 	});
 } );
 
-// Globale Variable
+/* Globale Variable fb2_config
+ * enthält alle Einstellungen und gewährt Zugriff auf die wesentlichen Objekte und
+ * die Methoden der App-Logik - eigentlich sollte das in eine eigene Datei ausgelagert werden
+ *
+ *	@Attribut	router wird dynamisch gesetzt
+ *	@Attribut	fragen wird dynamisch gesetz
+ */
+
 var fb2_config = {
 	version: '0.1',
-	'status': 'debug', 
+	'status': 'debug',
+	router: null,
+	fragen: null,
 
-	fragenCollection: [],
 	zeitenCollection: [],
 	log: (localStorage.log) ? JSON.parse(localStorage.log) : [],
-	antworten: (localStorage.antworten) ? JSON.parse(localStorage.antworten) : []
+	antworten: (localStorage.antworten) ? JSON.parse(localStorage.antworten) : [],
+
+	/*
+	 * setzeAntwort
+	 *	@param	antwortO - Object
+	 * im Objekt können folgende Eigenschaften übergeben werden
+	 * - kodierung
+	 * - wert
+	 * - zeit
+	 */
+	setzeAntwort: function(antwortO) {
+		console.debug( 'setzeAntwort aufgerufen mit antwortO:', antwortO);
+		if (typeof antwortO !== 'object') {
+			console.debug('Fehler: es wird versucht eine Antwort zu speichern, ' +
+					'aber die Antwort wird nicht übergeben - antwortO: ', antwortO);
+			return undefined;
+		}
+
+		this.log.push({dt:(new Date()).getTime(), msg:'setzeAntwort', data:antwortO});
+
+		var heuteNr = Math.abs(this.anzHeute);
+		if (!this.antworten[heuteNr]) {
+			// beim erstmaligen Aufruf weitere Eigenschaften speichern
+			var ah = new Object();
+			ah.erstellDatum = this.fragen.zeit;
+			this.antworten[heuteNr] = ah;
+		}
+		// TODO: vielleicht die Kodierung überprüfen? -> vermutlich nicht notwendig
+		
+		/* Datenbankeintrag (localStorage)
+		 * Antworten werden zunächst alle zwischengespeichert in this.antworten[], somit müssen sie
+		 * nur beim Neustart neu gelesen werden. Bei jeder Antwort müssen sie allerdings geschrieben 
+		 * werden.
+		 */
+		var data = this.antworten[heuteNr];
+		if (antwortO.kodierung) {
+			var kod = new Object();
+			kod.zeit = (antwortO.zeit) ? antwortO.zeit : (new Date()).getTime();
+			kod.wert = (antwortO.antw) ? antwortO.antw : 'null';
+			data[antwortO.kodierung] = kod; 
+			localStorage.antworten = JSON.stringify(this.antworten);
+			this.log.push({dt:(new Date()).getTime(), msg:'setzeAntwort erfolgreich'});
+		} else {
+			console.debug( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
+			this.log.push({dt:(new Date()).getTime(), 
+				msg:'FEHLER: setzeAntwort gescheitert - keine Kodierung in antwortO', data:antwortO});
+			return undefined;
+		}
+
+
+		// Eintrag in Collection: fragen
+		this.fragen.setzeAntwort(antwortO);
+
+		localStorage.log = JSON.stringify(this.log);
+
+	}
 };
 
 Object.defineProperty(fb2_config, 'device', {

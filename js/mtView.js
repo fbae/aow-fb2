@@ -1,7 +1,7 @@
 // View für eine Frage
 // ===================
 
-define([ "jquery", 'underscore', "backbone","model", 'fragen' ], function( $, _, Backbone, Fb2Model, Fragen ) {
+define([ "jquery", 'underscore', "backbone","model" ], function( $, _, Backbone, Fb2Model ) {
 	var MtView = Backbone.View.extend( {
 		el: '#f', 
 		// The View Constructor
@@ -11,13 +11,21 @@ define([ "jquery", 'underscore', "backbone","model", 'fragen' ], function( $, _,
 		},
 		render: function() {
 			var f = this.collection; // Fragen
-			var frage = f.get(f.ablauf[f.typ][f.aktuell]['f'][0]).attributes;
-			frage.next = f.next;
-			frage.prev = f.prev;
+			// aktuelle Frage ermitteln
+			var frage = f.get(f.ablauf[f.typ][f.akt]['f'][0]);
+			var fO = JSON.parse(frage.attributes.toJSON());
+			// vorherige und nachfolgende Frage für Verlinkung bestimmen
+			fO.next = f.nachher();
+			fO.prev = f.vorher();
+			fO.kodierung = f.zeitpunkt() + frage.id;
+console.debug( 'fO:',fO);
+			// Template rendern
+			this.template = _.template(frage.attributes.template,fO);
+			// HTML in DOM einhängen und mit page() jqm die Seite verbessert
+			this.$el.html(this.template).page();
+			this.$el.find( ":jqmData(role=listview)" ).listview(); // jqm verbessern 
+			// verbessern: http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html
 
-			this.template = _.template(frage.template,frage);
-			// Renders the view's template inside of the current listview element
-			this.$el.html(this.template);
 			// Maintains chainability
 			return this;
 		}

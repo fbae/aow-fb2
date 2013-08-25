@@ -51,7 +51,7 @@ define( function( require) {
 			this.fragen.typ = (fb2_config.artHeute) ? 'WA' : 'WB';
 			fb2_config.log.push({dt:new Date(), msg:'ablaufW Typ:' + this.fragen.typ});
 			localStorage.log = JSON.stringify(fb2_config.log);
-			this.fragen.aktuell = 0;
+			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
 			var view = new MtView( {collection: this.fragen} );
 			view.render();
@@ -59,6 +59,8 @@ define( function( require) {
 		},
 		ablaufQ: function() {
 			this.fragen.typ = (fb2_config.artHeute) ? 'QA' : 'QB';
+			fb2_config.log.push({dt:new Date(), msg:'ablaufQ Typ:' + this.fragen.typ});
+			localStorage.log = JSON.stringify(fb2_config.log);
 			this.fragen.aktuell = 0;
 			this.fragen.zeit = new Date();
 			var view = new MtView( {collection: this.fragen} );
@@ -73,14 +75,18 @@ define( function( require) {
 				return undefined;
 			}
 			nr = parseInt(nr);
-			if (Number.isInteger(nr) && (0 <= nr) && (nr < this.fragen.anzahl)) {
+			if ((nr !== 'NaN') && (0 <= nr) && (nr < this.fragen.anzahl())) {
 				this.fragen.akt = nr;
 			} else {
-				console.info( 'Fehler: der übergebene Parameter Nummer: ' + nr + ' passt nicht.');
+				if (this.fragen.akt + 1 < this.fragen.anzahl) this.fragen.akt++;
+				console.info( 'Fehler: der übergebene Parameter Nummer: ' + nr + 
+						' passt nicht. Es wird versucht die nächste Frage zu wählen');
 			}
 			var view = new MtView( {collection: this.fragen} );
 			view.render();
-			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
+			$('#f').trigger('create');
+			$.mobile.changePage('#f?' + this.fragen.akt, {reverse: false, changeHash: true, 
+			allowSamePageTransition: true, reloadPage:false} );
 
 
 /*

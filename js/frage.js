@@ -27,6 +27,11 @@ define(function(require) {
 			return this.tpl;
 		});
 		this.template;
+
+//		this.__defineGetter__('antwort',function() { return this.ant; });
+//		this.__defineSetter__('antwort',function(a) { this.ant = a; });
+	 	// TODO: eventuell Antwort auf Bereich prüfen
+
 	};
 
 	Frage.prototype.toJSON = function() {
