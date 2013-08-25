@@ -7,13 +7,17 @@ define( function( require) {
 	var Backbone = require('backbone');
 	var	Fb2Model = require('model');
 	var Fragen = require('fragen');
-	var MtView = require('mtView');
+
+//	var MtView = require('mtView');
+//	var fehlerView = require('fehlerView');
 
 	// Extends Backbone.Router
 	var Fb2Router = Backbone.Router.extend( {
 		// The Router constructor
 		initialize: function() {
+			console.debug( 'Fragen initialisieren');
 			this.fragen = new Fragen();
+			console.debug( 'Fragen initialisieren - fertig');
 
 			// Tells Backbone to start watching for hashchange events
 			Backbone.history.start();
@@ -37,7 +41,11 @@ define( function( require) {
 			$.mobile.changePage( '#home' , { reverse: false, changeHash: false } );
 		},
 		speichern: function() {
-			// TODO: alles speichern und Fragen zurücksetzen
+			fb2_config.log.push({
+				dt:(new Date()).getTime(), msg:'speichern nach Durchlauf ' + this.fragen.art,
+				data: fb2_config.antworten[fb2_config.anzHeute]
+			}); 
+			this.fragen.typ = 'O';
 			this.home();
 		},
 		FehlerLocalStorage: function() {
@@ -53,7 +61,9 @@ define( function( require) {
 			localStorage.log = JSON.stringify(fb2_config.log);
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
-			var view = new MtView( {collection: this.fragen} );
+			console.debug( 'ablaufW fragen:',this.fragen);
+			var frageView = this.fragen.view();
+			var view = new frageView( {collection: this.fragen} );
 			view.render();
 			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
 		},
@@ -61,9 +71,11 @@ define( function( require) {
 			this.fragen.typ = (fb2_config.artHeute) ? 'QA' : 'QB';
 			fb2_config.log.push({dt:new Date(), msg:'ablaufQ Typ:' + this.fragen.typ});
 			localStorage.log = JSON.stringify(fb2_config.log);
-			this.fragen.aktuell = 0;
+			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
-			var view = new MtView( {collection: this.fragen} );
+			console.debug( 'ablaufQ fragen:',this.fragen);
+			var frageView = this.fragen.view();
+			var view = new frageView( {collection: this.fragen} );
 			view.render();
 			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
 		},
@@ -78,15 +90,17 @@ define( function( require) {
 			if ((nr !== 'NaN') && (0 <= nr) && (nr < this.fragen.anzahl())) {
 				this.fragen.akt = nr;
 			} else {
-				if (this.fragen.akt + 1 < this.fragen.anzahl) this.fragen.akt++;
+				if (this.fragen.akt + 1 < this.fragen.anzahl()) this.fragen.akt++;
 				console.info( 'Fehler: der übergebene Parameter Nummer: ' + nr + 
 						' passt nicht. Es wird versucht die nächste Frage zu wählen');
 			}
-			var view = new MtView( {collection: this.fragen} );
+			console.debug( 'frage fragen:',this.fragen);
+			var frageView = this.fragen.view();
+			var view = new frageView( {collection: this.fragen} );
 			view.render();
 			$('#f').trigger('create');
-			$.mobile.changePage('#f?' + this.fragen.akt, {reverse: false, changeHash: true, 
-			allowSamePageTransition: true, reloadPage:false} );
+			$.mobile.changePage('#f?' + this.fragen.akt, {reverse: false, changeHash: true,
+				allowSamePageTransition: true, reloadPage:false} );
 
 
 /*

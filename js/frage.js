@@ -9,12 +9,15 @@ define(function(require) {
 	var mt5aTemplate = require('text!../templates/mt5A.html');
 	var mt5bTemplate = require('text!../templates/mt5B.html');
 
-	function Frage(id,art,txt) {
+	function Frage(id,art,txt, lTxt, rTxt) {
 		// Default-Werte vergeben
+		// lTxt und rTxt müssen nicht vergeben werden (siehe Multitastking)
 		this.id = (id !== undefined) ? id : -1;
 		this.art = ((art !== undefined)) ? art : 5; // Art der Frage - wirkt sich auf das Template aus
 		this.txt = (txt !== undefined) ? txt : 'Wie alt möchten Sie werden?';
 		this.ant = null;
+		this.lTxt = lTxt;
+		this.rTxt = rTxt;
 
 		this.__defineGetter__('template',function() {
 			if (!this.tpl) {
@@ -40,6 +43,8 @@ define(function(require) {
 		res.art = this.art;
 		res.txt = this.txt;
 		res.ant = this.ant;
+		if (this.lTxt) res.lTxt = this.lTxt;
+		if (this.rTxt) res.rTxt = this.rTxt;
 		return JSON.stringify( res );
 	}
 

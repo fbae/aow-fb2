@@ -7,7 +7,8 @@ define(function( require ) {
 	var FrageModel = require('model');
 	var Frage = require('frage');
 	var MtView = require('mtView');
-	var seitenTemplate = require('text!../templates/seiten.html');
+	var FView = require('fView');
+	var fehlerView = require('fehlerView');
 
 	var Fragen = Backbone.Collection.extend( {
 
@@ -63,32 +64,42 @@ define(function( require ) {
       this.add(new Frage('MZ7',3,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
       this.add(new Frage('MZ8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 
-      this.add(new Frage('FW',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.'));
+      this.add(new Frage('FRE',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.'));
+      this.add(new Frage('STI1',5,'In diesem Moment fühle ich mich &hellip;', 'sehr müde','sehr wach'));
+      this.add(new Frage('STI2',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unzufrieden','sehr zufrieden'));
+      this.add(new Frage('STI3',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unruhig','sehr ruhig'));
+      this.add(new Frage('STI4',5,'In diesem Moment fühle ich mich &hellip;', 'sehr energielos','sehr energiegeladen'));
+      this.add(new Frage('STI5',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unwohl','sehr wohl'));
+      this.add(new Frage('STI6',5,'In diesem Moment fühle ich mich &hellip;', 'sehr angespannt','sehr entspannt'));
 //      this.add(new Frage('',,''));
 
 			this.ablauf = {
+				STI: [
+					{v: FView, f:['STI1','STI2','STI3']},
+					{v: FView, f:['STI4','STI5','STI6']},
+				],
 				W1: [
-					{v: 'MtView', f:['MH1']},
-					{v: 'MtView', f:['MH2']},
-					{v: 'MtView', f:['MH3']},
-					{v: 'MtView', f:['MH4']},
-					{v: 'MtView', f:['MH5']},
-					{v: 'MtView', f:['MH6']},
-					{v: 'MtView', f:['MH7']},
-					{v: 'MtView', f:['MH8']},
+					{v: MtView, f:['MH1']},
+					{v: MtView, f:['MH2']},
+					{v: MtView, f:['MH3']},
+					{v: MtView, f:['MH4']},
+					{v: MtView, f:['MH5']},
+					{v: MtView, f:['MH6']},
+					{v: MtView, f:['MH7']},
+					{v: MtView, f:['MH8']},
 				],
 				Q1: [
-					{v: 'MtView', f:['MZ1']},
-					{v: 'MtView', f:['MZ2']},
-					{v: 'MtView', f:['MZ3']},
-					{v: 'MtView', f:['MZ4']},
-					{v: 'MtView', f:['MZ5']},
-					{v: 'MtView', f:['MZ6']},
-					{v: 'MtView', f:['MZ7']},
-					{v: 'MtView', f:['MZ8']},
+					{v: MtView, f:['MZ1']},
+					{v: MtView, f:['MZ2']},
+					{v: MtView, f:['MZ3']},
+					{v: MtView, f:['MZ4']},
+					{v: MtView, f:['MZ5']},
+					{v: MtView, f:['MZ6']},
+					{v: MtView, f:['MZ7']},
+					{v: MtView, f:['MZ8']},
 				],
 				W2: [ 
-					{v: 'FView', f:['FW','FW']}
+					{v: FView, f:['FW','FW']}
 				],
 			};
 	
@@ -102,13 +113,13 @@ define(function( require ) {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.W1.concat(this.W2) },
+				get: function(){ return this.STI.concat(this.W1,this.W2) },
 			});
 			Object.defineProperty(this.ablauf, 'Q', {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.Q1.concat(this.W2) },
+				get: function(){ return this.STI.concat(this.Q1,this.W2) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', {
 				__proto__: null,
@@ -213,8 +224,10 @@ Nicht weiter verwendet
 		},
 		// Anzahl der Fagen im aktuellen Ablauf
 		anzahl: function() {
-			if (this.typ === 'O') return -1;
-			return this.ablauf[this.typ].length;
+			if (this.ablauf && this.typ && (this.typ !== 'O'))
+				return this.ablauf[this.typ].length;
+
+			return -1;
 		},
 		zeitpunkt: function() {
 			switch (this.typ) {
@@ -233,12 +246,24 @@ Nicht weiter verwendet
 		setzeAntwort: function(antwortO) {
 			if (antwortO.kodierung && antwortO.antw) {
 				var kod = antwortO.kodierung.substr(1,antwortO.kodierung.length-1);
-				console.debug( 'kod:',kod,this.get(kod).attributes);
 				this.get(kod).attributes.ant = antwortO.antw;
 			}
+		},
+		view: function() {
+			if ((this.typ != 'O') && (this.akt <= this.anzahl()))	{
+				return this.ablauf[this.typ][this.akt].v;
+			}
+
+			// Fehler behandeln
+			console.warn( 'Fehler: Fragen.view konnte nicht ermittelt werden', this.typ, this.akt, this.anzahl());
+			fb2_config.log.push({dt:(new Date()).getTime(), 
+				msg:'Fehler: Es wurde eine View abgerufen, die nicht ausgeliefert werden konnte'});
+			localStorage.log = JSON.stringify(fb2_config.log);
+			return fehlerView;
 		}
 
 	} );
+
 	// Returns the Model class
 	return Fragen;
 

@@ -42,7 +42,7 @@
 			<% else { %>
 			<li><a href='#f?<%= prev %>' data-icon='arrow-l' >zurück</a></li>
 			<% } %>
-			<li><a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-icon='arrow-r' >weiter</a></li>
+			<li><a href='#<% print((next == null) ? 'S' : 'f?' + next) %>' data-icon='arrow-r' >weiter</a></li>
 		</ul>
 	</div>
 </div>

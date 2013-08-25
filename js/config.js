@@ -88,6 +88,7 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
 			fb2_config.log.push({dt: (new Date).getTime(), msg: 'StartZeit gesetzt: ' + sT});
 		}
 		localStorage.log = JSON.stringify(fb2_config.log);
+
 	});
 } );
 
@@ -96,14 +97,13 @@ require([ "jquery", "backbone", "router" ], function( $, Backbone, Fb2Router ) {
  * die Methoden der App-Logik - eigentlich sollte das in eine eigene Datei ausgelagert werden
  *
  *	@Attribut	router wird dynamisch gesetzt
- *	@Attribut	fragen wird dynamisch gesetz
+ *	@Attribut	fragen wird aus der router-Eigenschaft ermittelt 
  */
 
 var fb2_config = {
 	version: '0.1',
 	'status': 'debug',
 	router: null,
-	fragen: null,
 
 	zeitenCollection: [],
 	log: (localStorage.log) ? JSON.parse(localStorage.log) : [],
@@ -127,7 +127,7 @@ var fb2_config = {
 
 		this.log.push({dt:(new Date()).getTime(), msg:'setzeAntwort', data:antwortO});
 
-		var heuteNr = Math.abs(this.anzHeute);
+		var heuteNr = this.anzHeute;
 		if (!this.antworten[heuteNr]) {
 			// beim erstmaligen Aufruf weitere Eigenschaften speichern
 			var ah = new Object();
@@ -174,12 +174,21 @@ Object.defineProperty(fb2_config, 'tag', {
 	set: function(d) { localStorage.startTag = JSON.stringify(d); }
 });
 Object.defineProperty(fb2_config, 'anzHeute', {
+	__proto__: null,
+	enumerable: false,
+	writeable: false,
 	get: function() {
-		return Math.floor(((new Date()).getTime() - this.tag.getTime())/1000/60/60/24);
+		return Math.abs(Math.floor(((new Date()).getTime() - this.tag.getTime())/1000/60/60/24));
 	}
 });
 Object.defineProperty(fb2_config, 'artHeute', {
 	get: function() {
 		return Math.abs(this.anzHeute % 2);
 	}
-})
+});
+Object.defineProperty(fb2_config, 'fragen', {
+	__proto__: null,
+	enumerable: true,
+	writeable: false,
+	get: function(){ return (this.router) ? this.router.fragen : undefined; },
+});

@@ -1,14 +1,13 @@
-// View für eine Frage
-// ===================
+// View für eine Frage, die sich aus mehreren Teilfragen zusammensetzen kann
+// =========================================================================
 
-define([ "jquery", 'underscore', "backbone","model" ], function( $, _, Backbone, Fb2Model ) {
-	var MtView = Backbone.View.extend( {
+define([ "jquery", 'underscore', "backbone" ], function( $, _, Backbone ) {
+	var FView = Backbone.View.extend( {
 		el: '#f', 
-		// The View Constructor
+
 		initialize: function() {
-			// The render method is called when Fb2 Models are added to the Collection
-			//frank this.collection.on( "added", this.render, this );
 		},
+
 		render: function() {
 			var f = this.collection; // Fragen
 			// aktuelle Frage ermitteln
@@ -18,7 +17,6 @@ define([ "jquery", 'underscore', "backbone","model" ], function( $, _, Backbone,
 			fO.next = f.nachher();
 			fO.prev = f.vorher();
 			fO.kodierung = f.zeitpunkt() + frage.id;
-console.debug( 'fO:',fO);
 			// Template rendern
 			this.template = _.template(frage.attributes.template,fO);
 			// HTML in DOM einhängen und mit page() jqm die Seite verbessert
@@ -31,6 +29,6 @@ console.debug( 'fO:',fO);
 		}
 	} );
 	// Returns the View class
-	return MtView;
+	return FView;
 } );
 
