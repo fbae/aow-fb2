@@ -41,7 +41,6 @@ define(function( require ) {
 			 */
 
 			// Voreinstellungen
-			fb2_config.fragen = this;
 			if (!this.typ) this.typ = 'O';
 			this.akt = 0;
 			this.zeit = new Date();
@@ -64,7 +63,7 @@ define(function( require ) {
       this.add(new Frage('MZ7',3,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
       this.add(new Frage('MZ8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 
-      this.add(new Frage('FRE',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.'));
+      this.add(new Frage('FRE',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.','trifft überhaupt nicht zu','trifft völlig zu'));
       this.add(new Frage('STI1',5,'In diesem Moment fühle ich mich &hellip;', 'sehr müde','sehr wach'));
       this.add(new Frage('STI2',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unzufrieden','sehr zufrieden'));
       this.add(new Frage('STI3',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unruhig','sehr ruhig'));
@@ -256,9 +255,7 @@ Nicht weiter verwendet
 
 			// Fehler behandeln
 			console.warn( 'Fehler: Fragen.view konnte nicht ermittelt werden', this.typ, this.akt, this.anzahl());
-			fb2_config.log.push({dt:(new Date()).getTime(), 
-				msg:'Fehler: Es wurde eine View abgerufen, die nicht ausgeliefert werden konnte'});
-			localStorage.log = JSON.stringify(fb2_config.log);
+			fb2.log({ msg:'Fehler: Es wurde eine View abgerufen, die nicht ausgeliefert werden konnte'});
 			return fehlerView;
 		}
 

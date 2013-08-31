@@ -23,7 +23,7 @@
   
 \title{Dokumentation zum Fragebogen 2}
 \author{Frank Baethge}
-\date{2013-07-24}
+\date{2013-08-24}
 \begin{document}
 %%\maketitle
 %%\tableofcontents
@@ -39,7 +39,12 @@
 						\item es sollen nicht immer alle Fragebögen (abhängig von der Zeit) auswählbar sein
 						\item Header soll Fortschritt anzeigen
 					\end{itemize}
-				\item offline Applikation
+				\item href{http://developer.chrome.com/apps}{offline Applikation}\newline
+					die app kann jederzeit geschlossen werden, sollte dort fortsetzen wo sie war\newline
+					offline-app onLaunch(), onSuspend()\newline
+					oder chrome://flags enable offline cache\newline
+					oder href{http://appcachefacts.info/}{appcache} - HTML5 - das scheint mir erstmal das Einfachste, das zum Ziel führen könnte. Offline-App ist bestimmt schicker, bedeutet aber auch, dass localStorage nicht verwendet werden kann. Das Verwenden von async bedeutet andererseits Beschleunigung des Codes.
+					oder href{https://developers.google.com/chrome/apps/docs/developers_guide?csw=1}{hosted app}
 				\item DatenAblage auf Gerät
 				\item Hinweis für Nutzer, dass ein Fragebogen ausgefüllt werden soll (Wecker evtl. mit Erinnerung)
 				\item Datenübertragung auf Server

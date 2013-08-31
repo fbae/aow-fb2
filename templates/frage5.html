@@ -6,27 +6,27 @@
 	<fieldset data-role='controlgroup' data-type='horizontal'>
 		<input type='radio' id='_<%= kodierung%>1' name='_<%= kodierung %>' value='1' 
 			<% if (ant == 1) print( 'checked="checked"' ) %>
-			onClick='fb2_config.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "1"});'
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "1"});'
 		/>
 		<label for='_<%= kodierung %>1'>1</label>
 		<input type='radio' id='_<%= kodierung%>2' name='_<%= kodierung %>' value='2' 
 			<% if (ant == 2) print( 'checked="checked"' ) %>
-			onClick='fb2_config.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "2"});'
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "2"});'
 		/>
 		<label for='_<%= kodierung %>2'>2</label>
 		<input type='radio' id='_<%= kodierung%>3' name='_<%= kodierung %>' value='3' 
 			<% if (ant == 3) print( 'checked="checked"' ) %>
-			onClick='fb2_config.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "3"});'
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "3"});'
 		/>
 		<label for='_<%= kodierung %>3'>3</label>
 		<input type='radio' id='_<%= kodierung%>4' name='_<%= kodierung %>' value='4' 
 			<% if (ant == 4) print( 'checked="checked"' ) %>
-			onClick='fb2_config.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "4"});'
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "4"});'
 		/>
 		<label for='_<%= kodierung %>4'>4</label>
 		<input type='radio' id='_<%= kodierung%>5' name='_<%= kodierung %>' value='5' 
 			<% if (ant == 5) print( 'checked="checked"' ) %>
-			onClick='fb2_config.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "5"});'
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(), "antw": "5"});'
 		/>
 		<label for='_<%= kodierung %>5'>5</label>
 	</fieldset>

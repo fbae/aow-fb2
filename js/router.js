@@ -5,24 +5,20 @@
 define( function( require) {
 	var $ = require('jquery');
 	var Backbone = require('backbone');
-	var	Fb2Model = require('model');
+	var	Fb2Model = require('fb2Model');
 	var Fragen = require('fragen');
-
-//	var MtView = require('mtView');
-//	var fehlerView = require('fehlerView');
+	var SettingsView = require('settingsView');
 
 	// Extends Backbone.Router
 	var Fb2Router = Backbone.Router.extend( {
-		// The Router constructor
 		initialize: function() {
 			console.debug( 'Fragen initialisieren');
 			this.fragen = new Fragen();
 			console.debug( 'Fragen initialisieren - fertig');
 
-			// Tells Backbone to start watching for hashchange events
 			Backbone.history.start();
 		},
-		// Backbone.js Routes
+
 		routes: {
 			// When there is no hash bang on the url, the home method is called
 			'': 'home',
@@ -33,32 +29,39 @@ define( function( require) {
 			'W': 'ablaufW',
 			'Q': 'ablaufQ',
 
-			// When #a1? is on the url, the  method is called
+			// When #f? is on the url, the  method is called
 			'f?:nr': 'frage'
 		},
 
 		home: function() {
 			$.mobile.changePage( '#home' , { reverse: false, changeHash: false } );
 		},
+
 		speichern: function() {
-			fb2_config.log.push({
-				dt:(new Date()).getTime(), msg:'speichern nach Durchlauf ' + this.fragen.art,
-				data: fb2_config.antworten[fb2_config.anzHeute]
+			var antwortenA = fb2.get('antworten');
+			fb2.log({
+				msg:'speichern nach Durchlauf ' + this.fragen.art,
+				data: antwortenA[fb2.anzHeute] // TODO
 			}); 
 			this.fragen.typ = 'O';
 			this.home();
 		},
+
 		FehlerLocalStorage: function() {
 			$.mobile.changePage( '#FlS', { reverse: false, changeHash: false } );
 		},
+
 		settings: function() {
 			//TODO
+			var settingsView = new SettingsView();
+			settingsView.render();
+
+			$.mobile.changePage( '#settings', { reverse: false, changeHash: false } );
 		},
 
 		ablaufW: function() {
-			this.fragen.typ = (fb2_config.artHeute) ? 'WA' : 'WB';
-			fb2_config.log.push({dt:new Date(), msg:'ablaufW Typ:' + this.fragen.typ});
-			localStorage.log = JSON.stringify(fb2_config.log);
+			this.fragen.typ = (fb2.artHeute) ? 'WA' : 'WB';
+			fb2.log({msg:'ablaufW Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
 			console.debug( 'ablaufW fragen:',this.fragen);
@@ -68,9 +71,8 @@ define( function( require) {
 			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
 		},
 		ablaufQ: function() {
-			this.fragen.typ = (fb2_config.artHeute) ? 'QA' : 'QB';
-			fb2_config.log.push({dt:new Date(), msg:'ablaufQ Typ:' + this.fragen.typ});
-			localStorage.log = JSON.stringify(fb2_config.log);
+			this.fragen.typ = (fb2.artHeute) ? 'QA' : 'QB';
+			fb2.log({msg:'ablaufQ Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
 			console.debug( 'ablaufQ fragen:',this.fragen);
