@@ -67,7 +67,7 @@ define( function( require) {
 			console.debug( 'ablaufW fragen:',this.fragen);
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
-			view.render();
+			view.render().page();
 			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
 		},
 		ablaufQ: function() {
@@ -78,7 +78,7 @@ define( function( require) {
 			console.debug( 'ablaufQ fragen:',this.fragen);
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
-			view.render();
+			view.render().page();
 			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
 		},
 
@@ -100,7 +100,7 @@ define( function( require) {
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
-			$('#f').trigger('create');
+			view.$el.trigger('create');
 			$.mobile.changePage('#f?' + this.fragen.akt, {reverse: false, changeHash: true,
 				allowSamePageTransition: true, reloadPage:false} );
 

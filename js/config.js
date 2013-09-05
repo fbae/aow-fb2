@@ -4,7 +4,7 @@ require.config( {
 	paths: {
 		// Core Libraries
 		'jquery': 'vendor/jquery-2.0.3.min',
-		'jquerymobile': 'vendor/jquery.mobile-1.3.1.min',
+		'jquerymobile': 'vendor/jquery.mobile-1.3.2.min',
 		'parseURL': 'vendor/purl',
 		'text':'vendor/text', //require text-Plugin
 		'underscore': 'vendor/underscore',

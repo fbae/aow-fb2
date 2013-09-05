@@ -62,15 +62,19 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 			 * werden.
 			 */
 			var data = antwortenArr[heuteNr];
+			console.debug( 'data: ', data, 'antwortO.kodierung', antwortO.kodierung);
 			if (antwortO.kodierung) {
 				var kod = new Object();
-				kod.zeit = (antwortO.zeit) ? antwortO.zeit : (new Date()).getTime();
+				kod.zeit = (antwortO.zeit) ? antwortO.zeit : new Date();
 				kod.wert = (antwortO.antw) ? antwortO.antw : 'null';
 				data[antwortO.kodierung] = kod;
+				antwortenArr[heuteNr] = data;
 				this.set('antworten', antwortenArr);
+				//TODO: eigentlich müsste jetzt ein "changed:antworten" ablaufen, tut es aber nicht? Die folgende Zeile ist fraglich.
+				localStorage.antworten = JSON.stringify(antwortenArr);
 				this.log({msg:'setzeAntwort erfolgreich', data: antwortO});
 			} else {
-				console.debug( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
+				console.warn( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
 				this.log({
 					msg:'FEHLER: setzeAntwort gescheitert - keine Kodierung in antwortO', data:antwortO});
 				return undefined;
@@ -120,14 +124,17 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 	});
 
 	fb2.on('change:device', function(model, device) {
+		console.debug( 'change:device', model, device);
 		localStorage.device = device;
 		this.log({msg:'device geändert: ' + device});
 	});
 	fb2.on('change:tag', function(model, tag) {
+		console.debug( 'change:tag', model, tag);
 		localStorage.startTag = JSON.stringify(tag);
 		this.log({msg: 'startTag geändert: ' + localStorage.startTag});
 	});
 	fb2.on('change:antworten', function(model, antwortenArr) {
+		console.debug( 'change:antworten', model, antwortenArr);
 		localStorage.antworten = JSON.stringify(antwortenArr);
 	});
 

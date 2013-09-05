@@ -8,27 +8,27 @@
 		<li data-icon='<% print((ant == 1) ? 'check' : 'false') %>'>
 		<a 
 			href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='1' 
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(),	"antw": "1"});' 
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "1"});' 
 			>nie</a>
 		</li>
 		<li data-icon='<% print((ant == 2) ? 'check' : 'false') %>'>
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='2'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(),	"antw": "2"});' 
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "2"});' 
 			>selten</a>
 		</li>
 		<li data-icon='<% print((ant == 3) ? 'check' : 'false') %>'>
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='3'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(),	"antw": "3"});' 
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "3"});' 
 			>manchmal</a>
 		</li>
 		<li data-icon='<% print((ant == 4) ? 'check' : 'false') %>'>
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='4'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(),	"antw": "4"});' 
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "4"});' 
 			>häufig</a>
 		</li>
 		<li data-icon='<% print((ant == 5) ? 'check' : 'false') %>'>
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='5'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": (new Date()).getTime(),	"antw": "5"});' 
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "5"});' 
 			>immer</a>
 		</li>
 	</ul>
