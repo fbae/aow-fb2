@@ -38,6 +38,22 @@ define( function( require ) {
 			this.template = _.template(fViewTemplate,fO);
 			// HTML in DOM einhängen
 			this.$el.html(this.template).page();
+			
+			for (var i=0; i<fArr.length; i++) {
+				// falls ein Slider benutzt wird: ein onSlidestop setzen, damit die Daten sofort eingetragen werden
+				var frage = f.get(fArr[i]).attributes;
+				var kodierung = f.zeitpunkt() + frage.id;
+				if (frage.art == 20) {
+					this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
+						// TODO: zeit ist nicht richtig (muss aus dem event ausgelesen werden
+						console.debug( 'slidestop event: ',event);
+						console.debug( 'slidestop this: ', this);
+						console.debug( 'slidestop $(this): ', $(this));
+						console.debug( 'slidestop $(this).slider(): ', $(this).slider());
+						fb2.setzeAntwort({"kodierung": kodierung, "zeit": new Date(), "antw": $( this ).slider().val() });
+					} );
+				}
+			}
 			this.$el.find( ":jqmData(role=controlgroup)" ).controlgroup(); 
 
 			// Maintains chainability

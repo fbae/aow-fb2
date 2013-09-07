@@ -72,14 +72,35 @@ define(function( require ) {
       this.add(new Frage('STI5',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unwohl','sehr wohl'));
       this.add(new Frage('STI6',5,'In diesem Moment fühle ich mich &hellip;', 'sehr angespannt','sehr entspannt'));
 
-      this.add(new Frage('FLO1',7,'Ich wusste bei jedem Schritt, was ich zu tun hatte.','trifft nicht zu','trifft zu','teils teils'));
-      this.add(new Frage('FLO2',7,'Ich hatte das Gefühl, den Ablauf unter Kontrolle zu haben.','trifft nicht zu','trifft zu','teils teils'));
-      this.add(new Frage('FLO3',7,'Ich war ganz vertieft in das, was ich gerade tat.','trifft nicht zu','trifft zu','teils teils'));
-      this.add(new Frage('FLO4',7,'Ich fühlte mich optimal beansprucht.','trifft nicht zu','trifft zu','teils teils'));
-/*
-	 
+      this.add(new Frage('FLO1',7,'Ich wusste bei jedem Schritt, was ich zu tun hatte.',
+				'trifft nicht zu','trifft zu','teils teils'));
+ 		  this.add(new Frage('FLO2',7,'Ich hatte das Gefühl, den Ablauf unter Kontrolle zu haben.',
+				'trifft nicht zu','trifft zu','teils teils'));
+      this.add(new Frage('FLO3',7,'Ich war ganz vertieft in das, was ich gerade tat.',
+				'trifft nicht zu','trifft zu','teils teils'));
+      this.add(new Frage('FLO4',7,'Ich fühlte mich optimal beansprucht.',
+				'trifft nicht zu','trifft zu','teils teils'));
 
-      this.add(new Frage('',,''));
+      this.add(new Frage('WL1',20,'Wie hoch waren die geistigen Anforderungen in den letzten zwei Stunden?', 
+				'sehr niedrig', 'sehr hoch'));
+      this.add(new Frage('WL2',20,'Wie hoch waren die körperlichen Anforderungen in den letzten zwei Stunden?', 
+				'sehr gering', 'sehr hoch'));
+      this.add(new Frage('WL3',20,
+				'Wie hoch war das Tempo, mit der Sie die einzelnen Aufgaben in den letzten zwei Stunden bewältigen mussten?', 
+				'sehr niedrig', 'sehr hoch'));
+      this.add(new Frage('WL4',20,
+				'Wie erfolgreich haben Sie Ihre Aufgaben in den letzten zwei Stunden Ihrer Meinung nach durchgeführt?', 
+				'perfekter Erfolg', 'Misserfolg'));
+      this.add(new Frage('WL5',20,
+				'Wie sehr mussten Sie sich in den letzten zwei Stunden anstrengen, um Ihre Leistung zu erreichen?', 
+				'sehr wenig', 'sehr stark'));
+      this.add(new Frage('WL6',20,
+				'Wie verunsichert entmutigt, gereizt und verärgert waren Sie in den letzten zwei Stunden?', 
+				'sehr wenig', 'sehr stark'));
+      this.add(new Frage('WL7',20,'Wie gestresst fühlten Sie sich in den letzten zwei Stunden?',
+				'sehr wenig','sehr stark'));
+
+/*
       this.add(new Frage('',,''));
       this.add(new Frage('',,''));
       this.add(new Frage('',,''));
@@ -117,25 +138,30 @@ define(function( require ) {
 					{v: FView, f:['FLO1','FLO2'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
 					{v: FView, f:['FLO3','FLO4'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
 				],
+				WL: [
+					{v: FView, f:['WL1', 'WL2', 'WL3']},
+					{v: FView, f:['WL4', 'WL5', 'WL6']},
+					{v: FView, f:['WL7']}
+				],
 			};
 	
-			Object.defineProperty(this.ablauf, 'O', {
+			Object.defineProperty(this.ablauf, 'O', { // keine Ablauf
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
 				get: function(){ return [] },
 			});
-			Object.defineProperty(this.ablauf, 'W', {
+			Object.defineProperty(this.ablauf, 'W', { // erster Druchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.W1,this.W2) },
+				get: function(){ return this.STI.concat(/* this.W1,this.W2,*/this.WL) },
 			});
-			Object.defineProperty(this.ablauf, 'Q', {
+			Object.defineProperty(this.ablauf, 'Q', { // zweiter Durchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.Q1,this.W2) },
+				get: function(){ return this.STI.concat(/*this.Q1,this.W2,*/this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', {
 				__proto__: null,
