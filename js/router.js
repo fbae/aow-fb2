@@ -67,8 +67,8 @@ define( function( require) {
 			console.debug( 'ablaufW fragen:',this.fragen);
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
-			view.render().page();
-			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
+			view.render();
+			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 		ablaufQ: function() {
 			this.fragen.typ = (fb2.artHeute) ? 'QA' : 'QB';
@@ -78,8 +78,8 @@ define( function( require) {
 			console.debug( 'ablaufQ fragen:',this.fragen);
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
-			view.render().page();
-			$.mobile.changePage('#f', {reverse: false, changeHash: false} );
+			view.render();
+			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 
 		// frage method that passes in the type that is appended to the url hash

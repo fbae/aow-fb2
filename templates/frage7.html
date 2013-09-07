@@ -1,9 +1,9 @@
-<div data-theme='c' class='frage5'>
+<div data-theme='c' class='frage7'>
 	<div id='frage'><%= txt %></div>
 	<div id='linkeBeschriftung' style='position:relative; float:left'><%= lTxt %></div>
 	<div id='rechteBeschriftung' style='position:relative; float:right'><%= rTxt %></div>
 	<div style='position:relative; float:none; clear:both'></div>
-	<fieldset data-role='controlgroup' data-type='horizontal'>
+	<fieldset data-role='controlgroup' data-type='horizontal' data-mini='true'>
 		<input type='radio' id='_<%= kodierung%>1' name='_<%= kodierung %>' value='1' 
 			<% if (ant == 1) print( 'checked="checked"' ) %>
 			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(), "antw": "1"});'
@@ -29,5 +29,15 @@
 			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(), "antw": "5"});'
 		/>
 		<label for='_<%= kodierung %>5'>5</label>
+		<input type='radio' id='_<%= kodierung%>6' name='_<%= kodierung %>' value='6' 
+			<% if (ant == 6) print( 'checked="checked"' ) %>
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(), "antw": "6"});'
+		/>
+		<label for='_<%= kodierung %>6'>6</label>
+		<input type='radio' id='_<%= kodierung%>7' name='_<%= kodierung %>' value='7' 
+			<% if (ant == 7) print( 'checked="checked"' ) %>
+			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(), "antw": "7"});'
+		/>
+		<label for='_<%= kodierung %>7'>7</label>
 	</fieldset>
 </div>

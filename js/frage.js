@@ -6,10 +6,11 @@
 define(function(require) {
 	var $ = require('jquery');
 	var frage5Template = require('text!../templates/frage5.html');
+	var frage7Template = require('text!../templates/frage7.html');
 	var mt5aTemplate = require('text!../templates/mt5A.html');
 	var mt5bTemplate = require('text!../templates/mt5B.html');
 
-	function Frage(id,art,txt, lTxt, rTxt) {
+	function Frage(id,art,txt, lTxt, rTxt, mTxt) {
 		// Default-Werte vergeben
 		// lTxt und rTxt müssen nicht vergeben werden (siehe Multitastking)
 		this.id = (id !== undefined) ? id : -1;
@@ -18,12 +19,14 @@ define(function(require) {
 		this.ant = null;
 		this.lTxt = lTxt;
 		this.rTxt = rTxt;
+		this.mTxt = mTxt;
 
 		this.__defineGetter__('template',function() {
 			if (!this.tpl) {
 				switch (this.art) {
-					case 3:  this.tpl = mt5bTemplate; break;
-					case 4:  this.tpl = mt5aTemplate; break;
+					case 3: this.tpl = mt5bTemplate; break;
+					case 4: this.tpl = mt5aTemplate; break;
+					case 7: this.tpl = frage7Template; break;
 					default: this.tpl = frage5Template;  
 				}
 			}
@@ -45,6 +48,7 @@ define(function(require) {
 		res.ant = this.ant;
 		if (this.lTxt) res.lTxt = this.lTxt;
 		if (this.rTxt) res.rTxt = this.rTxt;
+		if (this.mTxt) res.mTxt = this.mTxt;
 		return JSON.stringify( res );
 	}
 

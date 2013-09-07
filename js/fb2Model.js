@@ -6,7 +6,7 @@
  *
  */
 define([ "jquery", "backbone" ],function( $, Backbone ) {
-	var Fb2Modell = Backbone.Model.extend( {
+	var Fb2Model = Backbone.Model.extend( {
 
 		initialize: function() {
 			this.set('status','debug');
@@ -36,9 +36,9 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 		},
 
 		setzeAntwort: function(antwortO) {
-			console.debug( 'setzeAntwort aufgerufen mit antwortO:', antwortO);
+//			console.debug( 'setzeAntwort aufgerufen mit antwortO:', antwortO);
 			if (typeof antwortO !== 'object') {
-				console.debug('Fehler: es wird versucht eine Antwort zu speichern, ' +
+				console.warn('Fehler: es wird versucht eine Antwort zu speichern, ' +
 						'aber die Antwort wird nicht übergeben - antwortO: ', antwortO);
 				return undefined;
 			}
@@ -62,7 +62,7 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 			 * werden.
 			 */
 			var data = antwortenArr[heuteNr];
-			console.debug( 'data: ', data, 'antwortO.kodierung', antwortO.kodierung);
+//			console.debug( 'data: ', data, 'antwortO.kodierung', antwortO.kodierung);
 			if (antwortO.kodierung) {
 				var kod = new Object();
 				kod.zeit = (antwortO.zeit) ? antwortO.zeit : new Date();
@@ -74,7 +74,7 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 				localStorage.antworten = JSON.stringify(antwortenArr);
 				this.log({msg:'setzeAntwort erfolgreich', data: antwortO});
 			} else {
-				console.warn( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
+//				console.warn( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
 				this.log({
 					msg:'FEHLER: setzeAntwort gescheitert - keine Kodierung in antwortO', data:antwortO});
 				return undefined;
@@ -93,7 +93,7 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 
 	} );
 
-	window.fb2 = new Fb2Modell;
+	window.fb2 = new Fb2Model;
 
 	Object.defineProperties(fb2, {
 		anzHeute: {
@@ -123,6 +123,7 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 		}
 	});
 
+	// on... scheint nicht ausgelöst zu werden?
 	fb2.on('change:device', function(model, device) {
 		console.debug( 'change:device', model, device);
 		localStorage.device = device;
@@ -138,6 +139,6 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 		localStorage.antworten = JSON.stringify(antwortenArr);
 	});
 
-	return Fb2Modell;
+	return Fb2Model;
 } );
 

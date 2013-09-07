@@ -1,4 +1,5 @@
-<div data-theme='c' data-role='content' class="ui-content ui-body-c">
+<div data-theme='c' data-role='content' class='ui-content ui-body-c'>
+	<% if (heading != null) { print('<div class="'+heading+'">Hallo</div>'); } %>
 	<% var nr=0; _.each(fragenTemplates, function(html) { %>
 	<div id='f<% print(nr++); %>'><% print(html); %></div>
 	<% }); %>
@@ -6,7 +7,7 @@
 <div data-theme='c' data-role='footer' data-position='fixed'>
 	<div data-role='navbar' data-iconpos='left'>
 		<ul>
-			<% if (!prev || (prev == null)) %>
+			<% if (prev == null) %>
 			<li><a href='#' data-icon='home' >home</a></li>
 			<% else { %>
 			<li><a href='#f?<%= prev %>' data-icon='arrow-l' >zurück</a></li>

@@ -16,7 +16,6 @@ define( function( require ) {
 			var f = this.collection; // Fragen
 			// aktuelle Frage ermitteln
 			var fArr = f.ablauf[f.typ][f.akt]['f'];
-			console.debug( 'fView render fArr:', fArr,f);
 			
 			// für alle Teilfragen die Templates zusammenstellen
 			var teilFragenHTMLArr = new Array();
@@ -33,6 +32,7 @@ define( function( require ) {
 			// vorherige und nachfolgende Frage für Verlinkung bestimmen
 			fO.next = f.nachher();
 			fO.prev = f.vorher();
+			fO.heading = (f.ablauf[f.typ][f.akt]['heading']) ? f.ablauf[f.typ][f.akt]['heading'] : null;
 
 			// Template rendern
 			this.template = _.template(fViewTemplate,fO);

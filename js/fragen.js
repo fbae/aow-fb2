@@ -64,14 +64,29 @@ define(function( require ) {
       this.add(new Frage('MZ8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 
       this.add(new Frage('FRE',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.','trifft überhaupt nicht zu','trifft völlig zu'));
+
       this.add(new Frage('STI1',5,'In diesem Moment fühle ich mich &hellip;', 'sehr müde','sehr wach'));
       this.add(new Frage('STI2',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unzufrieden','sehr zufrieden'));
       this.add(new Frage('STI3',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unruhig','sehr ruhig'));
       this.add(new Frage('STI4',5,'In diesem Moment fühle ich mich &hellip;', 'sehr energielos','sehr energiegeladen'));
       this.add(new Frage('STI5',5,'In diesem Moment fühle ich mich &hellip;', 'sehr unwohl','sehr wohl'));
       this.add(new Frage('STI6',5,'In diesem Moment fühle ich mich &hellip;', 'sehr angespannt','sehr entspannt'));
-//      this.add(new Frage('',,''));
 
+      this.add(new Frage('FLO1',7,'Ich wusste bei jedem Schritt, was ich zu tun hatte.','trifft nicht zu','trifft zu','teils teils'));
+      this.add(new Frage('FLO2',7,'Ich hatte das Gefühl, den Ablauf unter Kontrolle zu haben.','trifft nicht zu','trifft zu','teils teils'));
+      this.add(new Frage('FLO3',7,'Ich war ganz vertieft in das, was ich gerade tat.','trifft nicht zu','trifft zu','teils teils'));
+      this.add(new Frage('FLO4',7,'Ich fühlte mich optimal beansprucht.','trifft nicht zu','trifft zu','teils teils'));
+/*
+	 
+
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+      this.add(new Frage('',,''));
+*/
 			this.ablauf = {
 				STI: [
 					{v: FView, f:['STI1','STI2','STI3']},
@@ -98,7 +113,9 @@ define(function( require ) {
 					{v: MtView, f:['MZ8']},
 				],
 				W2: [ 
-					{v: FView, f:['FW','FW']}
+					{v: FView, f:['FRE']},
+					{v: FView, f:['FLO1','FLO2'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
+					{v: FView, f:['FLO3','FLO4'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
 				],
 			};
 	
@@ -215,7 +232,9 @@ Nicht weiter verwendet
 			return deferred;
 
 		},
-		vorher: function() { return (this.akt == 0) ? null : this.akt - 1; },
+		vorher: function() {
+		 	return (this.akt == 0) ? null : this.akt - 1; 
+		},
 		nachher: function() {
 			if (!this.ablauf || (this.typ === 'O')) return undefined;
 			var n = this.akt + 1;

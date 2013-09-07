@@ -8,6 +8,7 @@
 \usepackage{foilhtml}
 \usepackage[ngerman,english]{babel}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{hyperref}
 \usepackage{listings}
 \lstset{
@@ -39,26 +40,26 @@
 						\item es sollen nicht immer alle Fragebögen (abhängig von der Zeit) auswählbar sein
 						\item Header soll Fortschritt anzeigen
 					\end{itemize}
-				\item href{http://developer.chrome.com/apps}{offline Applikation}\newline
+				\item \href{http://developer.chrome.com/apps}{offline Applikation}\newline
 					die app kann jederzeit geschlossen werden, sollte dort fortsetzen wo sie war\newline
 					offline-app onLaunch(), onSuspend()\newline
 					oder chrome://flags enable offline cache\newline
-					oder href{http://appcachefacts.info/}{appcache} - HTML5 - das scheint mir erstmal das Einfachste, das zum Ziel führen könnte. Offline-App ist bestimmt schicker, bedeutet aber auch, dass localStorage nicht verwendet werden kann. Das Verwenden von async bedeutet andererseits Beschleunigung des Codes.
-					oder href{https://developers.google.com/chrome/apps/docs/developers_guide?csw=1}{hosted app}
+					oder \href{http://appcachefacts.info/}{appcache} - HTML5 - das scheint mir erstmal das Einfachste, das zum Ziel führen könnte. Offline-App ist bestimmt schicker, bedeutet aber auch, dass localStorage nicht verwendet werden kann. Das Verwenden von async bedeutet andererseits Beschleunigung des Codes.
+					oder \href{https://developers.google.com/chrome/apps/docs/developers_guide?csw=1}{hosted app}
 				\item DatenAblage auf Gerät
 				\item Hinweis für Nutzer, dass ein Fragebogen ausgefüllt werden soll (Wecker evtl. mit Erinnerung)
 				\item Datenübertragung auf Server
 				\item Hosting auf UniMainz-Irgendwo: ssh, webserver + php, ajax (mysql, git, node.js oder modWebSocket)
-				\item href{http://mirror.math.ku.edu/tex-archive/macros/latex/contrib/listings/listings.pdf}{Listing anpassen - JavaScript} 
+				\item \href{http://mirror.math.ku.edu/tex-archive/macros/latex/contrib/listings/listings.pdf}{Listing anpassen - JavaScript} 
 				\item merke: onClick='console.debug(\$(this).data("value"));'
 			\end{itemize}
 
 		\subsection{Informationen zum Programm}
 			\begin{itemize}
 				\item Testen mit: 192.168.178.20:8000
-				\item Parameter: device=bla \rightarrow Gerätename
-				\item Parameter: st=jjjj-mm-tt \rightarrow Startdatum (Tag)
-				\item Parameter: sz=13:45 \rightarrow Startzeit (Zeit des Arbeitsbeginns für jeden Tag)\newline
+				\item Parameter: device=bla $\rightarrow$ Gerätename
+				\item Parameter: st=jjjj-mm-tt $\rightarrow$ Startdatum (Tag)
+				\item Parameter: sz=13:45 $\rightarrow$ Startzeit (Zeit des Arbeitsbeginns für jeden Tag)\newline
 					Zeit und Tag überschreiben bereits vorhandene Zeit- und Tag-Werte
 			\end{itemize}
 
@@ -89,7 +90,23 @@
 					WLAN:android-d98263c8b9c79f4f \newline
 					WLAN-Mac:10:d5:42:46:b7:5b \newline
 					Seriennummer: RF1D625WH0B
+				\item  
+					IMEI:358309055100419/01 \newline
+					WLAN:android-d83bb82851286680 \newline
+					WLAN-Mac:6c:b7:f4:a9:df:23 \newline
+					Seriennummer: R21D80CMH2B
+				\item Inbetriebnahme
+					\begin{itemize}
+						\item Sprache auswählen
+						\item keine Sim-Karte $\rightarrow$ weiter
+						\item WLAN einrichten: Netzwerk hinzufügen; Erweitert | WLAN im Standbymodus eingeschaltet lassen: nie
+						\item Samsung-Konto: keins einrichten
+						\item Google-GMail: aowmain.gmail.com -- vae2RudeiP\newline
+							Update von Chrom-Browser
+						\item eventuell weitere Software-Updates installieren (Neustart)
+						\item Startbildschirm leeren und alle Seitenfenster löschen
 
+					\end{itemize}
 			\end{itemize}
 		\section{Quellen}
 			\subsection{index.html}
@@ -98,11 +115,11 @@
 				\subsubsection{mt5A}
 					\lstinputlisting{templates/mt5A.html}
 				\subsubsection{mt5B}
-					\lstinputlisting{templates/mt5.html}
-				\subsubsection{fragen5}
-					\lstinputlisting{templates/fragen5.html}
-				\subsubsection{seiten}
-					\lstinputlisting{templates/seiten.html}
+					\lstinputlisting{templates/mt5B.html}
+				\subsubsection{frage5}
+					\lstinputlisting{templates/frage5.html}
+				\subsubsection{settingsView}
+					\lstinputlisting{templates/settingsView.html}
 			\subsection{JavaScripte}
 				\subsubsection{config}
 					\lstinputlisting{js/config.js}
@@ -110,8 +127,8 @@
 					\lstinputlisting{js/frage.js}
 				\subsubsection{fragen}
 					\lstinputlisting{js/fragen.js}
-				\subsubsection{model}
-					\lstinputlisting{js/model.js}
+				\subsubsection{fb2Model}
+					\lstinputlisting{js/fb2Model.js}
 				\subsubsection{mtView}
 					\lstinputlisting{js/mtView.js}
 				\subsubsection{router}
