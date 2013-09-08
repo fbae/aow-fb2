@@ -5,5 +5,7 @@
 		<div id='rechteBeschriftung'><%= rTxt %></div>
 		<div style='float:none; clear:both'></div>
 	</label>
-	<input data-type='range' name='<%= kodierung %>' id='<%= kodierung %>' value='0' min='1' max='20' data-highlight='true' data-theme='c'/>
+	<input data-type='range' name='<%= kodierung %>' id='<%= kodierung %>'
+		value='<% print((ant == null) ? 0 : ant) %>'
+		min='1' max='20' data-highlight='true' data-theme='c'/>
 </div>
