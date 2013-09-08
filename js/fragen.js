@@ -4,7 +4,6 @@
 define(function( require ) {
 	var $ = require('jquery');
 	var Backbone = require('backbone');
-	var FrageModel = require('model');
 	var Frage = require('frage');
 	var MtView = require('mtView');
 	var FView = require('fView');
@@ -155,13 +154,13 @@ define(function( require ) {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(/* this.W1,this.W2,*/this.WL) },
+				get: function(){ return this.STI.concat(this.W1,this.W2,this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'Q', { // zweiter Durchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(/*this.Q1,this.W2,*/this.WL) },
+				get: function(){ return this.STI.concat(this.Q1,this.W2,this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', {
 				__proto__: null,
@@ -214,12 +213,14 @@ Nicht weiter verwendet
 
 
 		// Sets the Collection model property to be a Fragebogen2 Model
-		model: FrageModel,
+		//model: ,
 
 		// Overriding the Backbone.sync method (the Backbone.fetch method calls the sync method when trying to fetch data)
-		sync: function( method, model, options ) {
+/*
+ * sync: function( method, model, options ) {
 
 			/* TODO: das muss noch überarbeitet werden */
+/*
 
 			// Local Variables
 			// ===============
@@ -258,6 +259,7 @@ Nicht weiter verwendet
 			return deferred;
 
 		},
+*/
 		vorher: function() {
 		 	return (this.akt == 0) ? null : this.akt - 1; 
 		},
