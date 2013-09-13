@@ -10,7 +10,7 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 
 		initialize: function() {
 			this.set('status','debug');
-			this.set('version','0.1');
+			this.set('version','0.2');
 			this.logA = (localStorage.log && this.status != 'debug') ? JSON.parse(localStorage.log) : [];
 
 			// Gerätenamen setzen, falls nötig 
