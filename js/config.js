@@ -54,7 +54,7 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 
 		if (tagS !== undefined) { // TODO: testen
 			var tagA = tagS.split('-');
-			var sT = new Date(parseInt(tagA[0]),parseInt(tagA[1]),parseInt(tagA[2]));
+			var sT = new Date(parseInt(tagA[0]),parseInt(tagA[1])-1,parseInt(tagA[2]));
 			if (!zeitS) fb2.set({'tag': sT});
 		}
 
@@ -67,6 +67,7 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 			sT.setMinutes(zeitMin);
 			fb2.set({'tag': sT});
 		}
-
+	
+		console.debug( 'chrome:alarm: ', chrome, chrome.alarms);
 	});
 } );

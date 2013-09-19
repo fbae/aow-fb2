@@ -28,6 +28,7 @@ define( function( require) {
 
 			'W': 'ablaufW',
 			'Q': 'ablaufQ',
+			'N': 'ablaufN',
 
 			// When #f? is on the url, the  method is called
 			'f?:nr': 'frage'
@@ -38,11 +39,13 @@ define( function( require) {
 		},
 
 		speichern: function() {
-			var antwortenA = fb2.get('antworten');
+			var antw = fb2.get('antworten');
 			fb2.log({
 				msg:'speichern nach Durchlauf ' + this.fragen.art,
-				data: antwortenA[fb2.anzHeute] // TODO
+				data: antw
 			}); 
+			fb2.speichereAntworten(); // solange change:antworten nicht richtig funktioniert - mit callback?
+
 			this.fragen.typ = 'O';
 			this.home();
 		},
@@ -64,7 +67,7 @@ define( function( require) {
 			fb2.log({msg:'ablaufW Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
-			console.debug( 'ablaufW fragen:',this.fragen);
+			fb2.neueAntworten();
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
@@ -75,14 +78,24 @@ define( function( require) {
 			fb2.log({msg:'ablaufQ Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
-			console.debug( 'ablaufQ fragen:',this.fragen);
+			fb2.neueAntworten();
+			var frageView = this.fragen.view();
+			var view = new frageView( {collection: this.fragen} );
+			view.render();
+			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
+		},
+		ablaufN: function() {
+			this.fragen.typ = (fb2.artHeute) ? 'NA' : 'NB';
+			fb2.log({msg:'ablaufN Typ:' + this.fragen.typ});
+			this.fragen.akt = 0;
+			this.fragen.zeit = new Date();
+			fb2.neueAntworten();
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 
-		// frage method that passes in the type that is appended to the url hash
 		frage: function(nr) {
 			if (this.fragen.typ == 'O') {
 				console.warn( 'Fehler: es wurde kein Ablauf ausgewählt.' );

@@ -9,34 +9,126 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 	var Fb2Model = Backbone.Model.extend( {
 
 		initialize: function() {
+
+			// indexedDB initialisieren
+			window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+			// lege die Datenbank an, falls das noch nicht passiert ist, oder sich die Version geändert hat
+			this.dbName = 'multitasking.uni-mainz';
+			this.dbVersion = '4';
+
+			var self= this;
+			var openRequest = indexedDB.open(this.dbName,this.dbVersion);
+			
+			openRequest.onsuccess = function(e) {
+				self.db = e.target.result;
+				self.db.onerror = function(e) {
+					// Fehler steigen auf - wird aus allen requests für alle auftauchenden Fehler abgerufen
+					console.error('Fehler - indexedDB: ', e, 'ErrorCode:', e.target.errorCode);
+				};
+				
+				// laden der Informationen aus der Datenbank und Abspeichern im Fb2Model
+				var req = self.db.transaction('einstellungen').objectStore('einstellungen').openCursor();
+				req.onsuccess = function(event) {
+					var cursor = event.target.result;
+					if (cursor) {
+						if (!self.has(cursor.value.key)) {
+							// aus der URL ausgelesene Werte nicht überschreiben
+							var o = new Object();
+							o[cursor.value.key] = cursor.value.value;
+							self.set( o, { silent: true } );
+						}
+						cursor.continue();
+					} else {
+						// laden der Einstellungen ist jetzt fertig - jetzt nachbearbeiten
+						// Gerätenamen setzen, falls nötig
+						if ( !self.has('device') ) self.set('device','oN'+(new Date()).getTime());
+						// StartTag und StartZeit einlesen
+						if ( !self.has('tag') ) {
+							var tag = new Date();
+							tag.setHours(7);
+							tag.setMinutes(30);
+							tag.setSeconds(0);
+							tag.setMilliseconds(0);
+							self.set('tag',tag);
+						}
+						
+						// gibt es nicht beendete Antworten, die eventuell passen könnten?
+						if ( self.has('antwortenTabelle') && self.has('antwortenId')) {
+	/*
+	 * 					// Es sind Antworten noch nicht abgeschlossen, 
+							// aber die Antworten könnten eventuell auch verfallen sein.
+							// Nach 24 Stunden verfallen solche Antworten
+							// TODO - das muss noch programmiert werden
+							// TODO - laden aus IDB
+							// TODO - füllen der Fragen und des Modells
+							// TODO - Navigation zur letzten Fragenseite
+
+							// Antworten für laden, falls es welche gibt, die noch nicht beendet wurden
+							console.debug( 'heuteId: ', self.heuteId(), 'versuche gespeicherte Antwort zu laden');
+							var req = self.db.transaction('antworten').objectStore('antworten').openCursor(self.heuteId());
+							req.onsuccess = function(e) {
+								var cursor = e.target.result;
+								if (cursor) {
+									self.set('antworten', cursor.value);
+								} else {
+									// es sind noch keine Antworten gespeichert
+									self.set('antworten', self.neueAntworten());
+								}
+							}
+							req.onerror = function(e) {
+								console.debug('Antworten konnten nicht geladen werden',e);
+							}
+	*/
+							console.debug( 'TODO - muss erst noch programmiert werden');
+						}
+					} // Ende nachbearbeiten
+				} // Ende req.onsuccess
+				req.onerror = function(e) {
+					console.info( 'Es gibt keine Einstellungen: ', e );
+				}
+
+
+//			this.set('antworten', (localStorage.antworten) ? JSON.parse(localStorage.antworten) : []);
+				console.log('IDB-Open erfolgreich aufgerufen',new Date());
+			}; // Ende openRequest.onsuccess
+			openRequest.onerror = function(e) {
+				console.error('IDB(indexedDB) OPEN Fehler: ', e, 'ErrorCode:', e.target.errorCode);
+			}
+			openRequest.onupgradeneeded = function(e) {	// Update object stores and indices
+				var db = e.target.result;
+
+				// alle vorhandenen ObjectStores löschen
+				if (db.objectStoreNames.length > 0) { // es sind ObjectStores vorhanden
+					if (db.objectStoreNames.contains('log')) db.deleteObjectStore('log');
+					if (db.objectStoreNames.contains('antwortenW')) db.deleteObjectStore('antwortenW');
+					if (db.objectStoreNames.contains('antwortenQ')) db.deleteObjectStore('antwortenQ');
+					if (db.objectStoreNames.contains('antwortenN')) db.deleteObjectStore('antwortenN');
+					if (db.objectStoreNames.contains('antwortenA')) db.deleteObjectStore('antwortenA');
+					if (db.objectStoreNames.contains('einstellungen')) db.deleteObjectStore('einstellungen');
+				}
+
+				// ObjectStore neu anlegen
+				var objectStoreLog = db.createObjectStore('log', { keyPath: 'dt' });
+				objectStoreLog.add( { dt:new Date(), msg:'log neu angelegt' } );
+				var objectStoreAntwortenW = db.createObjectStore('antwortenW', { keyPath: 'id', autoIncrement: true });
+				var objectStoreAntwortenQ = db.createObjectStore('antwortenQ', { keyPath: 'id', autoIncrement: true });
+				var objectStoreAntwortenN = db.createObjectStore('antwortenN', { keyPath: 'id', autoIncrement: true });
+				var objectStoreAntwortenA = db.createObjectStore('antwortenA', { keyPath: 'id', autoIncrement: true });
+				var objectStoreEinstellungen = db.createObjectStore('einstellungen', { keyPath: 'key' });
+
+			};  // Ende onUpgradeNeeded
+
+			// initialisiere die Programm-Variablen ==================================
 			this.set('status','debug');
 			this.set('version','0.2');
-			this.logA = (localStorage.log && this.status != 'debug') ? JSON.parse(localStorage.log) : [];
+			if (this.status == 'debug') this.db.transaction('log','readwrite').objectStore('log').clear();
 
-			// Gerätenamen setzen, falls nötig 
-			if (localStorage.device && (localStorage.device !== undefined)) {
-				this.set('device',localStorage.device);
-			} else {
-				this.set('device','oN'+(new Date()).getTime());
-			}
-
-			// StartTag und StartZeit einlesen
-			if (localStorage.startTag) {
-				this.set('tag', new Date(JSON.parse(localStorage.startTag)));
-			} else {
-				var tag = new Date();
-				tag.setHours(7);
-				tag.setMinutes(30);
-				tag.setSeconds(0);
-				tag.setMilliseconds(0);
-				this.set('tag',tag);
-			}
-
-			this.set('antworten', (localStorage.antworten) ? JSON.parse(localStorage.antworten) : []);
 		},
 
 		setzeAntwort: function(antwortO) {
-//			console.debug( 'setzeAntwort aufgerufen mit antwortO:', antwortO);
 			if (typeof antwortO !== 'object') {
 				console.warn('Fehler: es wird versucht eine Antwort zu speichern, ' +
 						'aber die Antwort wird nicht übergeben - antwortO: ', antwortO);
@@ -45,51 +137,123 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 
 			this.log({msg:'setzeAntwort', data:antwortO});
 
-			var heuteNr = this.anzHeute;
-			var antwortenArr = this.get('antworten');
-
-			if (!antwortenArr[heuteNr]) {
-				// beim erstmaligen Aufruf weitere Eigenschaften speichern
-				var ah = new Object();
-				ah.erstellDatum = this.fragen.zeit;
-				antwortenArr[heuteNr] = ah;
+			if (this.has('antworten')) {
+				var data = this.get('antworten');
+			} else {
+				console.warn('setzeAntwort - neueAntworten() aufgerufen, das sollte nicht mehr passieren.');
+				var data = this.neueAntworten();
 			}
-			// TODO: vielleicht die Kodierung überprüfen? -> vermutlich nicht notwendig
-			
-			/* Datenbankeintrag (localStorage)
-			 * Antworten werden zunächst alle zwischengespeichert in this.antworten[], somit müssen sie
-			 * nur beim Neustart neu gelesen werden. Bei jeder Antwort müssen sie allerdings geschrieben 
-			 * werden.
-			 */
-			var data = antwortenArr[heuteNr];
-//			console.debug( 'data: ', data, 'antwortO.kodierung', antwortO.kodierung);
+
 			if (antwortO.kodierung) {
 				var kod = new Object();
 				kod.zeit = (antwortO.zeit) ? antwortO.zeit : new Date();
 				kod.wert = (antwortO.antw) ? antwortO.antw : 'null';
 				data[antwortO.kodierung] = kod;
-				antwortenArr[heuteNr] = data;
-				this.set('antworten', antwortenArr);
-				//TODO: eigentlich müsste jetzt ein "changed:antworten" ablaufen, tut es aber nicht? Die folgende Zeile ist fraglich.
-				localStorage.antworten = JSON.stringify(antwortenArr);
-				this.log({msg:'setzeAntwort erfolgreich', data: antwortO});
+//				console.debug( 'setzeAntwort data: ', data, 'antwortO.kodierung', antwortO.kodierung);
+				this.set( {'antworten': data} );
+				fb2.trigger('change:antworten',this,data); // Backbone scheint Änderungen in Objekten nicht zu erkennen
 			} else {
-//				console.warn( 'Fehler: ohne Kodierung keine Antwort in setzeAntwort: ', antwortO);
 				this.log({
 					msg:'FEHLER: setzeAntwort gescheitert - keine Kodierung in antwortO', data:antwortO});
 				return undefined;
 			}
-
 
 			// Eintrag in Collection: fragen
 			this.fragen.setzeAntwort(antwortO);
 		},	
 
 		log: function(obj) {
-			if (!obj.dt) obj.dt = new Date();
-			this.logA.push(obj);
-			localStorage.log = JSON.stringify(this.logA);
+			if (!this.db) {
+				console.debug( 'Loggen wurde vertagt, weil this.db noch nicht fertig ist: obj', obj);
+				setTimeout('fb2.log('+JSON.stringify(obj)+');',1000);
+			}
+			// obj ist entweder ein Objekt, dann sollte es das Attribut dt:Date() besitzen
+			// oder obj ist ein string, dann wird das Objekt hergestellt
+			if ( typeof obj == 'object' ) {
+				var logO = obj;
+				if (!logO.dt) logO.dt = new Date();
+			} else {
+				var logO = new Object();
+				logO.msg = obj;
+				logO.dt = new Date();
+			}
+			if (!logO.heuteId) logO.heuteId = this.heuteId();
+
+			this.db.transaction('log', 'readwrite').objectStore('log').add(logO).onerror = function (e) { 
+				console.warn('IDB - log -  mit obj: ',obj, ' Fehler: ',e); 
+			};
+
 		},
+
+		nameAntwortenTabelle: function() {
+			switch (this.fragen.typ) {
+				case 'WA':
+				case 'WB': return 'antwortenW'; break;
+				case 'QA':
+				case 'QB': return 'antwortenQ'; break;
+				case 'NA':
+				case 'NB': return 'antwortenN'; break;
+				case 'A': return 'antwortenA'; break;
+				default: return undefined;
+			}
+		},
+
+		heuteId: function() {
+			var heute = new Date();
+			var m = heute.getUTCMonth() + 1;
+			m = ((m<10) ? '0'+m : m);
+			var d = heute.getUTCDay();
+			d = ((d<10) ? '0'+d : d);
+			return this.get('device') + '_' + heute.getUTCFullYear() + '-' + m + '-' + d;
+		},
+
+		neueAntworten: function() {
+			var self = this;
+			// alte Antworten löschen
+			if (this.has('antworten')) this.unset('antworten', {silent: true});
+			if (this.has('antwortenId')) this.unset('antwortenId');
+			this.fragen.entferneAntworten();
+
+
+			var antwTab = this.nameAntwortenTabelle();
+			if (antwTab === undefined) {
+				console.warn('neueAntworten - konnte TabellenName nicht richtig bestimmen');
+				return undefined;
+			}
+			this.set('antwortenTabelle',antwTab);
+
+			// neue Antworten eintragen
+			var aO = new Object();
+			aO.device = this.get('device');
+			aO.tag = this.get('tag');
+			aO.heuteId = this.heuteId();
+			aO.antwortenErstellt = new Date();
+			aO.fragenErstellt = this.fragen.zeit;
+			aO.typ = this.fragen.typ;
+			aO.person = this.get('person');
+
+			var req = this.db.transaction(antwTab,'readwrite').objectStore(antwTab).add( aO );
+			req.onerror = function(e) {
+				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', aO);
+			}
+			req.onsuccess = function(e) {
+				aO.id = e.target.result;
+				self.set( { 'antworten': aO }, { silent: true } );
+				self.set( { 'antwortenId': aO.id, 'antwortenTabelle': antwTab } );
+			}
+			return aO; // das ist fraglich, weil hier die id nicht enthalten ist
+		},
+
+		speichereAntworten: function(cb) {
+			var antwTab = this.get('antwortenTabelle');
+			var antw = this.get('antworten');
+			this.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw ).onerror = function(e) {
+				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, this.fragen);
+			}
+			this.unset('antworten', {silent: true});
+			this.unset('antwortenId');
+			this.unset('antwortenTabelle');
+		}
 
 	} );
 
@@ -109,34 +273,58 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 		fragen: {
 			writeable:false,
 			get: function() { return (this.router) ? this.router.fragen : undefined;}
-		},
-		settings: {
-			writeable:false,
-			get: function() {
-				var o = new Object();
-				o.status = this.get('status');
-				o.version = this.get('version');
-				o.device = this.get('device');
-				o.tag = this.get('tag');
-				return o;
-			}
 		}
 	});
 
 	// on... scheint nicht ausgelöst zu werden?
+	// TODO wird noch nicht in DB eingetragen
 	fb2.on('change:device', function(model, device) {
-		console.debug( 'change:device', model, device);
-		localStorage.device = device;
-		this.log({msg:'device geändert: ' + device});
+		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put({
+			'key':'device',
+			'value':device
+		}).onerror = function(e){
+			console.warn('IDB - change:device - Einstellung für Device konnte nicht gespeichert werden.');
+		};
+		this.log('change:device ' + device);
 	});
 	fb2.on('change:tag', function(model, tag) {
-		console.debug( 'change:tag', model, tag);
-		localStorage.startTag = JSON.stringify(tag);
-		this.log({msg: 'startTag geändert: ' + localStorage.startTag});
+		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put({
+			'key':'tag',
+			'value':tag
+		}).onerror = function(e){
+			console.warn('IDB - change:tag - Einstellung für Tag konnte nicht gespeichert werden.');
+		};
+		this.log('change:tag ' + tag);
 	});
-	fb2.on('change:antworten', function(model, antwortenArr) {
-		console.debug( 'change:antworten', model, antwortenArr);
-		localStorage.antworten = JSON.stringify(antwortenArr);
+	fb2.on('change:antwortenId', function(model, aI) {
+		if (this.has('antwortenId')) {
+			this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( { 
+				'key': 'antwortenId', 
+				'value': aI } ).onerror = function() {
+					console.warn( 'IDB - change:antwortenId - Fehler beim Schreiben der Einstellungen');
+				}
+		} else {
+			this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').delete('antwortenId');
+		}
+	});
+	fb2.on('change:antwortenTabelle', function(model, aT) {
+		if (this.has('antwortenTabelle')) {
+			this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( { 
+				'key': 'antwortenTabelle', 
+				'value': aT } ).onerror = function() {
+					console.warn( 'IDB - change:antwortenTabelle - Fehler beim Schreiben der Einstellungen');
+				}
+		} else {
+			this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').delete('antwortenTabelle');
+		}
+	});
+
+	fb2.on('change:antworten', function(model, antw) {
+		console.debug( 'change:antworten antw', antw);
+		var antwTab = this.get('antwortenTabelle');
+		this.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw ).onerror = function(e) {
+			console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, this.fragen);
+		}
 	});
 
 	return Fb2Model;

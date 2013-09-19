@@ -42,19 +42,16 @@ define( function( require ) {
 			for (var i=0; i<fArr.length; i++) {
 				// falls ein Slider benutzt wird: ein onSlidestop setzen, damit die Daten sofort eingetragen werden
 				var frage = f.get(fArr[i]).attributes;
-				var kodierung = f.zeitpunkt() + frage.id;
 				if (frage.art == 20) {
+					var kodierung = f.zeitpunkt() + frage.id;
 					this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
 						// TODO: zeit ist nicht richtig (muss aus dem event ausgelesen werden
-						console.debug( 'slidestop event: ',event);
-						console.debug( 'slidestop this: ', this);
-						console.debug( 'slidestop $(this): ', $(this));
-						console.debug( 'slidestop $(this).slider(): ', $(this).slider());
-						fb2.setzeAntwort({"kodierung": kodierung, "zeit": new Date(), "antw": $( this ).slider().val() });
+						console.debug( 'slidestop $(this).slider().val(): ', $(this).slider().val(),event);
+						fb2.setzeAntwort({'kodierung': event.target.id, 'zeit': new Date(event.timeStamp), 'antw': $( this ).slider().val() });
 					} );
 				}
 			}
-			this.$el.find( ":jqmData(role=controlgroup)" ).controlgroup(); 
+			this.$el.find( ':jqmData(role=controlgroup)' ).controlgroup(); 
 
 			// Maintains chainability
 			return this;
