@@ -25,6 +25,17 @@ require.config( {
 // Includes File Dependencies
 require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Router, Fb2 ) {
 
+	function twoDigits(d) {
+		if(0 <= d && d < 10) return "0" + d.toString();
+		if(-10 < d && d < 0) return "-0" + (-1*d).toString();
+		return d.toString();
+	}
+	Date.prototype.toMysqlFormat = function() {
+		return this.getUTCFullYear() + "-" + twoDigits(1 + this.getUTCMonth()) + "-" + 
+			twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + 
+			twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
+	};
+
 	$( document ).on( "mobileinit",
 		function() {
 			// Prevents all anchor click handling including the addition of active button state and alternate link bluring.

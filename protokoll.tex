@@ -83,7 +83,24 @@
 					\href{http://docs.webplatform.org/wiki/tutorials/offline_storage}{localStorage verwenden}\newline
 					\href{http://docs.webplatform.org/wiki/tutorials/appcache_beginner}{application cache} mit manifest
 				\item \href{http://jquerymobile.com/demos/1.3.0-rc.1/docs/lists/lists-themes.html}{data-icon} - alle Icons auf einen Blick
-				\item 
+				\item Mail Datum:  Mon, 19 Aug 2013 16:37:14 +0200\newline
+					Von: ZDV System <system@uni-mainz.de>\newline
+					Organisation:   Zentrum für Datenverarbeitung\newline
+					An:     <baethge@uni-mainz.de>\newline 
+					Die Datenbank ist eingerichtet. Hier die Eckdaten für den Zugriff:
+
+					Name: psyc_mutask (nach dem name des Instituts, oder Abteilung, nicht länger als 12 Zeichen)\newline
+					Server: mysql-vh.zdv.Uni-Mainz.DE\newline
+					Portnummer: 3306 (Standardport)\newline
+					Default-Zeichensatz: UTF-8\newline
+					Name des Users mit Schreibrechten: psyc_mutask\newline
+					Passwort: wie im Antrag gewünscht\newline
+					Name des Users für Webzugriff: psyc_mutask_web\newline
+					Passwort: wie im Antrag gewünscht
+
+					Der User für Webzugriff wurde ohne alle Zugriffsrechte eingerichtet, der User mit Schreibrechten muss über den SQL-Befehl "Grant" die nötigen Rechte für den Webzugriff einrichten (siehe http://dev.mysql.com/doc/refman/5.0/en/grant.html) - Syntaxbeispiel:\newline GRANT ALL privileges ON `<dbname>`.* TO '<webusername>' ;
+				\item select version(); $\rightarrow$ 5.1.69-log
+				\item .
 			\end{itemize}
 		\subsection{Geräte}
 			\begin{itemize}

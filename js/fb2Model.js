@@ -5,7 +5,7 @@
  *	fragen:Collection
  *
  */
-define([ "jquery", "backbone" ],function( $, Backbone ) {
+define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 	var Fb2Model = Backbone.Model.extend( {
 
 		initialize: function() {
@@ -253,8 +253,114 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 			this.unset('antworten', {silent: true});
 			this.unset('antwortenId');
 			this.unset('antwortenTabelle');
-		}
+		},
 
+		saveTab: function(tabName) {
+			// TODO: ist unfertig
+			var self = this;
+			// Antworten auslesen
+			var req = self.db.transaction(tabName).objectStore(tabName).openCursor();
+			req.onsuccess = function(e) {
+				var cursor = e.target.result;
+				if (cursor) {
+					var cv = _.clone(cursor.value);
+					_.each(cv, function(v,k,l) { 
+						if (_.isDate(v)) {
+							l[k] = v.toMysqlFormat();
+						} else {
+							if (_.isObject(v) && _.isDate(v.zeit)) {
+								l[k + 'D'] = v.zeit.toMysqlFormat();
+								l[k] = v.wert;
+							}
+						}
+					} );
+					console.debug( 'saveTab - cv: ', cv);
+					cv.tabellenName = tabName;
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						data: cv,
+						beforeSend: function(x) {
+							if(x && x.overrideMimeType) {
+								x.overrideMimeType("application/json;charset=UTF-8");
+							}
+						},
+						url: 'api/putData.php',
+						success: function(data) {
+							console.debug( 'Erfolg - saveTab:success - data:', data);
+							if (data.status == 'erfolg') { 
+								/* löschen des Eintrages, falls data.status == erfolg
+								 * data enthält die id und den tabellenNamen
+								 */
+								self.db.transaction(tabName,'readwrite').objectStore(tabName).delete(Number(data.id)).onerror = 
+									function(e) {
+										console.debug('Fehler - saveTab - in Tabelle '+tabName+' konnte der Eintrag id: '+
+											data.id+' nicht gelöscht werden. e:',e);
+									};
+							} else {
+								console.error('Fehler - saveTab - Nach der Übermittlung wurde ein Fehler gemeldet. data:', data);
+							}
+						},
+						error: function(data) {
+							console.error('Fehler - saveTab - ajax ist gescheitert. data:',data);
+						}
+					});
+					cursor.continue();
+				} else console.debug('Erfolg - saveTab - die Tabelle '+tabName+' müsste jetzt leer sein');
+			}
+		},
+		saveAll: function() {
+			var self = this;
+			this.saveTab('antwortenW');
+			this.saveTab('antwortenQ');
+			this.saveTab('antwortenN');
+			this.saveTab('antwortenA');
+
+			// alle log-Einträge zusammenpacken und verschicken
+			var log = new Array();
+			var req = self.db.transaction('log').objectStore('log').openCursor();
+			req.onerror = function(e) { console.warn('Fehler - saveAll - log konnte icht ausgelesen werden. ',e); }
+			req.onsuccess = function(e) {
+				var cursor = e.target.result;
+				if (cursor) {
+					log.push(cursor.value);
+				} else {
+					// ajax-Übertragung und anschließend Leeren des Log
+					var data = new Object();
+					data.log = log;
+					data.settings = self.settings;
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						'data': data,
+						beforeSend: function(x) {
+							if(x && x.overrideMimeType) {
+								x.overrideMimeType("application/json;charset=UTF-8");
+							}
+						},
+						url: 'api/putData.php',
+						success: function(data) {
+							console.debug( 'Erfolg - saveLog:success - data:', data);
+							if (data.status == 'erfolg') { 
+								/* löschen des Eintrages, falls data.status == erfolg
+								 * data enthält die id und den tabellenNamen
+								 */
+								self.db.transaction('log','readwrite').objectStore('log').clear().onerror = 
+									function(e) {
+										console.debug('Fehler - saveLog konnte nicht gelöscht werden. e:',e);
+									};
+							} else {
+								console.error('Fehler - saveLog - Nach der Übermittlung wurde ein Fehler gemeldet. data:', data);
+							}
+						},
+						error: function(data) {
+							console.error('Fehler - saveLog - ajax ist gescheitert. data:',data);
+						}
+					});
+					
+				}
+			}
+		}
 	} );
 
 	window.fb2 = new Fb2Model;
@@ -273,7 +379,19 @@ define([ "jquery", "backbone" ],function( $, Backbone ) {
 		fragen: {
 			writeable:false,
 			get: function() { return (this.router) ? this.router.fragen : undefined;}
-		}
+		},
+		settings: {
+			writeable:false,
+			get: function() {
+				var o = new Object();
+				o.status = this.get('status');
+				o.version = this.get('version');
+				o.device = this.get('device');
+				o.tag = this.get('tag');
+				o.person = this.get('person');
+				return o;
+			}
+		},
 	});
 
 	// on... scheint nicht ausgelöst zu werden?

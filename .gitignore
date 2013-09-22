@@ -6,5 +6,6 @@
 *.log
 *.out
 *.pdf
+*.php
 *.directory
 js/vendor/*

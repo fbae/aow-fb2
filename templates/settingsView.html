@@ -2,4 +2,8 @@
 	<!-- Status: <%= status %> Version: <%= version %> -->
 	<div >Gerätename: <%= device %></div>
 	<div >Startdatum: <%= tag %></div>
+	<input type='button' value='übertrage alle Daten'
+		<% if(!navigator.onLine) { print("class='ui-disabled'"); } %>
+		onclick='if (navigator.onLine) fb2.saveAll();'
+	/>
 </div>

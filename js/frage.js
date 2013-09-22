@@ -10,7 +10,7 @@ define(function(require) {
 	var frage20Template = require('text!../templates/frage20.html');
 	var mt5aTemplate = require('text!../templates/mt5A.html');
 	var mt5bTemplate = require('text!../templates/mt5B.html');
-	var hs5Template = require('text!../templates/hs.html');
+//	var hs5Template = require('text!../templates/hs.html');
 
 	function Frage(id,art,txt, lTxt, rTxt, mTxt) {
 		// Default-Werte vergeben
@@ -26,7 +26,7 @@ define(function(require) {
 		this.__defineGetter__('template',function() {
 			if (!this.tpl) {
 				switch (this.art) {
-					case 2: this.tpl = hs5Template; break;
+//					case 2: this.tpl = hs5Template; break;
 					case 3: this.tpl = mt5bTemplate; break;
 					case 4: this.tpl = mt5aTemplate; break;
 					case 7: this.tpl = frage7Template; break;

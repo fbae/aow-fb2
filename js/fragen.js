@@ -192,6 +192,40 @@ define(function( require ) {
 				'Meine beruflichen Anforderungen behinderten heute mein Privat- und/oder Familienleben.',
 				'stimme überhaupt nicht zu','stimme voll zu'));
 
+      this.add(new Frage('EMO1',5,
+				'Heute fühlte ich mich durch meine Arbeit ausgebrannt.',
+				'trifft gar nicht zu','trifft vollständig zu'));
+      this.add(new Frage('EMO2',5,
+				'Heute fühlte ich mich durch meine Arbeit emotional erschöpft.',
+				'trifft gar nicht zu','trifft vollständig zu'));
+      this.add(new Frage('EMO3',5,
+				'Heute fühlte ich mich durch meine Arbeit frustriert.',
+				'trifft gar nicht zu','trifft vollständig zu'));
+
+      this.add(new Frage('IRR1',7,
+				'Es fiel mir heute schwer nach der Arbeit, abzuschalten.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR2',7,
+				'Ich musste auch zu Hause an Schwierigkeiten bei der Arbeit denken.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR3',7,
+				'Wenn andere mich ansprachen, kam es vor, dass ich mürrisch reagierte.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR4',7,
+				'Selbst im Urlaub müsste ich jetzt manchmal an Probleme bei der Arbeit denken.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR5',7,
+				'Ich fühlte mich heute ab und zu wie jemand, den man als Nervenbündel bezeichnet.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR6',7,
+				'Ich war schnell verärgert.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR7',7,
+				'Ich reagierte heute gereizt, obwohl ich es gar nicht wollte.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+      this.add(new Frage('IRR8',7,
+				'Als ich müde von der Arbeit nach Hause kam, fand ich durch nichts Erholung.',
+				'trifft überhaupt nicht zu','trifft fast völlig zu'));
 /*
 
       this.add(new Frage('',,
@@ -250,8 +284,14 @@ define(function( require ) {
 					{v: MtView, f:['HS1'] },
 					{v: MtView, f:['HS2'] },
 					{v: MtView, f:['HS3'] },
-
 				],
+				A1: [
+				{v: FView, f:['WHI', 'IRR1', 'IRR2']},
+				{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
+				{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
+//				{v: UeView},
+				{v: FView, f:['EMO1', 'EMO2', 'EMO3']}
+				]
 			};
 	
 			Object.defineProperty(this.ablauf, 'O', { // keine Ablauf
