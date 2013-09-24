@@ -8,6 +8,7 @@ define(function( require ) {
 	var MtView = require('mtView');
 	var FView = require('fView');
 	var fehlerView = require('fehlerView');
+	var SbView = require('sbView');
 
 	var Fragen = Backbone.Collection.extend( {
 
@@ -286,11 +287,12 @@ define(function( require ) {
 					{v: MtView, f:['HS3'] },
 				],
 				A1: [
-				{v: FView, f:['WHI', 'IRR1', 'IRR2']},
-				{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
-				{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
+//				{v: FView, f:['WHI', 'IRR1', 'IRR2']},
+//				{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
+//				{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
 //				{v: UeView},
-				{v: FView, f:['EMO1', 'EMO2', 'EMO3']}
+//				{v: FView, f:['EMO1', 'EMO2', 'EMO3']}
+				{v: SbView}
 				]
 			};
 	
@@ -317,6 +319,12 @@ define(function( require ) {
 				enumerable: true,
 				writeable: false,
 				get: function(){ return this.N1.concat(this.WL,this.N2) },
+			});
+			Object.defineProperty(this.ablauf, 'A', { // abends 
+				__proto__: null,
+				enumerable: true,
+				writeable: false,
+				get: function(){ return this.STI.concat(this.A1) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', { // erster Druchlauf - während der Arbeit
 				__proto__: null,
