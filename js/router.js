@@ -29,6 +29,7 @@ define( function( require) {
 			'W': 'ablaufW',
 			'Q': 'ablaufQ',
 			'N': 'ablaufN',
+			'A': 'ablaufA',
 
 			// When #f? is on the url, the  method is called
 			'f?:nr': 'frage'
@@ -40,6 +41,7 @@ define( function( require) {
 
 		speichern: function() {
 			var antw = fb2.get('antworten');
+			if (fb2.typ == 'A') antw.SB = fb2.get('schichtbeginn');
 			fb2.log({
 				msg:'speichern nach Durchlauf ' + this.fragen.art,
 				data: antw
@@ -71,6 +73,7 @@ define( function( require) {
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
+			view.$el.trigger('create');
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 		ablaufQ: function() {
@@ -82,6 +85,7 @@ define( function( require) {
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
+			view.$el.trigger('create');
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 		ablaufN: function() {
@@ -93,6 +97,19 @@ define( function( require) {
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
+			view.$el.trigger('create');
+			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
+		},
+		ablaufA: function() {
+			this.fragen.typ = 'A';
+			fb2.log({msg:'ablaufA Typ:' + this.fragen.typ});
+			this.fragen.akt = 0;
+			this.fragen.zeit = new Date();
+			fb2.neueAntworten();
+			var frageView = this.fragen.view();
+			var view = new frageView( {collection: this.fragen} );
+			view.render();
+			view.$el.trigger('create');
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
 

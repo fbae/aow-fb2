@@ -22,9 +22,9 @@ define(function( require ) {
 
 		render: function() {
 			var compiledTemplate = this.template(fb2.settings);
-			console.debug( 'fb2: ',fb2);
-			console.debug( 'compiledTemplate: ', compiledTemplate);
 			this.$el.html(compiledTemplate);
+			this.$el.find('#settingsSaveAllDataErfolg').popup();
+			this.$el.find('#settingsSaveAllDataFehler').popup();
 			return this;
 		}
 	} );

@@ -227,7 +227,11 @@ define(function( require ) {
       this.add(new Frage('IRR8',7,
 				'Als ich müde von der Arbeit nach Hause kam, fand ich durch nichts Erholung.',
 				'trifft überhaupt nicht zu','trifft fast völlig zu'));
+
+      this.add(new Frage('UE1',20,'Wie viele Stunden haben Sie heute gearbeitet?'));
+      this.add(new Frage('UE2',10,'Wie viele Überstunden haben Sie heute gearbeitet?'));
 /*
+
 
       this.add(new Frage('',,
 				'',
@@ -287,12 +291,12 @@ define(function( require ) {
 					{v: MtView, f:['HS3'] },
 				],
 				A1: [
-//				{v: FView, f:['WHI', 'IRR1', 'IRR2']},
-//				{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
-//				{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
-//				{v: UeView},
-//				{v: FView, f:['EMO1', 'EMO2', 'EMO3']}
-				{v: SbView}
+					{v: FView, f:['WHI', 'IRR1', 'IRR2']},
+					{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
+					{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
+					{v: FView, f:['UE1', 'UE2']},
+					{v: FView, f:['EMO1', 'EMO2', 'EMO3']},
+					{v: SbView}
 				]
 			};
 	

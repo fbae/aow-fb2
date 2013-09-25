@@ -1,63 +1,66 @@
-// View für mehrere Fragen mit horizontaler Auswahl
-// ================================================
+// View für Ende Abend-Durchlauf -> nächster Schichtbeginn 
+// =======================================================
 
 define( function( require ) {
 	var $ = require('jquery');
 	var _ = require('underscore');
 	var Backbone = require('backbone');
-	var fViewTemplate = require('text!../templates/fView.html');
+	var sbViewTemplate = require('text!../templates/sbView.html');
 
-	var FView = Backbone.View.extend( {
+	var SbView = Backbone.View.extend( {
 		el: '#f',
 		initialize: function() {
 		},
 
 		render: function() {
-			var f = this.collection; // Fragen
-			// aktuelle Frage ermitteln
-			var fArr = f.ablauf[f.typ][f.akt]['f'];
-			
-			// für alle Teilfragen die Templates zusammenstellen
-			var teilFragenHTMLArr = new Array();
-			for (var i=0; i<fArr.length; i++) {
-				var frage = f.get(fArr[i]).attributes;
-				var tfa = JSON.parse(frage.toJSON());
-				tfa.kodierung = f.zeitpunkt() + frage.id;
-				teilFragenHTMLArr.push(_.template(frage.template,tfa));
-			}
-
-			// TODO: eventuell noch gleichartige Fragen löschen (siehe Stimmung)
-
-			var fO = {'fragenTemplates': teilFragenHTMLArr};
-			// vorherige und nachfolgende Frage für Verlinkung bestimmen
-			fO.next = f.nachher();
-			fO.prev = f.vorher();
-			fO.heading = (f.ablauf[f.typ][f.akt]['heading']) ? f.ablauf[f.typ][f.akt]['heading'] : null;
-
-			// Template rendern
-			this.template = _.template(fViewTemplate,fO);
-			// HTML in DOM einhängen
+			var sb = fb2.naechsterWerktag();
+			this.template = _.template(sbViewTemplate,null);
 			this.$el.html(this.template).page();
+			// Werte vorbesetzen
+			this.$el.find('#select-choice-day')
+				.change(function(evt) {
+					sb.setDays(evt.target.value);
+					fb2.set('schichtbeginn',sb);
+					fb2.trigger('change:schichtbeginn',fb2,sb);
+				})
+				.find('option[value="'+sb.getDate()+'"]').attr('selected','selected');
+			this.$el.find('#select-choice-month')
+				.change(function(evt) {
+					sb.setMonth(evt.target.value);
+					fb2.set('schichtbeginn',sb);
+					fb2.trigger('change:schichtbeginn',fb2,sb);
+				})
+				.find('option[value="'+(sb.getMonth()+1)+'"]').attr('selected','selected');
+			this.$el.find('#select-choice-year')
+				.change(function(evt) {
+					sb.setYear(evt.target.value);
+					fb2.set('schichtbeginn',sb);
+					fb2.trigger('change:schichtbeginn',fb2,sb);
+				})
+				.find('option[value="'+sb.getFullYear()+'"]').attr('selected','selected');
 			
-			for (var i=0; i<fArr.length; i++) {
-				// falls ein Slider benutzt wird: ein onSlidestop setzen, damit die Daten sofort eingetragen werden
-				var frage = f.get(fArr[i]).attributes;
-				if (frage.art == 20) {
-					var kodierung = f.zeitpunkt() + frage.id;
-					this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
-						// TODO: zeit ist nicht richtig (muss aus dem event ausgelesen werden
-						console.debug( 'slidestop $(this).slider().val(): ', $(this).slider().val(),event);
-						fb2.setzeAntwort({'kodierung': event.target.id, 'zeit': new Date(event.timeStamp), 'antw': $( this ).slider().val() });
-					} );
-				}
-			}
-			this.$el.find( ':jqmData(role=controlgroup)' ).controlgroup(); 
-
-			// Maintains chainability
+			this.$el.find('#select-choice-hour')
+				.change(function(evt) {
+					sb.setHours(evt.target.value);
+					fb2.set('schichtbeginn',sb);
+					fb2.trigger('change:schichtbeginn',fb2,sb);
+				})
+				.find('option[value="'+sb.getHours()+'"]').attr('selected','selected');
+			var q = Math.round(sb.getMinutes()/15);
+			q = (q == 4) ? 0 : q*15 ; 
+			this.$el.find('#select-choice-quarter')
+				.change(function(evt) {
+					sb.setMinutes(evt.target.value);
+					fb2.set('schichtbeginn',sb);
+					fb2.trigger('change:schichtbeginn',fb2,sb);
+				})
+				.find('option[value="'+q+'"]').attr('selected','selected');
+			this.$el.page().find('select').selectmenu()
+				
 			return this;
 		}
 	} );
 	// Returns the View class
-	return FView;
+	return SbView;
 } );
 

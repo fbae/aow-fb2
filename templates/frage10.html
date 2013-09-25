@@ -1,4 +1,4 @@
-<div data-role='fieldcontain' data-theme='c' class='frage20'>
+<div data-role='fieldcontain' data-theme='c' class='frage10'>
 	<label for='<% kodierung %>'>
 		<div id='frage'><%= txt %></div>
 		<% if (lTxt) { print("<div id='linkeBeschriftung'>"+lTxt+"</div>"); } %>
@@ -7,5 +7,5 @@
 	</label>
 	<input data-type='range' name='<%= kodierung %>' id='<%= kodierung %>'
 		value='<% print((ant == null) ? 0 : ant) %>'
-		min='1' max='20' data-highlight='true' data-theme='c'/>
+		min='1' max='10' data-highlight='true' data-theme='c'/>
 </div>

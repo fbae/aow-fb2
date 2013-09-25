@@ -35,6 +35,11 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 			twoDigits(this.getUTCDate()) + " " + twoDigits(this.getUTCHours()) + ":" + 
 			twoDigits(this.getUTCMinutes()) + ":" + twoDigits(this.getUTCSeconds());
 	};
+	Date.prototype.toGerman = function() {
+		return this.getDate() + '.' + (1 + this.getMonth()) + "." + this.getFullYear() +
+			 " " + this.getHours() + ":" + this.getMinutes();
+		
+	}
 
 	$( document ).on( "mobileinit",
 		function() {

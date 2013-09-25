@@ -54,6 +54,26 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							tag.setMilliseconds(0);
 							self.set('tag',tag);
 						}
+						// Schichtbeginn schon lange (> 1 Tag) vorbei oder nicht vorhanden?
+						console.debug( 'IDB onsuccess: ',self.attributes);
+						if ( !self.has('schichtbeginn')) {
+							self.set({'schichtbeginn': self.naechsterWerktag()});
+							self.log({
+								msg: 'schichtbeginn nicht vorhanden - neu bestimmt', 
+								schichtbeginn: self.get('schichtbeginn')
+							});
+						} else {
+							var sb = self.get('schichtbeginn');
+							var anzTageDiff = (Date.now() - sb) % 86400000;
+							if (anzTageDiff > 1) {
+								sb.setDate(sb.getDate()+anzTageDiff);
+								self.set('schichtbeginn',sb);
+								self.log({
+									msg: 'schichtbeginn - neu berechnet', 
+									schichtbeginn: self.get('schichtbeginn')
+								});
+							}
+						}
 						
 						// gibt es nicht beendete Antworten, die eventuell passen könnten?
 						if ( self.has('antwortenTabelle') && self.has('antwortenId')) {
@@ -227,8 +247,8 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			aO.device = this.get('device');
 			aO.tag = this.get('tag');
 			aO.heuteId = this.heuteId();
-			aO.antwortenErstellt = new Date();
 			aO.fragenErstellt = this.fragen.zeit;
+			aO.erstellt = new Date();
 			aO.typ = this.fragen.typ;
 			aO.person = this.get('person');
 
@@ -255,7 +275,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			this.unset('antwortenTabelle');
 		},
 
-		saveTab: function(tabName) {
+		saveTab: function(tabName, errors) {
 			// TODO: ist unfertig
 			var self = this;
 			// Antworten auslesen
@@ -274,7 +294,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							}
 						}
 					} );
-					console.debug( 'saveTab - cv: ', cv);
 					cv.tabellenName = tabName;
 					$.ajax({
 						type: "POST",
@@ -287,21 +306,23 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						},
 						url: 'api/putData.php',
 						success: function(data) {
-							console.debug( 'Erfolg - saveTab:success - data:', data);
 							if (data.status == 'erfolg') { 
 								/* löschen des Eintrages, falls data.status == erfolg
 								 * data enthält die id und den tabellenNamen
 								 */
 								self.db.transaction(tabName,'readwrite').objectStore(tabName).delete(Number(data.id)).onerror = 
 									function(e) {
+										errors.push({e:tabname, msg:'saveTab - Eintrag id:'+data.id+' konnte nicht gelöscht werden'});
 										console.debug('Fehler - saveTab - in Tabelle '+tabName+' konnte der Eintrag id: '+
 											data.id+' nicht gelöscht werden. e:',e);
 									};
 							} else {
+								errors.push({e:tabname, msg:'saveTab - nach der Übermittlung wurde ein Fehler gemeldet'});
 								console.error('Fehler - saveTab - Nach der Übermittlung wurde ein Fehler gemeldet. data:', data);
 							}
 						},
 						error: function(data) {
+							errors.push({e:tabname, msg:'saveTab - ajax ist gescheitert'});
 							console.error('Fehler - saveTab - ajax ist gescheitert. data:',data);
 						}
 					});
@@ -311,24 +332,41 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		},
 		saveAll: function() {
 			var self = this;
-			this.saveTab('antwortenW');
-			this.saveTab('antwortenQ');
-			this.saveTab('antwortenN');
-			this.saveTab('antwortenA');
+			var errA = new Array();
+			var timeoutId = setTimeout(function() {
+				// Fehlermeldung anzeigen (nach 5sek)
+				$('#settingsSaveAllDataFehler').popup('open');
+			}, 5000);
+
+			this.saveTab('antwortenW', errA);
+			this.saveTab('antwortenQ', errA);
+			this.saveTab('antwortenN', errA);
+			this.saveTab('antwortenA', errA);
 
 			// alle log-Einträge zusammenpacken und verschicken
 			var log = new Array();
 			var req = self.db.transaction('log').objectStore('log').openCursor();
-			req.onerror = function(e) { console.warn('Fehler - saveAll - log konnte icht ausgelesen werden. ',e); }
+			req.onerror = function(e) { 
+				errA.push({e:'log', msg:'saveAll - log konnte nicht ausgelesen werden'});
+				console.warn('Fehler - saveAll - log konnte icht ausgelesen werden. ',e); 
+			}
 			req.onsuccess = function(e) {
 				var cursor = e.target.result;
 				if (cursor) {
 					log.push(cursor.value);
+					cursor.continue();
 				} else {
+					// dt in MySQL-Format übertragen (dt ist der key, muss deshalb in jedem Feld vorhanden sein)
+					_.each(log, function(v,k,l) {
+						v.dt = v.dt.toMysqlFormat();
+					});
 					// ajax-Übertragung und anschließend Leeren des Log
 					var data = new Object();
 					data.log = log;
 					data.settings = self.settings;
+					data.tabellenName = 'log';
+					data.id = -1;
+					console.debug( 'saveAll - log:data', data);
 					$.ajax({
 						type: "POST",
 						dataType: "json",
@@ -340,27 +378,55 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						},
 						url: 'api/putData.php',
 						success: function(data) {
-							console.debug( 'Erfolg - saveLog:success - data:', data);
+							console.debug( 'saveAll - ajaxLog:success - data:', data);
 							if (data.status == 'erfolg') { 
 								/* löschen des Eintrages, falls data.status == erfolg
 								 * data enthält die id und den tabellenNamen
 								 */
-								self.db.transaction('log','readwrite').objectStore('log').clear().onerror = 
-									function(e) {
-										console.debug('Fehler - saveLog konnte nicht gelöscht werden. e:',e);
-									};
+								var req = self.db.transaction('log','readwrite').objectStore('log').clear();
+								req.onerror = function(e) {
+									errA.push({e:'log', msg:'saveAll - log konnte nicht gelöscht werden'});
+									console.debug('Fehler - saveLog konnte nicht gelöscht werden. e:',e);
+								};
+								req.onsuccess = function(e) {
+									// versuche festzustellen, ob Fehler auftraten
+									if (errA.length > 0) {
+										fb2.log({'msg': 'beim Übertragen der Daten ins Internet wurden Fehler gemeldet:', 'data':errA});
+										console.warn( 'Fehler sind beim Übertragen aufgetreten: ', errA);
+									} else {
+										clearTimeout(timeoutId);
+										$('#settingsSaveAllDataErfolg').popup('open');
+									}
+								}
 							} else {
+								errA.push({e:'log', msg:'saveAll - log meldet nach Übermittlung Fehler'});
 								console.error('Fehler - saveLog - Nach der Übermittlung wurde ein Fehler gemeldet. data:', data);
 							}
 						},
 						error: function(data) {
+							errA.push({e:'log', msg:'saveAll - log ajax ist gescheitert.'});
 							console.error('Fehler - saveLog - ajax ist gescheitert. data:',data);
 						}
 					});
 					
 				}
 			}
-		}
+		},
+
+		naechsterWerktag: function() {
+			var jetzt = new Date();
+			if (this.has('schichtbeginn'))
+				var naechsterWochentag = this.get('schichtbeginn');
+			else if (this.has('tag'))
+				var naechsterWochentag = this.get('tag');
+			else 
+				var naechsterWochentag = jetzt;
+			while (naechsterWochentag < jetzt || 
+						naechsterWochentag.getDay() < 1 || 
+						naechsterWochentag.getDay() > 5)
+				naechsterWochentag.setDate(naechsterWochentag.getDate()+1);
+			return naechsterWochentag;
+		},
 	} );
 
 	window.fb2 = new Fb2Model;
@@ -389,6 +455,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				o.device = this.get('device');
 				o.tag = this.get('tag');
 				o.person = this.get('person');
+				o.schichtbeginn = this.get('schichtbeginn');
 				return o;
 			}
 		},
@@ -413,6 +480,13 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			console.warn('IDB - change:tag - Einstellung für Tag konnte nicht gespeichert werden.');
 		};
 		this.log('change:tag ' + tag);
+	});
+	fb2.on('change:schichtbeginn', function(model, sb) {
+		console.debug( 'change:schichtbeginn',sb);
+		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( {
+			'key': 'schichtbeginn',
+			'value': sb
+		} );
 	});
 	fb2.on('change:antwortenId', function(model, aI) {
 		if (this.has('antwortenId')) {
