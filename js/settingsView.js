@@ -18,6 +18,8 @@ define(function( require ) {
 
 		events: {
 			// Hängt von den Elementen im Template ab
+			'click #save0DataButton': 'saveAll',
+			'click #createPersonCodeButton': 'createPersonCode',
 		},
 
 		render: function() {
@@ -26,7 +28,15 @@ define(function( require ) {
 			this.$el.find('#settingsSaveAllDataErfolg').popup();
 			this.$el.find('#settingsSaveAllDataFehler').popup();
 			return this;
-		}
+		},
+
+		saveAll: function() { fb2.saveAll(); },
+		createPersonCode: function() {
+			// erstellen der Kennung für die Versuchsperson
+
+			fb2.set({'person':code});
+		},
+
 	} );
 	return SettingsView;
 } );

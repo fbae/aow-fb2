@@ -232,8 +232,11 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			// alte Antworten löschen
 			if (this.has('antworten')) this.unset('antworten', {silent: true});
 			if (this.has('antwortenId')) this.unset('antwortenId');
-			this.fragen.entferneAntworten();
-
+			if (this.fragen) {
+				this.fragen.entferneAntworten();
+			} else {
+				return undefined;
+			}
 
 			var antwTab = this.nameAntwortenTabelle();
 			if (antwTab === undefined) {
@@ -488,6 +491,12 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			'value': sb
 		} );
 	});
+	fb2.on('change:person', function(model, vpn) {
+		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( {
+			'key': 'person',
+			'value': vpn
+		} );
+	}),
 	fb2.on('change:antwortenId', function(model, aI) {
 		if (this.has('antwortenId')) {
 			this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( { 

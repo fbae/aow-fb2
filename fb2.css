@@ -4,8 +4,10 @@
 #linkeBeschriftung {
 	position:relative;
 	float:left;
+	font-size:smaller;
 }
 #rechteBeschriftung {
 	position:relative;
-	float:right
+	float:right;
+	font-size:smaller;
 }

@@ -8,10 +8,11 @@ define(function(require) {
 	var frage5Template = require('text!../templates/frage5.html');
 	var frage7Template = require('text!../templates/frage7.html');
 	var frage10Template = require('text!../templates/frage10.html');
+	var frage11Template = require('text!../templates/frage11.html');
 	var frage20Template = require('text!../templates/frage20.html');
+	var frage21Template = require('text!../templates/frage21.html');
 	var mt5aTemplate = require('text!../templates/mt5A.html');
 	var mt5bTemplate = require('text!../templates/mt5B.html');
-//	var hs5Template = require('text!../templates/hs.html');
 
 	function Frage(id,art,txt, lTxt, rTxt, mTxt) {
 		// Default-Werte vergeben
@@ -20,19 +21,20 @@ define(function(require) {
 		this.art = ((art !== undefined)) ? art : 5; // Art der Frage - wirkt sich auf das Template aus
 		this.txt = (txt !== undefined) ? txt : 'Wie alt möchten Sie werden?';
 		this.ant = null;
-		this.lTxt = lTxt;
-		this.rTxt = rTxt;
-		this.mTxt = mTxt;
+		this.lTxt = (lTxt) ? lTxt : null;
+		this.rTxt = (rTxt) ? rTxt : null;
+		this.mTxt = (mTxt) ? mTxt : null;
 
 		this.__defineGetter__('template',function() {
 			if (!this.tpl) {
 				switch (this.art) {
-//					case 2: this.tpl = hs5Template; break;
-					case 3: this.tpl = mt5bTemplate; break;
-					case 4: this.tpl = mt5aTemplate; break;
-					case 7: this.tpl = frage7Template; break;
+					case  3: this.tpl = mt5bTemplate; break;
+					case  4: this.tpl = mt5aTemplate; break;
+					case  7: this.tpl = frage7Template; break;
 					case 10: this.tpl = frage10Template; break;
+					case 11: this.tpl = frage11Template; break;
 					case 20: this.tpl = frage20Template; break;
+					case 21: this.tpl = frage21Template; break;
 					default: this.tpl = frage5Template;  
 				}
 			}

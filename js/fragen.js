@@ -228,8 +228,8 @@ define(function( require ) {
 				'Als ich müde von der Arbeit nach Hause kam, fand ich durch nichts Erholung.',
 				'trifft überhaupt nicht zu','trifft fast völlig zu'));
 
-      this.add(new Frage('UE1',20,'Wie viele Stunden haben Sie heute gearbeitet?'));
-      this.add(new Frage('UE2',10,'Wie viele Überstunden haben Sie heute gearbeitet?'));
+      this.add(new Frage('UE1',21,'Wie viele Stunden haben Sie heute gearbeitet?'));
+      this.add(new Frage('UE2',11,'Wie viele Überstunden haben Sie heute gearbeitet?'));
 /*
 
 

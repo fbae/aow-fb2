@@ -23,6 +23,9 @@ define( function( require ) {
 				var frage = f.get(fArr[i]).attributes;
 				var tfa = JSON.parse(frage.toJSON());
 				tfa.kodierung = f.zeitpunkt() + frage.id;
+				if (!tfa.hasOwnProperty('lTxt')) tfa.lTxt = null;
+				if (!tfa.hasOwnProperty('rTxt')) tfa.rTxt = null;
+				if (!tfa.hasOwnProperty('mTxt')) tfa.mTxt = null;
 				teilFragenHTMLArr.push(_.template(frage.template,tfa));
 			}
 

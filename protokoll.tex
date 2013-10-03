@@ -6,7 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{foilhtml}
-\usepackage[ngerman,english]{babel}
+\usepackage[ngermanb,english]{babel}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{hyperref}
@@ -24,36 +24,29 @@
   
 \title{Dokumentation zum Fragebogen 2}
 \author{Frank Baethge}
-\date{2013-08-24}
+\date{2013-10-04}
 \begin{document}
 %%\maketitle
 %%\tableofcontents
 	\section{Programmierung}
+	Dieses Dokument wurde am \today letztmalig geändert.
 
 		\subsection{TODO}
 			\begin{itemize}
 				\item UI
-
 					\begin{itemize}
-						\item teste übergebenen Parameter "'device"'
-						\item Einstellungen programmieren (Starttag, Startzeiten, Gerätenamen)
 						\item es sollen nicht immer alle Fragebögen (abhängig von der Zeit) auswählbar sein
 						\item es sollen Haken gesetzt werden, damit man sieht welche Fragebögen bearbeitet wurden, am nächsten Tag sind die Haken wieder zu löschen, eine Routiene soll erkennen, ob alle Fragen eines Durchlaufs beantwortet sind, oder ob noch welche fehlen
 						\item wenn die letzte Frage auf der Seite beantwortet ist auch ohne auf weiter zu klicken zur nächsten Seite gehen
 						\item Header soll Fortschritt anzeigen
 					\end{itemize}
-				\item \href{http://developer.chrome.com/apps}{offline Applikation}\newline
-					die app kann jederzeit geschlossen werden, sollte dort fortsetzen wo sie war\newline
-					offline-app onLaunch(), onSuspend()\newline
-					oder chrome://flags enable offline cache\newline
-					oder \href{http://appcachefacts.info/}{appcache} - HTML5 - das scheint mir erstmal das Einfachste, das zum Ziel führen könnte. Offline-App ist bestimmt schicker, bedeutet aber auch, dass localStorage nicht verwendet werden kann. Das Verwenden von async bedeutet andererseits Beschleunigung des Codes.
-					oder \href{https://developers.google.com/chrome/apps/docs/developers_guide?csw=1}{hosted app}
-				\item DatenAblage auf Gerät
 				\item Hinweis für Nutzer, dass ein Fragebogen ausgefüllt werden soll (Wecker evtl. mit Erinnerung)
-				\item Datenübertragung auf Server
-				\item Hosting auf UniMainz-Irgendwo: ssh, webserver + php, ajax (mysql, git, node.js oder modWebSocket)
-				\item \href{http://mirror.math.ku.edu/tex-archive/macros/latex/contrib/listings/listings.pdf}{Listing anpassen - JavaScript} 
-				\item http://tutorialzine.com/2013/06/digital-clock-adding-alarms/ 
+				\item Layout überprüfen - css überarbeiten
+				\item vpn-code programmieren
+				\item Datenübertragung an Server, bei ständiger Verbindung mit dem Internet, sofort vornehmen
+				\item Tabellen zur Datenüberprüfung anzeigen lassen
+				\item Mit Schichtbeginn-Datum besser umgehen. (bspw. entscheiden, ob die Fragebögen noch zu beantworten sind, Timer setzen, Wecker programmieren)
+				\item packaged app ausprobieren (Timer)
 			\end{itemize}
 
 		\subsection{Informationen zum Programm}
@@ -62,7 +55,9 @@
 				\item Parameter: device=bla $\rightarrow$ Gerätename
 				\item Parameter: st=jjjj-mm-tt $\rightarrow$ Startdatum (Tag)
 				\item Parameter: sz=13:45 $\rightarrow$ Startzeit (Zeit des Arbeitsbeginns für jeden Tag)\newline
-					Zeit und Tag überschreiben bereits vorhandene Zeit- und Tag-Werte
+					Zeit und Tag überschreiben bereits vorhandene Zeit- und Tag-Werte\newline
+					Startzeit und Startdatum waren ursprünglich dazu gedacht, den Timer für die "Weckzeiten" zu initialisieren. Momentan dienen Sie nur dazu die Reihenfolge WA, WB bzw. QA, QB zu steuern. Weckzeiten sollen die User selbst programmieren.
+				\item Am Ende der Abends-Befragung wird der Schichtbeginn abgefragt und auch dort nur abgespeichert.
 			\end{itemize}
 
 		\subsection{DONE}
@@ -89,18 +84,33 @@
 					An:     <baethge@uni-mainz.de>\newline 
 					Die Datenbank ist eingerichtet. Hier die Eckdaten für den Zugriff:
 
-					Name: psyc_mutask (nach dem name des Instituts, oder Abteilung, nicht länger als 12 Zeichen)\newline
+					Name: psyc\_mutask (nach dem name des Instituts, oder Abteilung, nicht länger als 12 Zeichen)\newline
 					Server: mysql-vh.zdv.Uni-Mainz.DE\newline
 					Portnummer: 3306 (Standardport)\newline
 					Default-Zeichensatz: UTF-8\newline
-					Name des Users mit Schreibrechten: psyc_mutask\newline
+					Name des Users mit Schreibrechten: psyc\_mutask\newline
 					Passwort: wie im Antrag gewünscht\newline
-					Name des Users für Webzugriff: psyc_mutask_web\newline
+					Name des Users für Webzugriff: psyc\_mutask\_web\newline
 					Passwort: wie im Antrag gewünscht
 
 					Der User für Webzugriff wurde ohne alle Zugriffsrechte eingerichtet, der User mit Schreibrechten muss über den SQL-Befehl "Grant" die nötigen Rechte für den Webzugriff einrichten (siehe http://dev.mysql.com/doc/refman/5.0/en/grant.html) - Syntaxbeispiel:\newline GRANT ALL privileges ON `<dbname>`.* TO '<webusername>' ;
 				\item select version(); $\rightarrow$ 5.1.69-log
-				\item .
+				\item \href{http://developer.chrome.com/apps}{offline Applikation}\newline
+					die app kann jederzeit geschlossen werden, sollte dort fortsetzen wo sie war\newline
+					offline-app onLaunch(), onSuspend()\newline
+					oder chrome://flags enable offline cache\newline
+					oder \href{http://appcachefacts.info/}{appcache} - HTML5 - das scheint mir erstmal das Einfachste, das zum Ziel führen könnte. Offline-App ist bestimmt schicker, bedeutet aber auch, dass localStorage nicht verwendet werden kann. Das Verwenden von async bedeutet andererseits Beschleunigung des Codes.
+					oder \href{https://developers.google.com/chrome/apps/docs/developers_guide?csw=1}{hosted app}
+				\item DatenAblage auf Gerät
+				\item Datenübertragung auf Server
+				\item Hosting auf UniMainz-Irgendwo: ssh, webserver + php, ajax (mysql, git, node.js oder modWebSocket)
+				\item \href{http://mirror.math.ku.edu/tex-archive/macros/latex/contrib/listings/listings.pdf}{Listing anpassen - JavaScript} 
+				\item http://tutorialzine.com/2013/06/digital-clock-adding-alarms/ 
+				\item UI
+					\begin{itemize}
+						\item teste übergebenen Parameter "'device"'
+						\item Einstellungen programmieren (Starttag, Startzeiten, Gerätenamen)
+					\end{itemize}
 			\end{itemize}
 		\subsection{Geräte}
 			\begin{itemize}

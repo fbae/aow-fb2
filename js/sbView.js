@@ -19,7 +19,7 @@ define( function( require ) {
 			// Werte vorbesetzen
 			this.$el.find('#select-choice-day')
 				.change(function(evt) {
-					sb.setDays(evt.target.value);
+					sb.setDate(evt.target.value);
 					fb2.set('schichtbeginn',sb);
 					fb2.trigger('change:schichtbeginn',fb2,sb);
 				})
@@ -30,7 +30,7 @@ define( function( require ) {
 					fb2.set('schichtbeginn',sb);
 					fb2.trigger('change:schichtbeginn',fb2,sb);
 				})
-				.find('option[value="'+(sb.getMonth()+1)+'"]').attr('selected','selected');
+				.find('option[value="'+sb.getMonth()+'"]').attr('selected','selected');
 			this.$el.find('#select-choice-year')
 				.change(function(evt) {
 					sb.setYear(evt.target.value);

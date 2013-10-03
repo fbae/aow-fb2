@@ -2,14 +2,18 @@
 	<!-- Status: <%= status %> Version: <%= version %> -->
 	<div >Gerätename: <%= device %></div>
 	<div >Startdatum: <% print(tag.toGerman()); %></div>
+	<div >Schichtbeginn: <% print(schichtbeginn.toGerman()); %></div>
+	<div >Versuchsperson: <%= person %> - 
+		<a href='#vpn' data-rel='dialog'>ändern</a>
+	</div>
+	<input type='button' value='Person benennen' id='createPersonButton'/>
 	<input type='button' value='übertrage alle Daten' id='save0DataButton'
 		<% if(!navigator.onLine) { print("class='ui-disabled'"); } %>
-		onclick='if (navigator.onLine) fb2.saveAll();'
 	/>
-	<div data-role="popup" id="settingsSaveAllDataErfolg">
+	<div data-role="popup" id="settingsSaveAllDataErfolg" data-theme='e' data-overlay-theme='c'>
 		<p>Die Daten wurden erfolgreich übertragen.<p>
 	</div>
-	<div data-role="popup" id="settingsSaveAllDataFehler">
+	<div data-role="popup" id="settingsSaveAllDataFehler" data-theme='e' data-overlay-theme='c'>
 		<p>Beim Übertragen der Daten ist ein Fehler aufgetreten.<p>
 	</div>
 </div>
