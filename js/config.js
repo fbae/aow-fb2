@@ -54,12 +54,6 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 		this.router = new Fb2Router();
 		fb2.router = this.router;
 
-		// ohne localStorage nicht weitermachen und Fehlerseite anzeigen
-		if (!localStorage) {
-			$.mobile.changePage( '#FlS', {reverse: false, changeHash: false} );			
-			return false;
-		}
-
 		// GeräteNamen setzen, falls in url übergeben wurde
 		var device = $.url().param('device');
 		if (device) fb2.set({'device':device});
@@ -83,7 +77,13 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 			sT.setMinutes(zeitMin);
 			fb2.set({'tag': sT});
 		}
-	
-		console.debug( 'chrome:alarm: ', chrome, chrome.alarms);
+
+		// Versuchsperson setzen, falls in url übergeben
+		var vpn = $.url().param('vpn');
+		console.debug( $.url().attr('source') );
+		if (vpn) {
+			console.debug( 'vpn Parameter erkannt', vpn);
+			fb2.set({'person':vpn});
+		}
 	});
 } );

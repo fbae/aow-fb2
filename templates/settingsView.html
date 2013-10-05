@@ -3,10 +3,9 @@
 	<div >Gerätename: <%= device %></div>
 	<div >Startdatum: <% print(tag.toGerman()); %></div>
 	<div >Schichtbeginn: <% print(schichtbeginn.toGerman()); %></div>
-	<div >Versuchsperson: <%= person %> - 
-		<a href='#vpn' data-rel='dialog'>ändern</a>
+	<div >Versuchsperson: <span id='vpn'><%= person %></span> - 
+		<a href='vpn.html' data-rel='dialog'>ändern</a>
 	</div>
-	<input type='button' value='Person benennen' id='createPersonButton'/>
 	<input type='button' value='übertrage alle Daten' id='save0DataButton'
 		<% if(!navigator.onLine) { print("class='ui-disabled'"); } %>
 	/>

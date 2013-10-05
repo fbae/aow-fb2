@@ -495,7 +495,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( {
 			'key': 'person',
 			'value': vpn
-		} );
+		} ).onsuccess = function() { $('#vpn').html(vpn); }
 	}),
 	fb2.on('change:antwortenId', function(model, aI) {
 		if (this.has('antwortenId')) {

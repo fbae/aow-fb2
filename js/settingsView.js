@@ -19,7 +19,6 @@ define(function( require ) {
 		events: {
 			// Hängt von den Elementen im Template ab
 			'click #save0DataButton': 'saveAll',
-			'click #createPersonCodeButton': 'createPersonCode',
 		},
 
 		render: function() {
@@ -30,12 +29,7 @@ define(function( require ) {
 			return this;
 		},
 
-		saveAll: function() { fb2.saveAll(); },
-		createPersonCode: function() {
-			// erstellen der Kennung für die Versuchsperson
-
-			fb2.set({'person':code});
-		},
+		saveAll: function() { if (navigator.onLine) fb2.saveAll(); },
 
 	} );
 	return SettingsView;
