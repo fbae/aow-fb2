@@ -33,7 +33,7 @@ define( function( require ) {
 				.find('option[value="'+sb.getMonth()+'"]').attr('selected','selected');
 			this.$el.find('#select-choice-year')
 				.change(function(evt) {
-					sb.setYear(evt.target.value);
+					sb.setFullYear(evt.target.value);
 					fb2.set('schichtbeginn',sb);
 					fb2.trigger('change:schichtbeginn',fb2,sb);
 				})

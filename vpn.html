@@ -26,14 +26,13 @@ $(document).ready(function() {
 			<div data-theme='c' data-role='content'>
 				<div>Um eine eindeutige Kennung zu erstellen, geben Sie bitte Folgendes an:
 					<label for="vvm">erste zwei Buchstaben des Vornamen der Mutter:</label>
-					<input type="text" name="vvm" id="vvm" value=""
-					/>
+					<input type="text" name="vvm" id="vvm" value="" pattern="[A-Za-z]{2}" />
 					<label for="vnm">erste zwei Buchstaben des Geburtsnamen der Mutter:</label>
-					<input type="text" name="vnv" id="vnm" value=""/>
+					<input type="text" name="vnv" id="vnm" value="" pattern="[A-Za-z]{2}" />
 					<label for="gm">letzte Ziffer des Geburtsjahres der Mutter:</label>
-					<input type="number" name="gm" id="gm" value="0"/>
+					<input type="number" name="gm" id="gm" value="0" min="0" max="9" />
 					<label for="go">erste zwei Buchstaben Ihres Geburtsortes:</label>
-					<input type="text" name="go" id="go" value=""/>
+					<input type="text" name="go" id="go" value="" pattern="[A-Za-z]{2}" />
 				</div>
 			</div>
 			<div data-theme='c' data-role='footer' data-position='fixed'>

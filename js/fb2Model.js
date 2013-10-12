@@ -224,7 +224,8 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			m = ((m<10) ? '0'+m : m);
 			var d = heute.getUTCDay();
 			d = ((d<10) ? '0'+d : d);
-			return this.get('device') + '_' + heute.getUTCFullYear() + '-' + m + '-' + d;
+			var vpn = (this.has('person')) ? this.get('person') : '';
+			return this.get('device') + '_' + vpn + '_' + heute.getUTCFullYear() + '-' + m + '-' + d;
 		},
 
 		neueAntworten: function() {
@@ -424,7 +425,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				var naechsterWochentag = this.get('tag');
 			else 
 				var naechsterWochentag = jetzt;
-			while (naechsterWochentag < jetzt || 
+			while (naechsterWochentag <= jetzt || 
 						naechsterWochentag.getDay() < 1 || 
 						naechsterWochentag.getDay() > 5)
 				naechsterWochentag.setDate(naechsterWochentag.getDate()+1);

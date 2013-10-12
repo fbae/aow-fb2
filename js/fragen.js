@@ -9,6 +9,7 @@ define(function( require ) {
 	var FView = require('fView');
 	var fehlerView = require('fehlerView');
 	var SbView = require('sbView');
+	var MsgView = require('msgView');
 
 	var Fragen = Backbone.Collection.extend( {
 
@@ -46,17 +47,17 @@ define(function( require ) {
 			this.zeit = new Date();
 
 			// Fragen
-			this.add(new Frage('MH1',4,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
-      this.add(new Frage('MH2',4,'arbeitete ich an mehr als einer Aufgabe.'));
-      this.add(new Frage('MH3',4,'bearbeitete ich Aufgaben nacheinander ab.'));
-      this.add(new Frage('MH4',4,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
-      this.add(new Frage('MH5',4,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
-      this.add(new Frage('MH6',4,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
-      this.add(new Frage('MH7',4,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
-      this.add(new Frage('MH8',4,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
+			this.add(new Frage('MH1',2,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
+      this.add(new Frage('MH2',2,'arbeitete ich an mehr als einer Aufgabe.'));
+      this.add(new Frage('MH3',2,'arbeitete ich Aufgaben nacheinander ab.'));
+      this.add(new Frage('MH2',4,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
+      this.add(new Frage('MH5',2,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
+      this.add(new Frage('MH6',2,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
+      this.add(new Frage('MH7',2,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
+      this.add(new Frage('MH8',2,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 			this.add(new Frage('MZ1',3,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
       this.add(new Frage('MZ2',3,'arbeitete ich an mehr als einer Aufgabe.'));
-      this.add(new Frage('MZ3',3,'bearbeitete ich Aufgaben nacheinander ab.'));
+      this.add(new Frage('MZ3',3,'arbeitete ich Aufgaben nacheinander ab.'));
       this.add(new Frage('MZ4',3,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
       this.add(new Frage('MZ5',3,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
       this.add(new Frage('MZ6',3,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
@@ -90,7 +91,7 @@ define(function( require ) {
 				'sehr niedrig', 'sehr hoch'));
       this.add(new Frage('WL4',20,
 				'Wie erfolgreich haben Sie Ihre Aufgaben in den letzten zwei Stunden Ihrer Meinung nach durchgeführt?', 
-				'perfekter Erfolg', 'Misserfolg'));
+				'Misserfolg', 'perfekter Erfolg'));
       this.add(new Frage('WL5',20,
 				'Wie sehr mussten Sie sich in den letzten zwei Stunden anstrengen, um Ihre Leistung zu erreichen?', 
 				'sehr wenig', 'sehr stark'));
@@ -147,18 +148,36 @@ define(function( require ) {
       this.add(new Frage('WD4',5,
 				'Heute habe ich insgesamt mehr Zeit mit Pausen verbracht, als mir zusteht.',
 				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('WD5',5,
+				'Heute habe ich bei der Arbeit viel Zeit mit Tagträumen verbracht.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
 
+			// erster Durchlauf
       this.add(new Frage('REC1',5,
-				'… fühle ich mich ausgeschlafen.',
+				'&hellip; war ich voll neuer Energie.',
 				'trifft gar nicht zu','trifft völlig zu'));
       this.add(new Frage('REC2',5,
-				'… fühle ich mich körperlich erholt.',
+				'&hellip; fühlte ich mich körperlich erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
       this.add(new Frage('REC3',5,
-				'… fühle ich mich geistig erholt.',
+				'&hellip; fühlte ich mich geistig erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
       this.add(new Frage('REC4',5,
+				'&hellip; fühlte ich mich ausgeschlafen.',
+				'trifft gar nicht zu','trifft völlig zu'));
+
+			// nach der Arbeit
+      this.add(new Frage('REC1n',5,
 				'… bin ich voll neuer Energie.',
+				'trifft gar nicht zu','trifft völlig zu'));
+      this.add(new Frage('REC2n',5,
+				'… fühle ich mich körperlich erholt.',
+				'trifft gar nicht zu','trifft völlig zu'));
+      this.add(new Frage('REC3n',5,
+				'… fühle ich mich geistig erholt.',
+				'trifft gar nicht zu','trifft völlig zu'));
+      this.add(new Frage('REC4n',5,
+				'… fühle ich mich ausgeschlafen.',
 				'trifft gar nicht zu','trifft völlig zu'));
 
       this.add(new Frage('Z1',5,
@@ -230,6 +249,27 @@ define(function( require ) {
 
       this.add(new Frage('UE1',21,'Wie viele Stunden haben Sie heute gearbeitet?'));
       this.add(new Frage('UE2',11,'Wie viele Überstunden haben Sie heute gearbeitet?'));
+
+      this.add(new Frage('ED1',5,
+				'Ich fühle mich ausgelaugt.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ED2',5,
+				'Momentan kommen mir meine Gedanken unkonzentriert vor.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ED3',5,
+				'Im Moment wäre es sehr anstrengend für mich, mich auf etwas zu konzentrieren.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ED4',5,
+				'Ich habe momentan nicht viel mentale Energie.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ED5',5,
+				'Ich fühle mich, als hätte ich keine Willenskraft mehr.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+
+      this.add(new Frage('SL1',4,
+				'Wie würden Sie die Qualität Ihres heutigen Schlafes beurteilen?',
+				'sehr schlecht','sehr gut'));
+      this.add(new Frage('SL2',49,'Wie viele Stunden haben Sie während der letzten Nacht tatsächlich geschlafen?'));
 /*
 
 
@@ -240,11 +280,22 @@ define(function( require ) {
       this.add(new Frage('',,''));
 */
 			this.ablauf = {
+				REC: [
+					{v: FView, f:['REC1', 'REC2', 'REC3'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
+					{v: FView, f:['REC4', 'SL1', 'SL2'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
+				],
 				STI: [
 					{v: FView, f:['STI1','STI2','STI3']},
 					{v: FView, f:['STI4','STI5','STI6']},
 				],
+				ED: [
+				{v: FView, f:['ED1', 'ED2', 'ED3'], heading: 'Wie fühlen Sie sich momentan?'},
+				{v: FView, f:['ED4', 'ED5'], heading: 'Wie fühlen Sie sich momentan?'},
+
+				
+				],
 				W1: [
+					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie <strong>häufig</strong> folgende Situationen vorkamen.<br/>'},
 					{v: MtView, f:['MH1']},
 					{v: MtView, f:['MH2']},
 					{v: MtView, f:['MH3']},
@@ -255,6 +306,7 @@ define(function( require ) {
 					{v: MtView, f:['MH8']},
 				],
 				Q1: [
+					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
 					{v: MtView, f:['MZ1']},
 					{v: MtView, f:['MZ2']},
 					{v: MtView, f:['MZ3']},
@@ -310,13 +362,13 @@ define(function( require ) {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.W1) },
+				get: function(){ return this.REC.concat(this.STI,this.ED,this.W1) },
 			});
 			Object.defineProperty(this.ablauf, 'Q', {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.Q1) },
+				get: function(){ return this.STI.concat(this.ED,this.Q1) },
 			});
 			Object.defineProperty(this.ablauf, 'N', { // Anhang zu nach der Arbeit 
 				__proto__: null,
