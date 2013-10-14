@@ -1,6 +1,6 @@
 <div data-theme='c' data-role='content' class="ui-content ui-body-c">
 	<div id='frage' data-value='<%= id %>'>
-		<span class='fEinleitung'>In den letzten 2 Arbeitsstunden</span>
+		<% if (heading) { print("<span class='fEinleitung'>"+heading+"</span>"); } %>
 		<%= txt %>
 	</div>
 

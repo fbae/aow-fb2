@@ -50,7 +50,7 @@ define(function( require ) {
 			this.add(new Frage('MH1',2,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
       this.add(new Frage('MH2',2,'arbeitete ich an mehr als einer Aufgabe.'));
       this.add(new Frage('MH3',2,'arbeitete ich Aufgaben nacheinander ab.'));
-      this.add(new Frage('MH2',4,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
+      this.add(new Frage('MH4',2,'erledigte ich mehrere Arbeiten und Aufgaben gleichzeitig.'));
       this.add(new Frage('MH5',2,'musste ich viele Dinge gleichzeitig im Kopf behalten.'));
       this.add(new Frage('MH6',2,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
       this.add(new Frage('MH7',2,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
@@ -153,30 +153,30 @@ define(function( require ) {
 				'trifft überhaupt nicht zu','trifft völlig zu'));
 
 			// erster Durchlauf
-      this.add(new Frage('REC1',5,
+      this.add(new Frage('REC1w',5,
 				'&hellip; war ich voll neuer Energie.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC2',5,
+      this.add(new Frage('REC2w',5,
 				'&hellip; fühlte ich mich körperlich erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC3',5,
+      this.add(new Frage('REC3w',5,
 				'&hellip; fühlte ich mich geistig erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC4',5,
+      this.add(new Frage('REC4w',5,
 				'&hellip; fühlte ich mich ausgeschlafen.',
 				'trifft gar nicht zu','trifft völlig zu'));
 
 			// nach der Arbeit
-      this.add(new Frage('REC1n',5,
+      this.add(new Frage('REC1',5,
 				'… bin ich voll neuer Energie.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC2n',5,
+      this.add(new Frage('REC2',5,
 				'… fühle ich mich körperlich erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC3n',5,
+      this.add(new Frage('REC3',5,
 				'… fühle ich mich geistig erholt.',
 				'trifft gar nicht zu','trifft völlig zu'));
-      this.add(new Frage('REC4n',5,
+      this.add(new Frage('REC4',5,
 				'… fühle ich mich ausgeschlafen.',
 				'trifft gar nicht zu','trifft völlig zu'));
 
@@ -212,15 +212,9 @@ define(function( require ) {
 				'Meine beruflichen Anforderungen behinderten heute mein Privat- und/oder Familienleben.',
 				'stimme überhaupt nicht zu','stimme voll zu'));
 
-      this.add(new Frage('EMO1',5,
-				'Heute fühlte ich mich durch meine Arbeit ausgebrannt.',
-				'trifft gar nicht zu','trifft vollständig zu'));
-      this.add(new Frage('EMO2',5,
-				'Heute fühlte ich mich durch meine Arbeit emotional erschöpft.',
-				'trifft gar nicht zu','trifft vollständig zu'));
-      this.add(new Frage('EMO3',5,
-				'Heute fühlte ich mich durch meine Arbeit frustriert.',
-				'trifft gar nicht zu','trifft vollständig zu'));
+      this.add(new Frage('EMO1',5,'&hellip; ausgebrannt.','trifft gar nicht zu','trifft vollständig zu'));
+      this.add(new Frage('EMO2',5,'&hellip; emotional erschöpft.','trifft gar nicht zu','trifft vollständig zu'));
+      this.add(new Frage('EMO3',5,'&hellip; frustriert.','trifft gar nicht zu','trifft vollständig zu'));
 
       this.add(new Frage('IRR1',7,
 				'Es fiel mir heute schwer nach der Arbeit, abzuschalten.',
@@ -249,6 +243,8 @@ define(function( require ) {
 
       this.add(new Frage('UE1',21,'Wie viele Stunden haben Sie heute gearbeitet?'));
       this.add(new Frage('UE2',11,'Wie viele Überstunden haben Sie heute gearbeitet?'));
+      this.add(new Frage('UE3',11,
+				'Wie lange haben Sie nach Ausfüllen des letzten Fragebogens noch für das Unternehmen gearbeitet?'));
 
       this.add(new Frage('ED1',5,
 				'Ich fühle mich ausgelaugt.',
@@ -270,19 +266,48 @@ define(function( require ) {
 				'Wie würden Sie die Qualität Ihres heutigen Schlafes beurteilen?',
 				'sehr schlecht','sehr gut'));
       this.add(new Frage('SL2',49,'Wie viele Stunden haben Sie während der letzten Nacht tatsächlich geschlafen?'));
+
+      this.add(new Frage('ABS1',5,
+				'&hellip; habe ich die Arbeit vergessen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS2',5,
+				'&hellip; habe ich überhaupt nicht an meine Arbeit gedacht.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS3',5,
+				'&hellip;  ist es mir gelungen, mich von meiner Arbeit zu distanzieren.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS4',5,
+				'&hellip;  habe ich Abstand zu meinen beruflichen Anforderungen gewonnen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS5',5,
+				'&hellip;  habe ich meine Seele baumeln lassen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS6',5,
+				'&hellip; habe ich Dinge unternommen, bei denen ich mich entspannt habe.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS7',5,
+				'&hellip;  habe ich die Zeit genutzt, um zu relaxen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ABS8',5,
+				'&hellip;  habe ich mir Zeit zur Muße genommen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+
+      this.add(new Frage('ANF1',5,
+				'&hellip; hatte ich zu Hause viel zu tun.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ANF2',5,
+				'&hellip; musste ich zu Hause viele Dinge in Eile erledigen.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
+      this.add(new Frage('ANF3',5,
+				'&hellip; musste ich zu Hause viele Aufgaben erledigen (z.B. Hausarbeit / Pflege / Kinderbetreuung).',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
 /*
 
-
-      this.add(new Frage('',,
-				'',
-				'trifft überhaupt nicht zu','trifft völlig zu'));
-      this.add(new Frage('',,''));
-      this.add(new Frage('',,''));
 */
 			this.ablauf = {
-				REC: [
-					{v: FView, f:['REC1', 'REC2', 'REC3'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
-					{v: FView, f:['REC4', 'SL1', 'SL2'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
+				RECw: [
+					{v: FView, f:['REC1w', 'REC2w', 'REC3w'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
+					{v: FView, f:['REC4w', 'SL1', 'SL2'], heading: 'Als ich meine Arbeit heute begonnen habe, &hellip;'},
 				],
 				STI: [
 					{v: FView, f:['STI1','STI2','STI3']},
@@ -294,27 +319,38 @@ define(function( require ) {
 
 				
 				],
-				W1: [
+				MH: [
 					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie <strong>häufig</strong> folgende Situationen vorkamen.<br/>'},
-					{v: MtView, f:['MH1']},
-					{v: MtView, f:['MH2']},
-					{v: MtView, f:['MH3']},
-					{v: MtView, f:['MH4']},
-					{v: MtView, f:['MH5']},
-					{v: MtView, f:['MH6']},
-					{v: MtView, f:['MH7']},
-					{v: MtView, f:['MH8']},
+					{v: MtView, f:['MH1'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH2'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH3'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH4'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH5'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH6'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH7'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MH8'], heading: 'In den letzten 2 Arbeitsstunden'},
 				],
-				Q1: [
+				MZ: [
 					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
-					{v: MtView, f:['MZ1']},
-					{v: MtView, f:['MZ2']},
-					{v: MtView, f:['MZ3']},
-					{v: MtView, f:['MZ4']},
-					{v: MtView, f:['MZ5']},
-					{v: MtView, f:['MZ6']},
-					{v: MtView, f:['MZ7']},
-					{v: MtView, f:['MZ8']},
+					{v: MtView, f:['MZ1'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ2'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ3'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ4'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ5'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ6'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ7'], heading: 'In den letzten 2 Arbeitsstunden'},
+					{v: MtView, f:['MZ8'], heading: 'In den letzten 2 Arbeitsstunden'},
+				],
+				MZF: [
+					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
+					{v: MtView, f:['MZ1'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ2'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ3'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ4'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ5'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ6'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ7'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MZ8'], heading: 'In meiner Freizeit'},
 				],
 				W2: [ 
 					{v: FView, f:['FRE']},
@@ -336,6 +372,7 @@ define(function( require ) {
 					{v: FView, f:['REC2', 'REC3', 'REC4'], heading: 'Jetzt, nach Arbeitsende, …'},
 				],
 				N2: [
+					{v: FView, f:['UE1', 'UE2']},
 					{v: FView, f:['Z1', 'Z2', 'Z3'], heading: 'Inwiefern stimmen Sie den folgenden Aussagen zu?'},
 					{v: FView, f:['P', 'SU1', 'SU2'] },
 					{v: MtView, f:['HS1'] },
@@ -346,8 +383,11 @@ define(function( require ) {
 					{v: FView, f:['WHI', 'IRR1', 'IRR2']},
 					{v: FView, f:['IRR3', 'IRR4', 'IRR5']},
 					{v: FView, f:['IRR6', 'IRR7', 'IRR8']},
-					{v: FView, f:['UE1', 'UE2']},
-					{v: FView, f:['EMO1', 'EMO2', 'EMO3']},
+					{v: FView, f:['EMO1', 'EMO2', 'EMO3'], heading: 'Heute fühlte ich mich durch meine Arbeit &hellip;'},
+					{v: FView, f:['ABS1', 'ABS2', 'ABS3'], heading: 'In meiner Freizeit &hellip;'},
+					{v: FView, f:['ABS4', 'ABS5', 'ABS6'], heading: 'In meiner Freizeit &hellip;'},
+					{v: FView, f:['ABS7', 'ABS8', 'UE3'], heading: 'In meiner Freizeit &hellip;'},
+					{v: FView, f:['ANF1', 'ANF2', 'ANF3'], heading: 'In meiner Freizeit &hellip;'},
 					{v: SbView}
 				]
 			};
@@ -358,67 +398,42 @@ define(function( require ) {
 				writeable: false,
 				get: function(){ return [] },
 			});
-			Object.defineProperty(this.ablauf, 'W', {
-				__proto__: null,
-				enumerable: true,
-				writeable: false,
-				get: function(){ return this.REC.concat(this.STI,this.ED,this.W1) },
-			});
-			Object.defineProperty(this.ablauf, 'Q', {
-				__proto__: null,
-				enumerable: true,
-				writeable: false,
-				get: function(){ return this.STI.concat(this.ED,this.Q1) },
-			});
 			Object.defineProperty(this.ablauf, 'N', { // Anhang zu nach der Arbeit 
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.N1.concat(this.WL,this.N2) },
+				get: function(){ return this.STI.concat(this.ED,this.MZF,this.N1,this.WL,this.N2) },
 			});
 			Object.defineProperty(this.ablauf, 'A', { // abends 
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.A1) },
+				get: function(){ return this.STI.concat(this.MZF,this.A1) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', { // erster Druchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.W.concat(this.W2,this.WL) },
+				get: function(){ return this.STI.concat(this.ED,this.RECw,this.MZ,this.W2,this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'WB', { // erster Druchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.Q.concat(this.W2,this.WL) },
+				get: function(){ return this.STI.concat(this.ED,this.RECw,this.MH,this.W2,this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'QA', { // zweiter Durchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.Q.concat(this.W2,this.WL) },
+				get: function(){ return this.STI.concat(this.ED,this.MH,this.W2,this.WL) },
 			});
 			Object.defineProperty(this.ablauf, 'QB', { // zweiter Durchlauf - während der Arbeit
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.W.concat(this.W2,this.WL) },
+				get: function(){ return this.STI.concat(this.ED,this.MZ,this.W2,this.WL) },
 			});
-			Object.defineProperty(this.ablauf, 'NA', { 
-				__proto__: null,
-				enumerable: true,
-				writeable: false,
-				get: function(){ return this.W.concat(this.N) },
-			});
-			Object.defineProperty(this.ablauf, 'NB', {
-				__proto__: null,
-				enumerable: true,
-				writeable: false,
-				get: function(){ return this.Q.concat(this.N) },
-			});
-
 		}, // Ende initialize
 
 		// Sets the Collection model property to be a Fragebogen2 Model

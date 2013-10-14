@@ -211,8 +211,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				case 'WB': return 'antwortenW'; break;
 				case 'QA':
 				case 'QB': return 'antwortenQ'; break;
-				case 'NA':
-				case 'NB': return 'antwortenN'; break;
+				case 'N': return 'antwortenN'; break;
 				case 'A': return 'antwortenA'; break;
 				default: return undefined;
 			}
@@ -255,6 +254,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			aO.erstellt = new Date();
 			aO.typ = this.fragen.typ;
 			aO.person = this.get('person');
+			aO.schichtbeginn = this.get('schichtbeginn');
 
 			var req = this.db.transaction(antwTab,'readwrite').objectStore(antwTab).add( aO );
 			req.onerror = function(e) {

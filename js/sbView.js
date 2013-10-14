@@ -10,11 +10,14 @@ define( function( require ) {
 	var SbView = Backbone.View.extend( {
 		el: '#f',
 		initialize: function() {
+			this.template = sbViewTemplate; // hat nur dynamische Ergänzungen
+
+			return this;
 		},
 
 		render: function() {
 			var sb = fb2.naechsterWerktag();
-			this.template = _.template(sbViewTemplate,null);
+			console.debug( 'nächster Werktag', sb );
 			this.$el.html(this.template).page();
 			// Werte vorbesetzen
 			this.$el.find('#select-choice-day')
@@ -55,7 +58,7 @@ define( function( require ) {
 					fb2.trigger('change:schichtbeginn',fb2,sb);
 				})
 				.find('option[value="'+q+'"]').attr('selected','selected');
-			this.$el.page().find('select').selectmenu()
+			this.$el.page().find('select').selectmenu();
 				
 			return this;
 		}

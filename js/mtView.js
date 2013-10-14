@@ -2,7 +2,7 @@
 // =========================================================================
 
 define([ "jquery", 'underscore', "backbone" ], function( $, _, Backbone ) {
-	var FView = Backbone.View.extend( {
+	var MtView = Backbone.View.extend( {
 		el: '#f', 
 
 		initialize: function() {
@@ -11,17 +11,20 @@ define([ "jquery", 'underscore', "backbone" ], function( $, _, Backbone ) {
 		render: function() {
 			var f = this.collection; // Fragen
 			// aktuelle Frage ermitteln
-			var frage = f.get(f.ablauf[f.typ][f.akt]['f'][0]);
-			var fO = JSON.parse(frage.attributes.toJSON());
+			var ablauf = f.ablauf[f.typ][f.akt];
+			var frage = f.get(ablauf['f'][0]);
+			var fO = _.clone(frage);
 			// vorherige und nachfolgende Frage für Verlinkung bestimmen
 			fO.next = f.nachher();
 			fO.prev = f.vorher();
+			fO.heading = (ablauf.hasOwnProperty('heading')) ? ablauf.heading : null;
 			fO.kodierung = f.zeitpunkt() + frage.id;
 			// Template rendern
 			this.template = _.template(frage.attributes.template,fO);
 			// HTML in DOM einhängen und mit page() jqm die Seite verbessert
-			this.$el.html(this.template).page();
+			this.$el.html(this.template);
 			this.$el.find( ":jqmData(role=listview)" ).listview(); // jqm verbessern 
+			this.$el.page();
 			// verbessern: http://jquerymobile.com/demos/1.2.0/docs/pages/page-dynamic.html
 
 			// Maintains chainability
@@ -29,6 +32,6 @@ define([ "jquery", 'underscore', "backbone" ], function( $, _, Backbone ) {
 		}
 	} );
 	// Returns the View class
-	return FView;
+	return MtView;
 } );
 

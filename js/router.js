@@ -8,6 +8,7 @@ define( function( require) {
 	var	Fb2Model = require('fb2Model');
 	var Fragen = require('fragen');
 	var SettingsView = require('settingsView');
+	var SbView = require('sbView');
 
 	// Extends Backbone.Router
 	var Fb2Router = Backbone.Router.extend( {
@@ -23,8 +24,8 @@ define( function( require) {
 			// When there is no hash bang on the url, the home method is called
 			'': 'home',
 			'S': 'speichern',
-			'FlS': 'FehlerLocalStorage',
 			'settings': 'settings',
+			'sb': 'changeSchichtbeginn',
 
 			'W': 'ablaufW',
 			'Q': 'ablaufQ',
@@ -52,8 +53,11 @@ define( function( require) {
 			this.home();
 		},
 
-		FehlerLocalStorage: function() {
-			$.mobile.changePage( '#FlS', { reverse: false, changeHash: false } );
+		changeSchichtbeginn: function() {
+			var sbView = new SbView();
+			sbView.render();
+			$.mobile.changePage( '#f' , { reverse: false, changeHash: true });
+			sbView.$el.find('a').attr('href','#settings').attr('data-icon','grid');
 		},
 
 		settings: function() {
@@ -64,9 +68,12 @@ define( function( require) {
 			$.mobile.changePage( '#settings', { reverse: false, changeHash: false } );
 		},
 
-		ablaufW: function() {
-			this.fragen.typ = (fb2.artHeute) ? 'WA' : 'WB';
-			fb2.log({msg:'ablaufW Typ:' + this.fragen.typ});
+		ablaufX: function(typC) {
+			if (typC == 'W' || typC == 'Q')
+				this.fragen.typ = typC + ((fb2.artHeute) ? 'A' : 'B')
+			else
+				this.fragen.typ = typC;
+			fb2.log({msg:'ablaufX Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
 			fb2.neueAntworten();
@@ -76,42 +83,10 @@ define( function( require) {
 			view.$el.trigger('create');
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
-		ablaufQ: function() {
-			this.fragen.typ = (fb2.artHeute) ? 'QA' : 'QB';
-			fb2.log({msg:'ablaufQ Typ:' + this.fragen.typ});
-			this.fragen.akt = 0;
-			this.fragen.zeit = new Date();
-			fb2.neueAntworten();
-			var frageView = this.fragen.view();
-			var view = new frageView( {collection: this.fragen} );
-			view.render();
-			view.$el.trigger('create');
-			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
-		},
-		ablaufN: function() {
-			this.fragen.typ = (fb2.artHeute) ? 'NA' : 'NB';
-			fb2.log({msg:'ablaufN Typ:' + this.fragen.typ});
-			this.fragen.akt = 0;
-			this.fragen.zeit = new Date();
-			fb2.neueAntworten();
-			var frageView = this.fragen.view();
-			var view = new frageView( {collection: this.fragen} );
-			view.render();
-			view.$el.trigger('create');
-			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
-		},
-		ablaufA: function() {
-			this.fragen.typ = 'A';
-			fb2.log({msg:'ablaufA Typ:' + this.fragen.typ});
-			this.fragen.akt = 0;
-			this.fragen.zeit = new Date();
-			fb2.neueAntworten();
-			var frageView = this.fragen.view();
-			var view = new frageView( {collection: this.fragen} );
-			view.render();
-			view.$el.trigger('create');
-			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
-		},
+		ablaufW: function() { this.ablaufX('W'); },
+		ablaufQ: function() { this.ablaufX('Q'); },
+		ablaufN: function() { this.ablaufX('N'); },
+		ablaufA: function() { this.ablaufX('A'); },
 
 		frage: function(nr) {
 			if (this.fragen.typ == 'O') {
