@@ -6,25 +6,20 @@
 
 	<ul id='antwort' data-role='listview' data-inset='true'>
 		<li data-icon='<% print((ant == 1) ? 'check' : 'false') %>'>
-		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='1'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "1"});' 
-			>Trifft überhaupt nicht zu</a></li>
+		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
+			data-value='1' class='mtAntwort' >Trifft überhaupt nicht zu</a></li>
 		<li data-icon='<% print((ant == 2) ? 'check' : 'false') %>'>
-		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='2'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "2"});' 
-			>Trifft eher nicht zu</a></li>
+		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
+			data-value='2' class='mtAntwort' >Trifft eher nicht zu</a></li>
 		<li data-icon='<% print((ant == 3) ? 'check' : 'false') %>'>
-		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='3'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "3"});' 
-			>Teils teils</a></li>
+		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
+			data-value='3' class='mtAntwort' >Teils teils</a></li>
 		<li data-icon='<% print((ant == 4) ? 'check' : 'false') %>'>
-		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='4'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "4"});' 
-			>Trifft eher zu</a></li>
+		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
+			data-value='4' class='mtAntwort' >Trifft eher zu</a></li>
 		<li data-icon='<% print((ant == 5) ? 'check' : 'false') %>'>
-		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' data-value='5'
-			onClick='fb2.setzeAntwort({"kodierung": "<%= kodierung %>", "zeit": new Date(),	"antw": "5"});' 
-			>Trifft völlig zu</a></li>
+		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
+			data-value='5' class='mtAntwort' >Trifft völlig zu</a></li>
 	</ul>
 
 </div>
@@ -34,9 +29,11 @@
 			<% if (!prev || (prev == null)) %>
 			<li><a href='#' data-icon='home' >home</a></li>
 			<% else { %>
-			<li><a href='#f?<%= prev %>' data-icon='arrow-l' >zurück</a></li>
+			<li><a href='#f?<%= prev %>' 
+				data-icon='arrow-l' class='mtNav'>zurück</a></li>
 			<% } %>
-			<li><a href='#<% print((next == null) ? 'S' : 'f?' + next) %>' data-icon='arrow-r' >weiter</a></li>
+			<li><a href='#<% print((next == null) ? 'S' : 'f?' + next) %>' 
+				data-icon='arrow-r' class='mtNav'>weiter</a></li>
 		</ul>
 	</div>
 </div>

@@ -6,21 +6,34 @@ define([ "jquery", 'underscore', "backbone" ], function( $, _, Backbone ) {
 		el: '#f', 
 
 		initialize: function() {
-		},
-
-		render: function() {
+			this.$el.off('click','a.mtAntwort');
 			var f = this.collection; // Fragen
 			// aktuelle Frage ermitteln
 			var ablauf = f.ablauf[f.typ][f.akt];
-			var frage = f.get(ablauf['f'][0]);
-			var fO = _.clone(frage);
+			this.frage = f.get(ablauf['f'][0]);
+			// Objekt fertigmachen, das die Daten für das Template hält
+			this.fO = JSON.parse(this.frage.attributes.toJSON());
 			// vorherige und nachfolgende Frage für Verlinkung bestimmen
-			fO.next = f.nachher();
-			fO.prev = f.vorher();
-			fO.heading = (ablauf.hasOwnProperty('heading')) ? ablauf.heading : null;
-			fO.kodierung = f.zeitpunkt() + frage.id;
+			this.fO.next = f.nachher();
+			this.fO.prev = f.vorher();
+			this.fO.heading = (ablauf.hasOwnProperty('heading')) ? ablauf.heading : null;
+			this.fO.kodierung = f.zeitpunkt() + this.frage.id;
+		},
+		events: {
+			'click a.mtAntwort':'antwort',
+		},
+
+		antwort: function(evt) {
+			fb2.setzeAntwort({
+				'kodierung': this.fO.kodierung, 
+				'zeit': new Date(),	
+				'antw': evt.target.attributes['data-value'].value
+			});
+		},
+
+		render: function() {
 			// Template rendern
-			this.template = _.template(frage.attributes.template,fO);
+			this.template = _.template(this.frage.attributes.template,this.fO);
 			// HTML in DOM einhängen und mit page() jqm die Seite verbessert
 			this.$el.html(this.template);
 			this.$el.find( ":jqmData(role=listview)" ).listview(); // jqm verbessern 
