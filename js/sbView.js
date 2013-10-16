@@ -17,7 +17,6 @@ define( function( require ) {
 
 		render: function() {
 			var sb = fb2.naechsterWerktag();
-			console.debug( 'nächster Werktag', sb );
 			this.$el.html(this.template).page();
 			// Werte vorbesetzen
 			this.$el.find('#select-choice-day')

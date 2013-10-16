@@ -55,7 +55,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							self.set('tag',tag);
 						}
 						// Schichtbeginn schon lange (> 1 Tag) vorbei oder nicht vorhanden?
-						console.debug( 'IDB onsuccess: ',self.attributes);
 						if ( !self.has('schichtbeginn')) {
 							self.set({'schichtbeginn': self.naechsterWerktag()});
 							self.log({
@@ -271,6 +270,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		speichereAntworten: function(cb) {
 			var antwTab = this.get('antwortenTabelle');
 			var antw = this.get('antworten');
+			console.debug( 'Antworten: ' + JSON.stringify(antw));
 			this.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw ).onerror = function(e) {
 				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, this.fragen);
 			}
@@ -486,11 +486,13 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		this.log('change:tag ' + tag);
 	});
 	fb2.on('change:schichtbeginn', function(model, sb) {
-		console.debug( 'change:schichtbeginn',sb);
 		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( {
 			'key': 'schichtbeginn',
 			'value': sb
-		} );
+		} ).onsuccess = function() {
+			if (fb2.router.settingsView) 
+				fb2.router.settingsView.$el.find('#sb').html(sb.toGerman());
+		};
 	});
 	fb2.on('change:person', function(model, vpn) {
 		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put( {

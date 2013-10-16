@@ -8,7 +8,6 @@ define( function( require) {
 	var	Fb2Model = require('fb2Model');
 	var Fragen = require('fragen');
 	var SettingsView = require('settingsView');
-	var SbView = require('sbView');
 
 	// Extends Backbone.Router
 	var Fb2Router = Backbone.Router.extend( {
@@ -25,7 +24,6 @@ define( function( require) {
 			'': 'home',
 			'S': 'speichern',
 			'settings': 'settings',
-			'sb': 'changeSchichtbeginn',
 
 			'W': 'ablaufW',
 			'Q': 'ablaufQ',
@@ -53,19 +51,10 @@ define( function( require) {
 			this.home();
 		},
 
-		changeSchichtbeginn: function() {
-			var sbView = new SbView();
-			sbView.render();
-			$.mobile.changePage( '#f' , { reverse: false, changeHash: true });
-			sbView.$el.find('a').attr('href','#settings').attr('data-icon','grid');
-		},
-
 		settings: function() {
-			//TODO
-			var settingsView = new SettingsView();
-			settingsView.render();
-
-			$.mobile.changePage( '#settings', { reverse: false, changeHash: false } );
+			if (!this.settingsView) this.settingsView = new SettingsView();
+			this.settingsView.render();
+			$.mobile.changePage( '#settings', { reverse: false, changeHash: true } );
 		},
 
 		ablaufX: function(typC) {
