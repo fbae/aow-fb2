@@ -88,7 +88,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							// TODO - Navigation zur letzten Fragenseite
 
 							// Antworten für laden, falls es welche gibt, die noch nicht beendet wurden
-							console.debug( 'heuteId: ', self.heuteId(), 'versuche gespeicherte Antwort zu laden');
 							var req = self.db.transaction('antworten').objectStore('antworten').openCursor(self.heuteId());
 							req.onsuccess = function(e) {
 								var cursor = e.target.result;
@@ -170,7 +169,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				kod.zeit = (antwortO.zeit) ? antwortO.zeit : new Date();
 				kod.wert = (antwortO.antw) ? antwortO.antw : 'null';
 				data[antwortO.kodierung] = kod;
-//				console.debug( 'setzeAntwort data: ', data, 'antwortO.kodierung', antwortO.kodierung);
 				this.set( {'antworten': data} );
 				fb2.trigger('change:antworten',this,data); // Backbone scheint Änderungen in Objekten nicht zu erkennen
 			} else {
@@ -185,7 +183,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 
 		log: function(obj) {
 			if (!this.db) {
-				console.debug( 'Loggen wurde vertagt, weil this.db noch nicht fertig ist: obj', obj);
 				setTimeout('fb2.log('+JSON.stringify(obj)+');',1000);
 			}
 			// obj ist entweder ein Objekt, dann sollte es das Attribut dt:Date() besitzen
@@ -274,7 +271,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			var self = this;
 			var antwTab = self.get('antwortenTabelle');
 			var antw = self.get('antworten');
-			console.debug( 'Antworten: ' + JSON.stringify(antw));
 			var req =	self.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw );
 			req.onerror = function(e) {
 				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, self.fragen);
@@ -323,8 +319,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 								self.db.transaction(tabName,'readwrite').objectStore(tabName).delete(Number(data.id)).onerror = 
 									function(e) {
 										errors.push({e:tabname, msg:'saveTab - Eintrag id:'+data.id+' konnte nicht gelöscht werden'});
-										console.debug('Fehler - saveTab - in Tabelle '+tabName+' konnte der Eintrag id: '+
-											data.id+' nicht gelöscht werden. e:',e);
 									};
 							} else {
 								errors.push({e:tabname, msg:'saveTab - nach der Übermittlung wurde ein Fehler gemeldet'});
@@ -337,7 +331,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						}
 					});
 					cursor.continue();
-				} else console.debug('Erfolg - saveTab - die Tabelle '+tabName+' müsste jetzt leer sein');
+				} // else console.debug('Erfolg - saveTab - die Tabelle '+tabName+' müsste jetzt leer sein');
 			}
 		},
 		saveAll: function() {
@@ -376,7 +370,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 					data.settings = self.settings;
 					data.tabellenName = 'log';
 					data.id = -1;
-					console.debug( 'saveAll - log:data', data);
 					$.ajax({
 						type: "POST",
 						dataType: "json",
@@ -388,7 +381,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						},
 						url: 'api/putData.php',
 						success: function(data) {
-							console.debug( 'saveAll - ajaxLog:success - data:', data);
 							if (data.status == 'erfolg') { 
 								/* löschen des Eintrages, falls data.status == erfolg
 								 * data enthält die id und den tabellenNamen
@@ -396,7 +388,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 								var req = self.db.transaction('log','readwrite').objectStore('log').clear();
 								req.onerror = function(e) {
 									errA.push({e:'log', msg:'saveAll - log konnte nicht gelöscht werden'});
-									console.debug('Fehler - saveLog konnte nicht gelöscht werden. e:',e);
 								};
 								req.onsuccess = function(e) {
 									// versuche festzustellen, ob Fehler auftraten
@@ -568,7 +559,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 	});
 
 	fb2.on('change:antworten', function(model, antw) {
-		console.debug( 'change:antworten antw', antw);
+//		console.info( 'change:antworten antw', antw);
 		var antwTab = this.get('antwortenTabelle');
 		this.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw ).onerror = function(e) {
 			console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, this.fragen);

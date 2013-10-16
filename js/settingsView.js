@@ -86,10 +86,8 @@ define(function( require ) {
 						var vpnCode = fb2.get('person');
 						var re = /(\D{2})(\D*)(\d).*/;
 						var vpnCodeA = re.exec(vpnCode);
-						console.debug( 'vpnVisibility: vpnCodeA', vpnCodeA, typeof vpnCodeA);
 						if (typeof vpnCodeA === 'object') {
 					    this.$el.find('#vvm').attr('value',vpnCodeA[1]);
-							console.debug( this.$el.find('#vvm'), this.$el.find('#vvm').attr('value'),vpnCodeA[1]);
 							this.$el.find('#vnm').attr('value',vpnCodeA[2]);
 							this.$el.find( '#gm').attr('value',vpnCodeA[3]);
 						}

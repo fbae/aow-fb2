@@ -80,9 +80,7 @@ require(['jquery','backbone','router','fb2Model'], function( $, Backbone, Fb2Rou
 
 		// Versuchsperson setzen, falls in url übergeben
 		var vpn = $.url().param('vpn');
-		console.debug( $.url().attr('source') );
 		if (vpn) {
-			console.debug( 'vpn Parameter erkannt', vpn);
 			fb2.set({'person':vpn});
 		}
 	});

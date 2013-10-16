@@ -12,10 +12,7 @@ define( function( require) {
 	// Extends Backbone.Router
 	var Fb2Router = Backbone.Router.extend( {
 		initialize: function() {
-			console.debug( 'Fragen initialisieren');
 			this.fragen = new Fragen();
-			console.debug( 'Fragen initialisieren - fertig');
-
 			Backbone.history.start();
 		},
 
@@ -94,7 +91,7 @@ define( function( require) {
 				console.info( 'Fehler: der übergebene Parameter Nummer: ' + nr + 
 						' passt nicht. Es wird versucht die nächste Frage zu wählen');
 			}
-			console.debug( 'frage fragen:',this.fragen);
+//			console.info( 'frage fragen:',this.fragen);
 			var frageView = this.fragen.view();
 			var view = new frageView( {collection: this.fragen} );
 			view.render();
