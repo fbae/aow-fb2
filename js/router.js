@@ -40,7 +40,6 @@ define( function( require) {
 
 		speichern: function() {
 			var antw = fb2.get('antworten');
-			if (fb2.typ == 'A') antw.SB = fb2.get('schichtbeginn');
 			fb2.log({
 				msg:'speichern nach Durchlauf ' + this.fragen.art,
 				data: antw
@@ -54,14 +53,15 @@ define( function( require) {
 		settings: function() {
 			if (!this.settingsView) this.settingsView = new SettingsView();
 			this.settingsView.render();
+			this.settingsView.$el.trigger('create');
 			$.mobile.changePage( '#settings', { reverse: false, changeHash: true } );
 		},
 
 		ablaufX: function(typC) {
-			if (typC == 'W' || typC == 'Q')
-				this.fragen.typ = typC + ((fb2.artHeute) ? 'A' : 'B')
+			if (typC == 'A')
+				this.fragen.typ = typC
 			else
-				this.fragen.typ = typC;
+				this.fragen.typ = typC + ((fb2.artHeute) ? 'A' : 'B');
 			fb2.log({msg:'ablaufX Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();
@@ -72,7 +72,11 @@ define( function( require) {
 			view.$el.trigger('create');
 			$.mobile.changePage('#f?0', {reverse: false, changeHash: true} );
 		},
-		ablaufW: function() { this.ablaufX('W'); },
+		ablaufW: function() { 
+			// den Zustand A und B triggern
+			if (fb2.has('art')) fb2.set('art', !fb2.get('art'));
+			this.ablaufX('W'); 
+		},
 		ablaufQ: function() { this.ablaufX('Q'); },
 		ablaufN: function() { this.ablaufX('N'); },
 		ablaufA: function() { this.ablaufX('A'); },

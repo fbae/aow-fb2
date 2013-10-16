@@ -73,6 +73,8 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 								});
 							}
 						}
+						// Art setzen, falls noch nicht erfolgt ist
+						if (!fb2.has('art')) fb2.set('art', Boolean(Math.abs(this.anzHeute % 2)));
 						
 						// gibt es nicht beendete Antworten, die eventuell passen könnten?
 						if ( self.has('antwortenTabelle') && self.has('antwortenId')) {
@@ -210,7 +212,8 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				case 'WB': return 'antwortenW'; break;
 				case 'QA':
 				case 'QB': return 'antwortenQ'; break;
-				case 'N': return 'antwortenN'; break;
+				case 'NA':
+				case 'NB': return 'antwortenN'; break;
 				case 'A': return 'antwortenA'; break;
 				default: return undefined;
 			}
@@ -268,15 +271,18 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		},
 
 		speichereAntworten: function(cb) {
-			var antwTab = this.get('antwortenTabelle');
-			var antw = this.get('antworten');
+			var self = this;
+			var antwTab = self.get('antwortenTabelle');
+			var antw = self.get('antworten');
 			console.debug( 'Antworten: ' + JSON.stringify(antw));
-			this.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw ).onerror = function(e) {
-				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, this.fragen);
+			var req =	self.db.transaction(antwTab,'readwrite').objectStore(antwTab).put( antw );
+			req.onerror = function(e) {
+				console.warn( 'IDB - neueAntworten - konnten nicht gespeichert werden: ', antw, antwTab, self.fragen);
 			}
-			this.unset('antworten', {silent: true});
-			this.unset('antwortenId');
-			this.unset('antwortenTabelle');
+			self.unset('antworten', {silent: true});
+			self.unset('antwortenId');
+			self.unset('antwortenTabelle');
+
 		},
 
 		saveTab: function(tabName, errors) {
@@ -342,10 +348,10 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				$('#settingsSaveAllDataFehler').popup('open');
 			}, 5000);
 
-			this.saveTab('antwortenW', errA);
-			this.saveTab('antwortenQ', errA);
-			this.saveTab('antwortenN', errA);
-			this.saveTab('antwortenA', errA);
+			self.saveTab('antwortenW', errA);
+			self.saveTab('antwortenQ', errA);
+			self.saveTab('antwortenN', errA);
+			self.saveTab('antwortenA', errA);
 
 			// alle log-Einträge zusammenpacken und verschicken
 			var log = new Array();
@@ -415,6 +421,25 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 					
 				}
 			}
+
+			// Wenn alle Daten weg sind den SpeichernAlle-Button ausblenden
+			var antA = ['antwortenW','antwortenQ','antwortenN','antwortenA','log'];
+			var t = self.db.transaction(antA);
+			var anz = 0;
+			t.objectStore('antwortenW').count().onsuccess = function(e) {
+				anz = anz + e.target.result;
+				t.objectStore('antwortenQ').count().onsuccess = function(e) {
+					anz = anz + e.target.result;
+					t.objectStore('antwortenN').count().onsuccess = function(e) {
+						anz = anz + e.target.result;
+						t.objectStore('antwortenA').count().onsuccess = function(e) {
+							anz = anz + e.target.result;
+							self.showSaveAllButton(Boolean(anz > 0));
+							console.info('es wurden '+anz+' Datensätze in W,Q,N und A gezählt');
+						}
+					}
+				}
+			};
 		},
 
 		naechsterWerktag: function() {
@@ -431,6 +456,20 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				naechsterWochentag.setDate(naechsterWochentag.getDate()+1);
 			return naechsterWochentag;
 		},
+
+		showSaveAllButton: function(boo) {
+			// SaveAll-Button einblenden oder auch nicht
+			if ( this.router.hasOwnProperty('settingsView') && (typeof boo === 'boolean') ) {
+				var b = this.router.settingsView.$el.find('save0DataButton');
+				if (b && boo) {
+					b.button('enable');
+					b.parent().css('display','inline-block');
+				} else {
+					b.button('disable');
+					b.parent().css('display','none');
+				}
+			}
+		},
 	} );
 
 	window.fb2 = new Fb2Model;
@@ -441,10 +480,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			get: function() {
 				return Math.abs(Math.floor(((new Date()).getTime() - (this.get('tag')).getTime())/1000/60/60/24));
 			}
-		},
-		artHeute: {
-			writeable: false,
-			get: function() {	return Math.abs(this.anzHeute % 2);}
 		},
 		fragen: {
 			writeable:false,
@@ -476,6 +511,15 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		};
 		this.log('change:device ' + device);
 	});
+	fb2.on('change:art', function(model, art) {
+		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put({
+			'key':'art',
+			'value':art
+		}).onerror = function(e){
+			console.warn('IDB - change:art - Einstellung für Art konnte nicht gespeichert werden.');
+		};
+		this.log('change:art ' + art);
+	});
 	fb2.on('change:tag', function(model, tag) {
 		this.db.transaction('einstellungen','readwrite').objectStore('einstellungen').put({
 			'key':'tag',
@@ -490,7 +534,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			'key': 'schichtbeginn',
 			'value': sb
 		} ).onsuccess = function() {
-			if (fb2.router.settingsView) 
+			if (fb2.router.hasOwnProperty('settingsView')) 
 				fb2.router.settingsView.$el.find('#sb').html(sb.toGerman());
 		};
 	});

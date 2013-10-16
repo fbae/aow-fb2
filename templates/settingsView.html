@@ -6,7 +6,7 @@
 		Startdatum: <% print(tag.toGerman()); %>
 	-->
 	<div >Schichtbeginn: <span id='sb'><% print(schichtbeginn.toGerman()); %></span>
-		<span data-role='button' data-inline='true' data-mini='true' id='cSbButton'>ändern</span>
+		<input type='button' data-role='button' data-inline='true' data-mini='true' id='cSbButton' value='ändern' />
 	</div>
 	<div id='changeSchichtbeginn' style='display:none'>
 		<div>Bitte geben Sie an, zu welchem Zeitpunkt Ihr nächster Arbeitseinsatz voraussichtlich beginnen wird.</div>
@@ -105,7 +105,7 @@
 		</div>
 	</div> <!-- changeSchichtbeginn -->
 	<div >Versuchsperson: <span id='vpn'><%= person %></span>
-		<span data-role='button' data-inline='true' data-mini='true' id='vpnButton'>ändern</span>
+		<input type='button' data-role='button' data-inline='true' data-mini='true' id='vpnButton' value='ändern' />
 	</div>
 	<div id='vpnCode' style='display:none'>
 		Um eine eindeutige, anonyme Kennung zu erstellen, geben Sie bitte Folgende Angaben Ihrer Mutter an:

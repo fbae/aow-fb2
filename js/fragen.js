@@ -398,12 +398,6 @@ define(function( require ) {
 				writeable: false,
 				get: function(){ return [] },
 			});
-			Object.defineProperty(this.ablauf, 'N', { // Anhang zu nach der Arbeit 
-				__proto__: null,
-				enumerable: true,
-				writeable: false,
-				get: function(){ return this.STI.concat(this.ED,this.MZF,this.N1,this.WL,this.N2) },
-			});
 			Object.defineProperty(this.ablauf, 'A', { // abends 
 				__proto__: null,
 				enumerable: true,
@@ -433,6 +427,18 @@ define(function( require ) {
 				enumerable: true,
 				writeable: false,
 				get: function(){ return this.STI.concat(this.ED,this.MZ,this.W2,this.WL) },
+			});
+			Object.defineProperty(this.ablauf, 'NA', { // Anhang zu nach der Arbeit 
+				__proto__: null,
+				enumerable: true,
+				writeable: false,
+				get: function(){ return this.STI.concat(this.ED,this.MZ,this.N1,this.WL,this.N2) },
+			});
+			Object.defineProperty(this.ablauf, 'NB', { // Anhang zu nach der Arbeit 
+				__proto__: null,
+				enumerable: true,
+				writeable: false,
+				get: function(){ return this.STI.concat(this.ED,this.MH,this.N1,this.WL,this.N2) },
 			});
 		}, // Ende initialize
 
