@@ -2,6 +2,7 @@
 *.vim
 *.bak
 *.swp
+*.tex
 *.aux
 *.log
 *.out

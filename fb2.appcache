@@ -1,18 +1,20 @@
 CACHE MANIFEST
-# v0.1.3 - 21.9.2013
-# Testen Upload - kein AppCache
+# v0.3.0 - 18.10.2013
 
 favicon.ico
 fb2.css
 index.html
+
 js/config.js
 js/fb2Model.js
 js/fehlerView.js
 js/frage.js
 js/fragen.js
 js/fView.js
+js/msgView.js
 js/mtView.js
 js/router.js
+js/sbView.js
 js/settingsView.js
 
 js/vendor/backbone.min.js
@@ -23,7 +25,7 @@ js/vendor/jquery.mobile-1.3.2.min.css
 js/vendor/jquery.mobile-1.3.2.min.js
 js/vendor/jquery.mobile-1.3.2.min.map
 js/vendor/purl.js
-js/vendor/require-2.1.8.min.js
+js/vendor/require-2.1.9.min.js
 js/vendor/text.js
 js/vendor/underscore.js
 
@@ -34,10 +36,16 @@ js/vendor/images/icons-36-black.png
 js/vendor/images/icons-36-white.png
 
 templates/fehlerView.html
-templates/frage20.html
+templates/frage4.html
 templates/frage5.html
 templates/frage7.html
 templates/fView.html
+templates/msgView.html
 templates/mt5A.html
 templates/mt5B.html
+templates/sbView.html
 templates/settingsView.html
+templates/slider0-10_15.html
+templates/slider0-12_15.html
+templates/slider0-20_15.html
+templates/slider1-20.html

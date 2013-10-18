@@ -63,9 +63,12 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							});
 						} else {
 							var sb = self.get('schichtbeginn');
-							var anzTageDiff = (Date.now() - sb) % 86400000;
+							var anzTageDiff = Math.floor((Date.now() - sb.getTime()) / 86400000);
+							console.debug( 'anzTageDiff', anzTageDiff, sb.getTime(), Date.now());
 							if (anzTageDiff > 1) {
+								console.debug( 'sb vor',sb);
 								sb.setDate(sb.getDate()+anzTageDiff);
+								console.debug( 'sb vor',sb);
 								self.set('schichtbeginn',sb);
 								self.log({
 									msg: 'schichtbeginn - neu berechnet', 
@@ -142,10 +145,11 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			};  // Ende onUpgradeNeeded
 
 			// initialisiere die Programm-Variablen ==================================
-			this.set('status','debug');
-			this.set('version','0.2');
-			if (this.status == 'debug') this.db.transaction('log','readwrite').objectStore('log').clear();
-
+			this.set('status','testing');
+			this.set('version','0.3');
+			if ((this.get('status') == 'debug') && this.db) 
+				// tritt nicht ein, weil so früh this.db noch nicht zur Verfügung steht
+				this.db.transaction('log','readwrite').objectStore('log').clear();
 		},
 
 		setzeAntwort: function(antwortO) {
@@ -282,7 +286,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		},
 
 		saveTab: function(tabName, errors) {
-			// TODO: ist unfertig
 			var self = this;
 			// Antworten auslesen
 			var req = self.db.transaction(tabName).objectStore(tabName).openCursor();
@@ -292,7 +295,13 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 					var cv = _.clone(cursor.value);
 					_.each(cv, function(v,k,l) { 
 						if (_.isDate(v)) {
+							// Datum formatieren
 							l[k] = v.toMysqlFormat();
+						} if (/[34]UE[123]/.test(k) && _.isNumber(v)) {
+							// Zeit formatieren (UE1,2,3)
+							var std = Math.floor(v);
+							var min = Math.floor((v - G) * 60);
+							l[k] = std + ':' + min + ':00';
 						} else {
 							if (_.isObject(v) && _.isDate(v.zeit)) {
 								l[k + 'D'] = v.zeit.toMysqlFormat();
@@ -318,15 +327,15 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 								 */
 								self.db.transaction(tabName,'readwrite').objectStore(tabName).delete(Number(data.id)).onerror = 
 									function(e) {
-										errors.push({e:tabname, msg:'saveTab - Eintrag id:'+data.id+' konnte nicht gelöscht werden'});
+										errors.push({e:tabName, msg:'saveTab - Eintrag id:'+data.id+' konnte nicht gelöscht werden'});
 									};
 							} else {
-								errors.push({e:tabname, msg:'saveTab - nach der Übermittlung wurde ein Fehler gemeldet'});
+								errors.push({e:tabName, msg:'saveTab - nach der Übermittlung wurde ein Fehler gemeldet'});
 								console.error('Fehler - saveTab - Nach der Übermittlung wurde ein Fehler gemeldet. data:', data);
 							}
 						},
 						error: function(data) {
-							errors.push({e:tabname, msg:'saveTab - ajax ist gescheitert'});
+							errors.push({e:tabName, msg:'saveTab - ajax ist gescheitert'});
 							console.error('Fehler - saveTab - ajax ist gescheitert. data:',data);
 						}
 					});
@@ -477,7 +486,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 			get: function() { return (this.router) ? this.router.fragen : undefined;}
 		},
 		settings: {
-			writeable:false,
 			get: function() {
 				var o = new Object();
 				o.status = this.get('status');
@@ -486,6 +494,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				o.tag = this.get('tag');
 				o.person = this.get('person');
 				o.schichtbeginn = this.get('schichtbeginn');
+				console.debug( 'schichtbeginn', o.schichtbeginn ,(new Date()).getTime());
 				return o;
 			}
 		},
