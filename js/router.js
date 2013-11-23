@@ -44,6 +44,9 @@ define( function( require) {
 			fb2.speichereAntworten(); // solange change:antworten nicht richtig funktioniert - mit callback?
 
 			this.fragen.typ = 'O';
+			var danke = $('#danke').popup('open');
+			console.debug( 'speichern - danke:',danke);
+			setTimeout(function(){danke.popup("close");},1500);
 			this.home();
 		},
 

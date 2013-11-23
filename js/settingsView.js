@@ -21,8 +21,9 @@ define(function( require ) {
 		events: {
 			// Hängt von den Elementen im Template ab
 			'click #save0DataButton': 'saveAll',
-			'click #cSbButton': 'cSbVisibility',
-			'click #vpnButton': 'vpnVisibility',
+			'click #cSbButton':				'cSbVisibility',
+			'click #vpnButton':				'vpnVisibility',
+			'click #vpnButtonBottom': 'vpnVisibility',
 
 			'change #select-choice-quarter': 'cSQ',
 			'change #select-choice-hour': 'cSH',
@@ -77,16 +78,22 @@ define(function( require ) {
 				else
 					cS.css('display','none');
 		},
+		/*
+		 * Ein- oder Ausblenden des Formulars
+		 * und Eintragen der Werte für den Code der Versuchsperson
+		 */
 		vpnVisibility: function() {
 			var cS = $('#vpnCode');
-			if (cS)
+			console.debug( 'vpnVisibility - #vpnCode:', cS);
+			if (cS) {
 				if (cS.css('display') == 'none') {
 					// vpnCode eintragen
 					if (fb2.has('person')) {
 						var vpnCode = fb2.get('person');
 						var re = /(\D{2})(\D*)(\d).*/;
 						var vpnCodeA = re.exec(vpnCode);
-						if (typeof vpnCodeA === 'object') {
+						console.debug( 'vpnCodeA: ', vpnCodeA);
+						if (vpnCodeA != null && typeof vpnCodeA === 'object') {
 					    this.$el.find('#vvm').attr('value',vpnCodeA[1]);
 							this.$el.find('#vnm').attr('value',vpnCodeA[2]);
 							this.$el.find( '#gm').attr('value',vpnCodeA[3]);
@@ -95,7 +102,11 @@ define(function( require ) {
 					cS.css('display','block');
 				} else
 					cS.css('display','none');
+			}
 		},
+		/*
+		 * bei jeder Änderung im Formular wird auch der Datenbankeintrag geändert
+		 */
 		cPerson: function() {
 			fb2.set('person',
 				this.$el.find('#vvm').val() +

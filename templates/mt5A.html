@@ -5,23 +5,23 @@
 	</div>
 
 	<ul id='antwort' data-role='listview' data-inset='true'>
-		<li data-icon='<% print((ant == 1) ? 'check' : 'false') %>'>
+		<li <% print((ant == 1) ? 'class="ui-btn-active"': '') %> >
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
 			data-value='1' class='mtAntwort' >sehr wenig</a>
 		</li>
-		<li data-icon='<% print((ant == 2) ? 'check' : 'false') %>'>
+		<li <% print((ant == 1) ? 'class="ui-btn-active"': '') %> >
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
 			data-value='2' class='mtAntwort' >ziemlich wenig</a>
 		</li>
-		<li data-icon='<% print((ant == 3) ? 'check' : 'false') %>'>
+		<li <% print((ant == 1) ? 'class="ui-btn-active"': '') %> >
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
 			data-value='3' class='mtAntwort' >etwas</a>
 		</li>
-		<li data-icon='<% print((ant == 4) ? 'check' : 'false') %>'>
+		<li <% print((ant == 1) ? 'class="ui-btn-active"': '') %> >
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
 			data-value='4' class='mtAntwort' >ziemlich viel</a>
 		</li>
-		<li data-icon='<% print((ant == 5) ? 'check' : 'false') %>'>
+		<li <% print((ant == 1) ? 'class="ui-btn-active"': '') %> >
 		<a href='#<% if (next == null) { print('S') } else { print('f?'+next) ;} %>' 
 			data-value='5' class='mtAntwort' >sehr viel</a>
 		</li>

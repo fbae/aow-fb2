@@ -64,7 +64,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						} else {
 							var sb = self.get('schichtbeginn');
 							var anzTageDiff = Math.floor((Date.now() - sb.getTime()) / 86400000);
-							console.debug( 'anzTageDiff', anzTageDiff, sb.getTime(), Date.now());
 							if (anzTageDiff > 1) {
 								console.debug( 'sb vor',sb);
 								sb.setDate(sb.getDate()+anzTageDiff);
