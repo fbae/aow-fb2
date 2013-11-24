@@ -38,6 +38,7 @@ define(function( require ) {
 		},
 
 		render: function() {
+			fb2.countDS();
 			var compiledTemplate = this.template(fb2.settings);
 			this.$el.html(compiledTemplate);
 			// Werte vorbesetzen

@@ -45,16 +45,25 @@ define( function( require ) {
 			for (var i=0; i<fArr.length; i++) {
 				// falls ein Slider benutzt wird: ein onSlidestop setzen, damit die Daten sofort eingetragen werden
 				var frage = f.get(fArr[i]).attributes;
-				if (frage.art == 20) {
-					var kodierung = f.zeitpunkt() + frage.id;
-					this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
-						// TODO: zeit ist nicht richtig (muss aus dem event ausgelesen werden
-						fb2.setzeAntwort({
-							'kodierung': event.target.id, 
-							'zeit': new Date(event.timeStamp), 
-							'antw': $( this ).slider().val() 
+				switch (frage.art) {
+					case 11,20,24,49: 
+						var kodierung = f.zeitpunkt() + frage.id;
+						this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
+							fb2.setzeAntwort({
+								'kodierung': event.target.id, 
+								'zeit': new Date(event.timeStamp), 
+								'antw': $( this ).slider().val() 
+							});
+						})
+						.on('focusout', function( event ) {
+							fb2.setzeAntwort({
+								'kodierung': event.target.id, 
+								'zeit': new Date(event.timeStamp), 
+								'antw': $( this ).slider().val() 
+							});
 						});
-					} );
+						break;
+					default: // nichts zu tun
 				}
 			}
 			this.$el.find( ':jqmData(role=controlgroup)' ).controlgroup(); 

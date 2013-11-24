@@ -18,7 +18,8 @@ define( function( require ) {
 		render: function() {
 			var sb = fb2.naechsterWerktag();
 			this.$el.html(this.template).page();
-			// Werte vorbesetzen
+
+			// Werte für nächsten Schichtbeginn vorbesetzen
 			this.$el.find('#select-choice-day')
 				.change(function(evt) {
 					sb.setDate(evt.target.value);

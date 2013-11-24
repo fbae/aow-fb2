@@ -10,11 +10,6 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 
 		initialize: function() {
 
-			// indexedDB initialisieren
-			window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-			window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
-			window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
-
 			// lege die Datenbank an, falls das noch nicht passiert ist, oder sich die Version geändert hat
 			this.dbName = 'multitasking.uni-mainz';
 			this.dbVersion = '4';
@@ -26,11 +21,12 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				self.db = e.target.result;
 				self.db.onerror = function(e) {
 					// Fehler steigen auf - wird aus allen requests für alle auftauchenden Fehler abgerufen
-					console.error('Fehler - indexedDB: ', e, 'ErrorCode:', e.target.errorCode);
+					console.error('Fehler - indexedDB: ', e, 'Message:', e.target.error.message);
 				};
-				
+//console.debug( 'open1');				
 				// laden der Informationen aus der Datenbank und Abspeichern im Fb2Model
 				var req = self.db.transaction('einstellungen').objectStore('einstellungen').openCursor();
+//console.debug( 'open2');
 				req.onsuccess = function(event) {
 					var cursor = event.target.result;
 					if (cursor) {
@@ -65,9 +61,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 							var sb = self.get('schichtbeginn');
 							var anzTageDiff = Math.floor((Date.now() - sb.getTime()) / 86400000);
 							if (anzTageDiff > 1) {
-								console.debug( 'sb vor',sb);
 								sb.setDate(sb.getDate()+anzTageDiff);
-								console.debug( 'sb vor',sb);
 								self.set('schichtbeginn',sb);
 								self.log({
 									msg: 'schichtbeginn - neu berechnet', 
@@ -77,6 +71,7 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 						}
 						// Art setzen, falls noch nicht erfolgt ist
 						if (!fb2.has('art')) fb2.set('art', Boolean(Math.abs(this.anzHeute % 2)));
+//console.debug( 'open3');
 						
 						// gibt es nicht beendete Antworten, die eventuell passen könnten?
 						if ( self.has('antwortenTabelle') && self.has('antwortenId')) {
@@ -106,6 +101,10 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 	*/
 							console.debug( 'TODO - muss erst noch programmiert werden');
 						}
+
+						// zähle Datensätze
+						self.countDS();
+
 					} // Ende nachbearbeiten
 				} // Ende req.onsuccess
 				req.onerror = function(e) {
@@ -145,10 +144,13 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 
 			// initialisiere die Programm-Variablen ==================================
 			this.set('status','testing');
-			this.set('version','0.3');
+			this.set('version','0.4');
+//console.debug( 'open4');
 			if ((this.get('status') == 'debug') && this.db) 
 				// tritt nicht ein, weil so früh this.db noch nicht zur Verfügung steht
 				this.db.transaction('log','readwrite').objectStore('log').clear();
+
+//console.debug( 'open5');
 		},
 
 		setzeAntwort: function(antwortO) {
@@ -469,6 +471,24 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 				}
 			}
 		},
+
+		countDS: function() {
+			var self = this;
+			self.set({count:0},{silent:true});
+			var tran = self.db.transaction(['antwortenW','antwortenQ','antwortenN','antwortenA']);
+			tran.objectStore('antwortenW').count().onsuccess = function(e) { 
+				self.set('count', self.get('count') + e.target.result);
+			};
+			tran.objectStore('antwortenQ').count().onsuccess = function(e) { 
+				self.set('count', self.get('count') + e.target.result);
+			};
+			tran.objectStore('antwortenN').count().onsuccess = function(e) { 
+				self.set('count', self.get('count') + e.target.result);
+			};
+			tran.objectStore('antwortenA').count().onsuccess = function(e) { 
+				self.set('count', self.get('count') + e.target.result);
+			};
+		}
 	} );
 
 	window.fb2 = new Fb2Model;
@@ -574,6 +594,9 @@ define([ 'jquery', 'underscore', 'backbone' ],function( $, _, Backbone ) {
 		}
 	});
 
+	fb2.on('change:count', function(model,antw) {
+		$('#save0DataButton').attr('title',this.get('count')+' Datensätze sind vorhanden.').trigger('mouseover');
+	});
 	return Fb2Model;
 } );
 

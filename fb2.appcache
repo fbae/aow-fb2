@@ -1,5 +1,7 @@
 CACHE MANIFEST
-# v0.3.1 - 22.11.2013
+
+# v0.3.5 - 24.11.2013
+# v0.3.6 - 24.11.2013
 
 favicon.ico
 fb2.css
@@ -15,6 +17,7 @@ js/msgView.js
 js/mtView.js
 js/router.js
 js/sbView.js
+js/seView.js
 js/settingsView.js
 
 js/vendor/backbone.min.js
@@ -44,8 +47,9 @@ templates/msgView.html
 templates/mt5A.html
 templates/mt5B.html
 templates/sbView.html
+templates/seView.html
 templates/settingsView.html
 templates/slider0-10_15.html
 templates/slider0-12_15.html
-templates/slider0-20_15.html
+templates/slider0-24_15.html
 templates/slider1-20.html

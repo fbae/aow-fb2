@@ -9,6 +9,7 @@ define(function( require ) {
 	var FView = require('fView');
 	var fehlerView = require('fehlerView');
 	var SbView = require('sbView');
+	var SeView = require('seView');
 	var MsgView = require('msgView');
 
 	var Fragen = Backbone.Collection.extend( {
@@ -55,6 +56,7 @@ define(function( require ) {
       this.add(new Frage('MH6',2,'erhielt ich Anweisungen, die ich gleichzeitig im Kopf behalten musste.'));
       this.add(new Frage('MH7',2,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
       this.add(new Frage('MH8',2,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
+			
 			this.add(new Frage('MZ1',3,'beschäftigte ich mich mit verschiedenen Dingen gleichzeitig.'));
       this.add(new Frage('MZ2',3,'arbeitete ich an mehr als einer Aufgabe.'));
       this.add(new Frage('MZ3',3,'arbeitete ich Aufgaben nacheinander ab.'));
@@ -64,7 +66,18 @@ define(function( require ) {
       this.add(new Frage('MZ7',3,'gab es Momente, die für kurze Zeit höchste Konzentration erfordert haben.'));
       this.add(new Frage('MZ8',3,'kam es vor, dass mehrere Personen gleichzeitig etwas von mir wollten.'));
 
-      this.add(new Frage('FRE',5,'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.','trifft überhaupt nicht zu','trifft völlig zu'));
+			this.add(new Frage('MF1',3,
+				'beschäftigte ich mich mit verschiedenen Dingen (z.B. Hausarbeit, private Erledigungen) gleichzeitig.'));
+      this.add(new Frage('MF2',3,
+				'arbeitete ich an mehr als einer Aufgabe (z.B. Hausarbeit, private Erledigungen).'));
+      this.add(new Frage('MF3',3,
+				'arbeitete ich Aufgaben (z.B. Hausarbeit, private Erledigungen) nacheinander ab.'));
+      this.add(new Frage('MF4',3,
+				'erledigte ich mehrere Arbeiten und Aufgaben (z.B. Hausarbeit, private Erledigungen) gleichzeitig.'));
+
+      this.add(new Frage('FRE',5,
+				'Während der letzten 2 Arbeitsstunden konnte ich selbst entscheiden, ob ich Dinge gleichzeitig tue.',
+				'trifft überhaupt nicht zu','trifft völlig zu'));
 
       this.add(new Frage('STI1',7,'In diesem Moment fühle ich mich &hellip;', 'sehr müde','sehr wach'));
       this.add(new Frage('STI2',7,'In diesem Moment fühle ich mich &hellip;', 'sehr unzufrieden','sehr zufrieden'));
@@ -241,7 +254,7 @@ define(function( require ) {
 				'Als ich müde von der Arbeit nach Hause kam, fand ich durch nichts Erholung.',
 				'trifft überhaupt nicht zu','trifft fast völlig zu'));
 
-      this.add(new Frage('UE1',21,'Wie viele Stunden haben Sie heute gearbeitet?'));
+      this.add(new Frage('UE1',24,'Wie viele Stunden haben Sie heute gearbeitet?'));
       this.add(new Frage('UE2',11,'Wie viele Überstunden haben Sie heute gearbeitet?'));
       this.add(new Frage('UE3',11,
 				'Wie lange haben Sie nach Ausfüllen des letzten Fragebogens noch für das Unternehmen gearbeitet?'));
@@ -320,7 +333,7 @@ define(function( require ) {
 				
 				],
 				MH: [
-					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie <strong>häufig</strong> folgende Situationen vorkamen.<br/>'},
+					{v: MsgView, msg:'Bitte geben Sie an, wie <strong>häufig</strong> folgende Situationen vorkamen.<br/>'},
 					{v: MtView, f:['MH1'], heading: 'In den letzten 2 Arbeitsstunden'},
 					{v: MtView, f:['MH2'], heading: 'In den letzten 2 Arbeitsstunden'},
 					{v: MtView, f:['MH3'], heading: 'In den letzten 2 Arbeitsstunden'},
@@ -331,7 +344,7 @@ define(function( require ) {
 					{v: MtView, f:['MH8'], heading: 'In den letzten 2 Arbeitsstunden'},
 				],
 				MZ: [
-					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
+					{v: MsgView, msg:'Bitte geben Sie an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
 					{v: MtView, f:['MZ1'], heading: 'In den letzten 2 Arbeitsstunden'},
 					{v: MtView, f:['MZ2'], heading: 'In den letzten 2 Arbeitsstunden'},
 					{v: MtView, f:['MZ3'], heading: 'In den letzten 2 Arbeitsstunden'},
@@ -341,21 +354,20 @@ define(function( require ) {
 					{v: MtView, f:['MZ7'], heading: 'In den letzten 2 Arbeitsstunden'},
 					{v: MtView, f:['MZ8'], heading: 'In den letzten 2 Arbeitsstunden'},
 				],
-				MZF: [
-					{v: MsgView, msg:'Bitte geben Sie für die folgenden Aussagen an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
-					{v: MtView, f:['MZ1'], heading: 'In meiner Freizeit'},
-					{v: MtView, f:['MZ2'], heading: 'In meiner Freizeit'},
-					{v: MtView, f:['MZ3'], heading: 'In meiner Freizeit'},
-					{v: MtView, f:['MZ4'], heading: 'In meiner Freizeit'},
+				MF: [
+					{v: MsgView, msg:'Bitte geben Sie an, wie sehr folgende Aussagen auf Sie <strong>zutreffen</strong>.<br/>'},
+					{v: MtView, f:['MF1'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MF2'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MF3'], heading: 'In meiner Freizeit'},
+					{v: MtView, f:['MF4'], heading: 'In meiner Freizeit'},
 					{v: MtView, f:['MZ5'], heading: 'In meiner Freizeit'},
-					{v: MtView, f:['MZ6'], heading: 'In meiner Freizeit'},
 					{v: MtView, f:['MZ7'], heading: 'In meiner Freizeit'},
 					{v: MtView, f:['MZ8'], heading: 'In meiner Freizeit'},
 				],
 				W2: [ 
 					{v: FView, f:['FRE']},
-					{v: FView, f:['FLO1','FLO2'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
-					{v: FView, f:['FLO3','FLO4'], heading:'Bitte geben sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
+					{v: FView, f:['FLO1','FLO2'], heading:'Bitte geben Sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
+					{v: FView, f:['FLO3','FLO4'], heading:'Bitte geben Sie an, inwieweit die folgenden Aussagen in den letzten zwei Stunden auf Sie zutrafen.'},
 				],
 				WL: [ 
 					{v: FView, f:['WL1', 'WL2', 'WL3']},
@@ -378,6 +390,7 @@ define(function( require ) {
 					{v: MtView, f:['HS1'] },
 					{v: MtView, f:['HS2'] },
 					{v: MtView, f:['HS3'] },
+					{v: SeView}
 				],
 				A1: [
 					{v: FView, f:['WHI', 'IRR1', 'IRR2']},
@@ -402,7 +415,7 @@ define(function( require ) {
 				__proto__: null,
 				enumerable: true,
 				writeable: false,
-				get: function(){ return this.STI.concat(this.MZF,this.A1) },
+				get: function(){ return this.STI.concat(this.MF,this.A1) },
 			});
 			Object.defineProperty(this.ablauf, 'WA', { // erster Druchlauf - während der Arbeit
 				__proto__: null,

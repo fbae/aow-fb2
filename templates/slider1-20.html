@@ -1,8 +1,8 @@
 <div data-role='fieldcontain' data-theme='c' class='slider1-20'>
 	<label for='<% kodierung %>'>
-		<div id='frage'><%= txt %></div>
-		<% if (lTxt != null) { print("<div id='linkeBeschriftung'>"+lTxt+"</div>"); } %>
-		<% if (rTxt != null) { print("<div id='rechteBeschriftung'>"+rTxt+"</div>"); } %>
+		<div class='frage'><%= txt %></div>
+		<% if (lTxt != null) { print("<div class='linkeBeschriftung'>"+lTxt+"</div>"); } %>
+		<% if (rTxt != null) { print("<div class='rechteBeschriftung'>"+rTxt+"</div>"); } %>
 		<div style='float:none; clear:both'></div>
 	</label>
 	<input data-type='range' name='<%= kodierung %>' id='<%= kodierung %>'

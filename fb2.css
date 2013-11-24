@@ -1,13 +1,24 @@
 .frage7 .ui-controlgroup-horizontal .ui-controlgroup-controls {
 	zoom: 1.28;
+	padding-bottom:1em;
 }
-#linkeBeschriftung {
+.frage {
+	padding-bottom:1ex;
+}
+.linkeBeschriftung {
 	position:relative;
 	float:left;
 	font-size:smaller;
 }
-#rechteBeschriftung {
+.rechteBeschriftung {
 	position:relative;
 	float:right;
 	font-size:smaller;
+}
+.heading {
+	padding-bottom:1em;
+}
+.Nachricht{
+	padding:1em;
+	font-size:larger;
 }
