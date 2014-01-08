@@ -1,11 +1,10 @@
 CACHE MANIFEST
 
-# v0.3.5 - 24.11.2013
-# v0.3.6 - 24.11.2013
+# v0.5.13 - 8.1.2014
 
+index.html
 favicon.ico
 fb2.css
-index.html
 
 js/config.js
 js/fb2Model.js
@@ -21,16 +20,17 @@ js/seView.js
 js/settingsView.js
 
 js/vendor/backbone.min.js
-js/vendor/backbone-min.map
+js/vendor/backbone.min.map
 js/vendor/jquery-2.0.3.min.js
 js/vendor/jquery-2.0.3.min.map
 js/vendor/jquery.mobile-1.3.2.min.css
+#js/vendor/jquery.mobile-1.4.0.min.css
 js/vendor/jquery.mobile-1.3.2.min.js
-js/vendor/jquery.mobile-1.3.2.min.map
+#js/vendor/jquery.mobile-1.4.0.min.js
 js/vendor/purl.js
 js/vendor/require-2.1.9.min.js
 js/vendor/text.js
-js/vendor/underscore.js
+js/vendor/underscore.min.js
 
 js/vendor/images/ajax-loader.gif
 js/vendor/images/icons-18-black.png

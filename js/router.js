@@ -57,10 +57,15 @@ define( function( require) {
 		},
 
 		ablaufX: function(typC) {
-			if (typC == 'A')
+			if (typC == 'A') {
 				this.fragen.typ = typC
-			else
-				this.fragen.typ = typC + ((fb2.artHeute) ? 'A' : 'B');
+			} else {
+				if (fb2.has('art')) {
+					this.fragen.typ = typC + ((fb2.get('art')) ? 'A' : 'B')
+				} else {
+					this.fragen.typ = typC + ((fb2.artHeute) ? 'A' : 'B');
+				}
+			}
 			fb2.log({msg:'ablaufX Typ:' + this.fragen.typ});
 			this.fragen.akt = 0;
 			this.fragen.zeit = new Date();

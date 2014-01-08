@@ -1,13 +1,24 @@
 // Sets the require.js configuration for your application.
+/*
+ * Dateien die eventuell aktualisiert werden könnten
+ * Stand: 7.1.2014
+ *	require -> 2.1.9
+ *	text-Plugin von require
+ *	backbone -> 1.1.0
+ *	underscore -> 1.5.2
+ *	jquery-2.0.3
+ *	jquery.mobile-1.4.0
+ *	purl
+ *
+ */
 require.config( {
-	// 3rd party script alias names (Easier to type 'jquery' than 'libs/jquery-1.8.2.min')
 	paths: {
 		// Core Libraries
 		'jquery': 'vendor/jquery-2.0.3.min',
 		'jquerymobile': 'vendor/jquery.mobile-1.3.2.min',
 		'parseURL': 'vendor/purl',
 		'text':'vendor/text', //require text-Plugin
-		'underscore': 'vendor/underscore',
+		'underscore': 'vendor/underscore.min',
 		'backbone': 'vendor/backbone.min'
 	},
 	// Sets the configuration for your third party scripts that are not AMD compatible
@@ -70,7 +81,7 @@ require(['jquery','backbone'], function( $, Backbone ) {
 
 				// indexedDB - Fehler anzeigen falls nicht definiert ist.
 				if ( !window.indexedDB ) {
-					console.debug('Fehler: indexedDB');
+					console.error('Fehler: indexedDB');
 					$.mobile.changePage( '#Fehler' , { reverse: false, changeHash: false } );
 				}
 

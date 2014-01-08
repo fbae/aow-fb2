@@ -85,7 +85,6 @@ define(function( require ) {
 		 */
 		vpnVisibility: function() {
 			var cS = $('#vpnCode');
-			console.debug( 'vpnVisibility - #vpnCode:', cS);
 			if (cS) {
 				if (cS.css('display') == 'none') {
 					// vpnCode eintragen
@@ -93,7 +92,6 @@ define(function( require ) {
 						var vpnCode = fb2.get('person');
 						var re = /(\D{2})(\D*)(\d).*/;
 						var vpnCodeA = re.exec(vpnCode);
-						console.debug( 'vpnCodeA: ', vpnCodeA);
 						if (vpnCodeA != null && typeof vpnCodeA === 'object') {
 					    this.$el.find('#vvm').attr('value',vpnCodeA[1]);
 							this.$el.find('#vnm').attr('value',vpnCodeA[2]);
