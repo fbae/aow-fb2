@@ -46,7 +46,10 @@ define( function( require ) {
 				// falls ein Slider benutzt wird: ein onSlidestop setzen, damit die Daten sofort eingetragen werden
 				var frage = f.get(fArr[i]).attributes;
 				switch (frage.art) {
-					case 11,20,24,49: 
+					case 11:
+					case 20:
+					case 24:
+					case 49:
 						var kodierung = f.zeitpunkt() + frage.id;
 						this.$el.find( '#' + kodierung ).on( 'slidestop', function( event ) {
 							fb2.setzeAntwort({
